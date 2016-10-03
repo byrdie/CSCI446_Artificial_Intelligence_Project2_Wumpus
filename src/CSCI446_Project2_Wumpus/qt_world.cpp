@@ -15,17 +15,37 @@ Qt_world::Qt_world(int num_tiles) {
 
     // Initialize variables
     N = num_tiles;
-    win_sz = 500;
-    scale = win_sz / num_tiles;
-    p = new Point(1, 1);
+    win_sz = 1000;
+    scale = win_sz / (num_tiles + 2);
 
     // Initialize Qt variables
     scene = new QGraphicsScene(0, 0, win_sz, win_sz);
     view = new World_view(scene);
+    view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
+    view->resize(win_sz,win_sz);
+    init_map();
+
+}
+
+Qt_world::Qt_world(int num_tiles, Human_agent * h_agent) {
+    // Initialize variables
+    N = num_tiles;
+    win_sz = 1000;
+    scale = win_sz / (num_tiles + 2);
+
+    // Initialize Qt variables
+    scene = new QGraphicsScene(0, 0, win_sz, win_sz);
+    view = new World_view(scene, h_agent);
+    view->resize(win_sz,win_sz);
+    view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
+    init_map();
+}
+
+void Qt_world::init_map() {
     base_bg_sprite = new QPixmap("sprites/cobble.png");
     base_wall_sprite = new QPixmap("sprites/wall.png");
     base_hero_sprite = new QPixmap("sprites/hero.png");
-    base_wumpus_sprite = new QPixmap("sprites/wumpus.png");
+    base_wumpus_sprite = new QPixmap("sprites/wumpus2.png");
     base_stench_sprite = new QPixmap("sprites/stench3.png");
     base_pit_sprite = new QPixmap("sprites/pit.png");
     base_breeze_sprite = new QPixmap("sprites/breeze.png");
@@ -42,9 +62,17 @@ Qt_world::Qt_world(int num_tiles) {
     sprite_map[WALL] = base_wall_sprite;
     sprite_map[EMPTY] = base_bg_sprite;
     sprite_map[AGENT] = base_hero_sprite;
-
-
-    hero_tile = new QGraphicsPixmapItem(0, scene);
+    
+    // Fill hight map to know what elements to draw over
+    height_map[FOG] = 1;
+    height_map[GOLD] = 3;
+    height_map[WUMPUS] = 3;
+    height_map[STENCH] = 10;
+    height_map[PIT] = 3;
+    height_map[BREEZE] = 9;
+    height_map[WALL] = 3;
+    height_map[EMPTY] = 2;
+    height_map[AGENT] = 5;
 
     // Construct map between indices and screen position
     for (int i = 0; i < N + 2; i++) {
@@ -54,50 +82,33 @@ Qt_world::Qt_world(int num_tiles) {
         }
         ind2win.push_back(ind2win_row);
     }
-
-
-//    for (int i = 0; i < N + 2; i++) {
-//        for (int j = 0; j < N + 2; j++) {
-//            QPixmap * bg_sprite = new QPixmap(base_bg_sprite->scaled(scale, scale, Qt::KeepAspectRatio));
-//            QGraphicsPixmapItem * bg_tile = new QGraphicsPixmapItem(0, scene);
-//            bg_tile->setPixmap(*bg_sprite);
-//            bg_tile->setPos(ind2win[i][j]->x, ind2win[i][j]->y);
-//            bg_tile->setZValue(0);
-//
-//            if (i == 0 or i == N + 1 or j == 0 or j == N + 1) {
-//                QPixmap * wall_sprite = new QPixmap(base_wall_sprite->scaled(scale, scale, Qt::KeepAspectRatio));
-//                QGraphicsPixmapItem * wall_tile = new QGraphicsPixmapItem(0, scene);
-//                wall_tile->setPixmap(*wall_sprite);
-//                wall_tile->setPos(ind2win[i][j]->x, ind2win[i][j]->y);
-//                wall_tile->setZValue(1);
-//            }
-//        }
-//    }
-//
-//
-//
-//
-//
-//
-//    QPixmap * hero_sprite = new QPixmap(base_hero_sprite->scaled(scale, scale, Qt::KeepAspectRatio));
-//
-//    hero_tile->setPixmap(*hero_sprite);
-//    hero_tile->setPos(ind2win[p->x][p->y]->x, ind2win[p->x][p->y]->y);
-//    hero_tile->setZValue(2);
-
-
-
 }
 
-void Qt_world::set_tile(int x, int y, int z, int elem_bits) {
-    
-    QPixmap * base_sprite = sprite_map[elem_bits];
+QGraphicsPixmapItem * Qt_world::set_tile(int x, int y, int elem_bits) {
+
+    QGraphicsPixmapItem * tile;
+    int base = 0x00000001;
+    for (int i = 0; i < 32; i++) {
+        int new_base = base << i;
+        int single_elem_bits = new_base & elem_bits;
+
+        if (single_elem_bits != 0) {
+            int z = height_map[single_elem_bits];
+            QPixmap * base_sprite = sprite_map[single_elem_bits];
+            QPixmap * sprite = new QPixmap(base_sprite->scaled(scale, scale, Qt::KeepAspectRatio));
+            tile = new QGraphicsPixmapItem(0, scene);
+            tile->setPixmap(*sprite);
+            tile->setPos(ind2win[x][y]->x, ind2win[x][y]->y);
+            tile->setZValue(z);
             
-    QPixmap * sprite = new QPixmap(base_sprite->scaled(scale, scale, Qt::KeepAspectRatio));
-    QGraphicsPixmapItem * bg_tile = new QGraphicsPixmapItem(0, scene);
-    bg_tile->setPixmap(*sprite);
-    bg_tile->setPos(ind2win[x][y]->x, ind2win[x][y]->y);
-    bg_tile->setZValue(z);
+        }
+
+    }
+    return tile;
+}
+
+void Qt_world::move_tile(QGraphicsPixmapItem * tile, int x, int y) {
+    tile->setPos(ind2win[x][y]->x, ind2win[x][y]->y);
 }
 
 /**
@@ -105,28 +116,39 @@ void Qt_world::set_tile(int x, int y, int z, int elem_bits) {
  * is to overwrite the keyPressEvents to provide input for human players
  * @param scene
  */
-World_view::World_view(QGraphicsScene * scene) : QGraphicsView(scene) {
-    cout << "constructed view" << endl;
+World_view::World_view(QGraphicsScene * scene, Human_agent * h_agent) : QGraphicsView(scene) {
+    agent = h_agent;
 }
 
-//void World_view::keyPressEvent(QKeyEvent * e) {
-//
-//
-//    switch (e->key()) {
-//        case Qt::Key_A: p->x = p->x - 1;
-//            break;
-//        case Qt::Key_S: p->y = p->y + 1;
-//            break;
-//        case Qt::Key_W: p->y = p->y - 1;
-//            break;
-//        case Qt::Key_D: p->x = p->x + 1;
-//            break;
-//        default:
-//            std::cout << "invalid input" << std::endl;
-//    }
-//    hero_tile->setPos(ind2win[p->x][p->y]->x, ind2win[p->x][p->y]->y);
-//    //        qApp->processEvents();
-//
-//    QGraphicsView::keyPressEvent(e);
-//}
+World_view::World_view(QGraphicsScene * scene) : QGraphicsView(scene) {
+    agent = 0;
+}
+
+void World_view::keyPressEvent(QKeyEvent * e) {
+
+
+    if (agent != 0) {
+        switch (e->key()) {
+            case Qt::Key_A:
+                agent->make_move(WEST);
+                break;
+            case Qt::Key_S:
+                agent->make_move(NORTH);
+                break;
+            case Qt::Key_W:
+                agent->make_move(SOUTH);
+                break;
+            case Qt::Key_D:
+                agent->make_move(EAST);
+                break;
+            default:
+                std::cout << "invalid input" << std::endl;
+        }
+    }
+
+    //    hero_tile->setPos(ind2win[p->x][p->y]->x, ind2win[p->x][p->y]->y);
+    //        qApp->processEvents();
+
+    QGraphicsView::keyPressEvent(e);
+}
 

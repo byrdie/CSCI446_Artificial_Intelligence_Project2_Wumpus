@@ -19,10 +19,17 @@
 #include <time.h>
 #include <algorithm>
 
+class World;
+
 #include "qt_world.h"
 #include "typedef.h"
 
+#define START_X 1
+#define START_Y 1
+
 using namespace std;
+
+
 
 class World {
 public:
@@ -40,12 +47,13 @@ public:
     vector<Point*> barrier_list;
     vector<Point*> gold_list;
     
-    World(int N);   // Create a new world covered in fog
+    World(int side_length, Human_agent * agent);   // Create a new world covered in fog
     World(int side_length, int n_wumpi, int n_pit, int n_barrier); // Create a new master world
     World(char * filename);     // Load a world from a file
     bool tile_is_empty(Point * p);
     Point * add_element(int elem);
     vector<Point *> add_effect(Point * center, int effect_bits);
+    vector<Point *> find_neighbors(Point * center);
     
 };
 

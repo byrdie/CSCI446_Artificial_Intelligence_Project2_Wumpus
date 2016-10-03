@@ -30,12 +30,15 @@
 #include <QKeyEvent>
 #include <qt5/QtWidgets/qwidget.h>
 
+class Qt_world;
+class World_view;
+
 #include "typedef.h"
+#include "human_agent.h"
 
 using namespace std;
 
-class Qt_world;
-class World_view;
+
 
 class Qt_world {
 public:
@@ -60,28 +63,33 @@ public:
     
     // Dictionary between sprites and bits
     map<int, QPixmap *> sprite_map;
+    map<int, int> height_map;
     
     // Array to store mappings between coordinates and locations on screen
     std::vector<std::vector<Point*> > ind2win;
 
-    // These need to be in the player class
-    Point * p;
-    QGraphicsPixmapItem * hero_tile;
-
     // Constructor
     Qt_world(int num_tiles);
+    Qt_world(int num_tiles, Human_agent * h_agent);
+    void init_map();
     
-    void set_tile(int x, int y, int z, int elem_bits);
+    QGraphicsPixmapItem *  set_tile(int x, int y, int elem_bits);
+    void move_tile(QGraphicsPixmapItem * tile, int x, int y);
 
 
 };
 
 class World_view : public QGraphicsView {
 public:
+    
+    Human_agent * agent;
+    
+    World_view(QGraphicsScene * scene, Human_agent * h_agent);
     World_view(QGraphicsScene * scene);
+    
 
 private:
-//    void keyPressEvent(QKeyEvent * e);
+    void keyPressEvent(QKeyEvent * e);
 };
 
 

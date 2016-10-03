@@ -4,6 +4,8 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>engine.h</itemPath>
+      <itemPath>human_agent.h</itemPath>
       <itemPath>main.h</itemPath>
       <itemPath>qt_world.h</itemPath>
       <itemPath>typedef.h</itemPath>
@@ -16,6 +18,8 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>engine.cpp</itemPath>
+      <itemPath>human_agent.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>qt_world.cpp</itemPath>
       <itemPath>typedef.cpp</itemPath>
@@ -54,6 +58,14 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="engine.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="engine.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="human_agent.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="human_agent.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="main.h" ex="false" tool="3" flavor2="0">
@@ -95,6 +107,14 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="engine.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="engine.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="human_agent.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="human_agent.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="main.h" ex="false" tool="3" flavor2="0">
