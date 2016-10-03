@@ -52,11 +52,6 @@
         <ccTool>
           <standard>8</standard>
         </ccTool>
-        <linkerTool>
-          <linkerLibItems>
-            <linkerLibStdlibItem>Curses</linkerLibStdlibItem>
-          </linkerLibItems>
-        </linkerTool>
       </compileType>
       <item path="engine.cpp" ex="false" tool="1" flavor2="0">
       </item>
