@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <cerrno>
 #include <stdio.h>
+#include <map>
 
 #include <QApplication>
 #include <QGraphicsScene>
@@ -31,24 +32,58 @@
 
 #include "typedef.h"
 
+using namespace std;
 
-class Qt_world : public QGraphicsView {
-    
+class Qt_world;
+class World_view;
+
+class Qt_world {
 public:
     int N;
     int win_sz;
     int scale;
-    std::vector<std::vector<Point*> > ind2win;
     
+    // Qt display variables
+    QGraphicsScene * scene;
+    World_view * view;
+    
+    // Qt pixelmaps of sprites
+    QPixmap * base_bg_sprite;
+    QPixmap * base_wall_sprite;
+    QPixmap * base_hero_sprite;
+    QPixmap * base_wumpus_sprite;
+    QPixmap * base_stench_sprite;
+    QPixmap * base_pit_sprite;
+    QPixmap * base_breeze_sprite;
+    QPixmap * base_gold_sprite;
+    QPixmap * base_fog_sprite;
+    
+    // Dictionary between sprites and bits
+    map<int, QPixmap *> sprite_map;
+    
+    // Array to store mappings between coordinates and locations on screen
+    std::vector<std::vector<Point*> > ind2win;
+
     // These need to be in the player class
     Point * p;
     QGraphicsPixmapItem * hero_tile;
+
+    // Constructor
+    Qt_world(int num_tiles);
     
-    Qt_world(QGraphicsScene * scene, int num_tiles, int window_sz);
-    
-private:
-    void keyPressEvent(QKeyEvent * e);
+    void set_tile(int x, int y, int z, int elem_bits);
+
+
 };
+
+class World_view : public QGraphicsView {
+public:
+    World_view(QGraphicsScene * scene);
+
+private:
+//    void keyPressEvent(QKeyEvent * e);
+};
+
 
 #endif /* QT_WORDL_H */
 

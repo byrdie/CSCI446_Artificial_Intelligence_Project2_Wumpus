@@ -14,7 +14,40 @@
 #ifndef WORLD_GEN_H
 #define WORLD_GEN_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <algorithm>
 
+#include "qt_world.h"
+#include "typedef.h"
+
+using namespace std;
+
+class World {
+public:
+    int N;
+    int num_wumpi;
+    int num_pits;
+    int num_barriers;
+    vector<vector<int>> world_vec;
+    
+    Qt_world * qt_world;
+    
+    // Points describing location of various obstacles
+    vector<Point*> wumpus_list;
+    vector<Point*> pit_list;
+    vector<Point*> barrier_list;
+    vector<Point*> gold_list;
+    
+    World(int N);   // Create a new world covered in fog
+    World(int side_length, int n_wumpi, int n_pit, int n_barrier); // Create a new master world
+    World(char * filename);     // Load a world from a file
+    bool tile_is_empty(Point * p);
+    Point * add_element(int elem);
+    vector<Point *> add_effect(Point * center, int effect_bits);
+    
+};
 
 #endif /* WORLD_GEN_H */
 

@@ -13,12 +13,7 @@
 
 
 
-#include "qt_world.h"
-
-using namespace std;
-//using namespace Qt;
-
-
+#include "main.h"
 
 
 
@@ -26,16 +21,31 @@ int main(int argc, char *argv[]) {
 
     QApplication app(argc, argv);
 //    app.installEventFilter(new QApplicationFilter());
+    
+    init_rand();
 
     int N = 10;
-    int win_sz = 500;
     
-    QGraphicsScene *scene = new QGraphicsScene(0, 0, win_sz, win_sz);
-    Qt_world * gameboard = new Qt_world(scene, N, win_sz);
-    gameboard->show();
+    World * world = new World(N, 2, 1, 1);
+    
+    
+    
 
     cout <<"here" << endl;
     
     return app.exec();
 
+}
+
+
+/* Prepare random number generation */
+void init_rand(unsigned long int seed) {
+    srand(seed);
+    printf("Seed: %u\n", seed);
+}
+
+void init_rand() {
+    unsigned int seed = time(NULL);
+    srand(seed);
+    printf("Seed: %u\n", seed);
 }
