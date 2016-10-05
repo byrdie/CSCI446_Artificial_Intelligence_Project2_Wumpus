@@ -24,9 +24,9 @@ int main(int argc, char *argv[]) {
     
     init_rand();
 
-    int N = 5;
+    int N = 10;
     
-    World * world = new World(N, 2, 1, 1);
+    World * world = new World(N, 3, 3, 3);
     Engine * engine = new Engine(world);
     Human_agent * player = new Human_agent(engine, N);
     
