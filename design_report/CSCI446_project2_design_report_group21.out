@@ -4,7 +4,8 @@
 \BOOKMARK [1][-]{section.4}{Software Design}{}% 4
 \BOOKMARK [2][-]{subsection.4.1}{Wumpus World Generation}{section.4}% 5
 \BOOKMARK [2][-]{subsection.4.2}{Environment Engine}{section.4}% 6
-\BOOKMARK [2][-]{subsection.4.3}{Agents}{section.4}% 7
-\BOOKMARK [3][-]{subsubsection.4.3.1}{Human Agent}{subsection.4.3}% 8
-\BOOKMARK [3][-]{subsubsection.4.3.2}{Reactive Agent}{subsection.4.3}% 9
-\BOOKMARK [3][-]{subsubsection.4.3.3}{Reasoning Agent}{subsection.4.3}% 10
+\BOOKMARK [2][-]{subsection.4.3}{Reasoning Agent}{section.4}% 7
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Inference Engine}{subsection.4.3}% 8
+\BOOKMARK [2][-]{subsection.4.4}{Knowledge Base}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.5}{Pathfinding}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.6}{Reactive Agent}{section.4}% 11

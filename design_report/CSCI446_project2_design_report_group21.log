@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.9.17)  4 OCT 2016 18:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.9.17)  6 OCT 2016 13:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -581,44 +581,57 @@ LaTeX Font Warning: Font shape `T1/cmr/bx/n' in size <24> not available
 (Font)              size <24.88> substituted on input line 80.
 
 (./CSCI446_project2_design_report_group21.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 118.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 123.
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 118.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 123.
  (./CSCI446_project2_design_report_group21.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 118.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 118.
-Package rerunfilecheck Info: File `CSCI446_project2_design_report_group21.out' 
-has not changed.
-(rerunfilecheck)             Checksum: 7812B09657247AD410E7729A0DD2C194;613.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 123.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 123.
 
+
+Package rerunfilecheck Warning: File `CSCI446_project2_design_report_group21.ou
+t' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `CSCI446_project2_design_report_grou
+p21.out':
+(rerunfilecheck)             Before: 7812B09657247AD410E7729A0DD2C194;613
+(rerunfilecheck)             After:  910FAE1EB3A05E4DB6236F3AD33BCB81;667.
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.88pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 118.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 123.
  ) 
 Here is how much of TeX's memory you used:
- 9944 strings out of 493029
- 151759 string characters out of 6136234
- 382919 words of memory out of 5000000
+ 9947 strings out of 493029
+ 151801 string characters out of 6136234
+ 383919 words of memory out of 5000000
  13315 multiletter control sequences out of 15000+600000
  15931 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  40i,12n,43p,327b,338s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/
-type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-supe
-r/sfcc1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1440.pfb></usr
-/share/texmf/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf/fonts/t
-ype1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super
-/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb>
-Output written on CSCI446_project2_design_report_group21.pdf (1 page, 106139 by
+pdfTeX warning (dest): name{subsubsection.4.3.3} has been referenced but does
+ not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{subsubsection.4.3.2} has been referenced but does n
+ot exist, replaced by a fixed one
+
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/ty
+pe1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/
+sfcc1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1440.pfb></usr/s
+hare/texmf/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf/fonts/typ
+e1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
+frm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb>
+Output written on CSCI446_project2_design_report_group21.pdf (1 page, 107943 by
 tes).
 PDF statistics:
- 92 PDF objects out of 1000 (max. 8388607)
- 80 compressed objects within 1 object stream
- 13 named destinations out of 1000 (max. 500000)
+ 95 PDF objects out of 1000 (max. 8388607)
+ 83 compressed objects within 1 object stream
+ 16 named destinations out of 1000 (max. 500000)
  19025 words of extra memory for PDF output out of 20736 (max. 10000000)
 
