@@ -91,9 +91,32 @@
 	\section{Software Design}
 		Our design will incorporate three main classes: \texttt{World}, \texttt{EnvironmentEngine}, and \texttt{Agent}. 
 		These classes have all of the important attributes and functions needed to implement this game.
-		The \texttt{World} class is responsible for creating and maintaining worlds. The \texttt{EnvironmentEngine} is responsible for checking the move an agent selects and then telling the agent the result of the move. Finally, the \texttt{agent} is an abstract class that uses information provided by the \texttt{EnvironmentEngine} to decide what the next move is. The three implemented versions of \texttt{Agent} are \texttt{HumanAgent}, \texttt{ReactiveAgent} , and \texttt{ReasoningAgent}.
+		The \texttt{World} class is responsible for creating and maintaining worlds.
+		The \texttt{EnvironmentEngine} is responsible for checking the move an agent selects and then telling the agent the result of the move.
+		Finally, the \texttt{agent} is an abstract class that uses information provided by the \texttt{EnvironmentEngine} to decide what the next move is. The three implemented versions of \texttt{Agent} are \texttt{HumanAgent}, \texttt{ReactiveAgent} , and \texttt{ReasoningAgent}.
+		
+		The \texttt{World} is used to create both the fully populated ''Master World`` and blank ''Agent World``. 
+		A world will consist of a vector of vectors that each hold an int.
+		Each int represents one square in the world, with each bit representing the presence of a certain feature. 
+		We chose to represent the board this way because it seemed more simple than using a whole object for each tile.
+		We decided to use a vector of vectors because they are much more forgiving to work with than two dimensional arrays in c++.
+		The \texttt{World} class will also be responsible for keeping some important data such as number of wumpi and pits for general usage throughout the program.
+		
+		The \texttt{EnvironmnetEngine} is responsible for holding the master world object telling the agents about the world as it is explored.
+		It's main job is to operate a loop that constantly calls the \texttt{update\_world} method in the agent. 
+		The idea is that the \texttt{update\_world} returns the agents next move. 
+		The \texttt{EnvironmentEngine} then applies that move to the master world.
+		The next time \texttt{update\_world} is called the \texttt{EnvironmentEngine} includes the results of the attempted move.
+		These results include the agents new position, the integer that represents the facts about that square, and miscellaneous facts such as whether a bump was detected. 
+		This system is a good option because the same \texttt{EnvironmnentEngine} can be used for all of the agents. 
+		
+		The final, and most important class, is the \texttt{Agent} class. We chose create an abstract class because 
+		   
+		
 	
-		The design of our software is centered around the environment engine. This class servers to link all components of the program and drives the main processes involved with this project. 
+		The design of our software is centered around the environment engine. 
+		This class servers to link all components of the program and drives the main processes involved with this project. 
+		
 
 		
 		\subsection{Wumpus World Generation}
