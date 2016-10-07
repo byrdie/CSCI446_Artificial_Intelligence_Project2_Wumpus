@@ -89,8 +89,11 @@
 		To solve the Wumpus World problem, we will develop a problem generator that creates the Wumpus worlds in which the agent will navigate.  We will then implement a logic system that uses unification and resolution on first-order rules that allow the agent to navigate.  The reasoning system will use the following information: the stench when near a Wumpus, the breeze when near a pit, the scream of a Wumpus as it is killed, and the wall when ran into.  Additionally, a reactive agent will be created that makes decisions based upon random decisions regarding which cells are safe and which are not.  We will test the logic system on Wumpus worlds of sizes {5x5, 10x10,…, 25x25}.  Our performance metrics are as follows: number of times the gold is found, number of Wumpus killed, number of times the explorer falls into a pit, number of times the Wumpus kills the explorer, and number of cells explored.
 	
 	\section{Software Design}
+		Our design will incorporate three main classes: \texttt{World}, \texttt{EnvironmentEngine}, and \texttt{Agent}. 
+		These classes have all of the important attributes and functions needed to implement this game.
+		The \texttt{World} class is responsible for creating and maintaining worlds. The \texttt{EnvironmentEngine} is responsible for checking the move an agent selects and then telling the agent the result of the move. Finally, the \texttt{agent} is an abstract class that uses information provided by the \texttt{EnvironmentEngine} to decide what the next move is. The three implemented versions of \texttt{Agent} are \texttt{HumanAgent}, \texttt{ReactiveAgent} , and \texttt{ReasoningAgent}.
 	
-		The design of our software is centered around the environment engine. This class ervers to link all components of the program, while
+		The design of our software is centered around the environment engine. This class servers to link all components of the program and drives the main processes involved with this project. 
 		
 		\subsection{Wumpus World Generation}
 		
