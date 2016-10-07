@@ -85,10 +85,9 @@
 		\textit{Logic and the Wumpus World} is an artificial intelligence problem first proposed by Michael Genesereth, and described in detail by his student Stuart Russel\cite{ai}.  The problem involves navigating an environment known as the Wumpus World using logic to avoid dangers as the agent attempts to reach a goal.  The environment is a square grid of tiles that can be empty or contain gold for the goal state, a pit that the agent will fall into, or a monster known as a wumpus.  As the agent navigates the environment, a score is calculated from the various actions that the agent makes.  The objective of the game is thus to maximize the score, which can be achieved by using logic to find the most efficient route.
 	
 	\section{Problem Statement}
-	
-<<<<<<< HEAD
+
 		To solve the Wumpus World problem, we will develop a problem generator that creates the wumpus worlds in which the agent will navigate.  We will then implement a logic system that uses unification and resolution on first-order rules that allow the agent to navigate.  The reasoning system will use the following information: the stench when near a Wumpus, the breeze when near a pit, the scream of a wumpus as it is killed, and the wall when ran into.  Additionally, a reactive agent will be created that makes decisions based upon random decisions regarding which cells are safe and which are not.  We will test the logic system on wumpus worlds of sizes {5x5, 10x10,…, 25x25}.  Our performance metrics are as follows: number of times the gold is found, number of wumpi killed, number of times the explorer falls into a pit, number of times the wumpus kills the explorer, and number of cells explored.
-=======
+
 		To solve the Wumpus World problem, we will develop a problem generator that creates the Wumpus worlds in which the agent will navigate.  We will then implement a logic system that uses unification and resolution on first-order rules that allow the agent to navigate.  The reasoning system will use the following information: the stench when near a Wumpus, the breeze when near a pit, the scream of a Wumpus as it is killed, and the wall when ran into.  Additionally, a reactive agent will be created that makes decisions based upon random decisions regarding which cells are safe and which are not.  We will test the logic system on Wumpus worlds of sizes {5x5, 10x10,…, 25x25}.  Our performance metrics are as follows: number of times the gold is found, number of Wumpus killed, number of times the explorer falls into a pit, number of times the Wumpus kills the explorer, and number of cells explored.
 		
 		\begin{figure}
@@ -97,7 +96,7 @@
 			\caption{An example of a wumpus world produced by our problem generator. The green haze represents stench and the blue tiles represent breezy squares.}
 			\label{ex_ww}
 		\end{figure}
->>>>>>> 227350b5729aece71a14fb4738fb1a03ab5b667a
+
 	
 	\section{Software Design}
 		Our design will incorporate three main classes: \texttt{World}, \texttt{EnvironmentEngine}, and \texttt{Agent}. 
