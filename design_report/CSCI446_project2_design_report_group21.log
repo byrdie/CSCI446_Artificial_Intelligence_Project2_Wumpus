@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.9.17)  7 OCT 2016 11:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.9.17)  7 OCT 2016 11:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -591,43 +591,47 @@ Package microtype Info: Loading generic settings for font family
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 ] (./CSCI446_project2_design_report_group21.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 131.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 142.
 [2]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 131.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 142.
  (./CSCI446_project2_design_report_group21.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 131.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 131.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 142.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 142.
 Package rerunfilecheck Info: File `CSCI446_project2_design_report_group21.out' 
 has not changed.
-(rerunfilecheck)             Checksum: 9ABD6E3DA8877206E2751AEC63C6ADF0;667.
+(rerunfilecheck)             Checksum: FA7069744EA51CFD77F2AD0DF03FFCEC;687.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.88pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 131.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 142.
  ) 
 Here is how much of TeX's memory you used:
- 9999 strings out of 493029
- 152749 string characters out of 6136234
+ 10021 strings out of 493029
+ 153016 string characters out of 6136234
  385919 words of memory out of 5000000
- 13335 multiletter control sequences out of 15000+600000
- 17056 words of font info for 69 fonts, out of 8000000 for 9000
+ 13338 multiletter control sequences out of 15000+600000
+ 18400 words of font info for 79 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,12n,43p,952b,340s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,10n,43p,952b,340s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/
-type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-supe
-r/sfcc1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1440.pfb></usr
-/share/texmf/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf/fonts/t
-ype1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super
-/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb></usr/
-share/texmf/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on CSCI446_project2_design_report_group21.pdf (2 pages, 142313 b
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-supe
+r/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1000.pfb></usr
+/share/texmf/fonts/type1/public/cm-super/sfcc1200.pfb></usr/share/texmf/fonts/t
+ype1/public/cm-super/sfcc1440.pfb></usr/share/texmf/fonts/type1/public/cm-super
+/sfcc1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/
+share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/ty
+pe1/public/cm-super/sfti1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/
+sftt1000.pfb>
+Output written on CSCI446_project2_design_report_group21.pdf (2 pages, 179946 b
 ytes).
 PDF statistics:
- 104 PDF objects out of 1000 (max. 8388607)
- 90 compressed objects within 1 object stream
+ 123 PDF objects out of 1000 (max. 8388607)
+ 104 compressed objects within 2 object streams
  15 named destinations out of 1000 (max. 500000)
- 19545 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 21593 words of extra memory for PDF output out of 24883 (max. 10000000)
 

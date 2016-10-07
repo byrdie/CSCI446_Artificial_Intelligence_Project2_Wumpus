@@ -94,20 +94,31 @@
 		The \texttt{World} class is responsible for creating and maintaining worlds. The \texttt{EnvironmentEngine} is responsible for checking the move an agent selects and then telling the agent the result of the move. Finally, the \texttt{agent} is an abstract class that uses information provided by the \texttt{EnvironmentEngine} to decide what the next move is. The three implemented versions of \texttt{Agent} are \texttt{HumanAgent}, \texttt{ReactiveAgent} , and \texttt{ReasoningAgent}.
 	
 		The design of our software is centered around the environment engine. This class servers to link all components of the program and drives the main processes involved with this project. 
+
 		
 		\subsection{Wumpus World Generation}
 		
-		We will implement a class
+			The wumpus world will be represented 
 		
 		\subsection{Environment Engine}
 		
 		\subsection{Reasoning Agent}
 		
 			\subsubsection{Inference Engine}
-			The core of this project is the inference engine. This is the part that will take our knowledge base and, as more information is added, infer more information to add to the knowledge base. 
-			\subsection{Knowledge Base}
 			
-			\subsection{Pathfinding}
+				Our inference engine will use the function \textsc{PL-Resolution}($KB$, $\alpha$) described by Russel and Norvig in Figure 7.12 \cite{ai} to perform \textit{resolution}. 
+				Resolution allows the inference engine to use a knowledge base of facts to ascertain new details about the wumpus world. 
+				The function \textsc{PL-Resolution} accepts a knowledge base, $KB$ and $\alpha$, the query to be checked. Of course, \textsc{PL-Resolution} is based on propositional logic clauses, but according to Section 9.5.2 of Russel and Norvig, we can adapt it to operate using first order logic clauses if we we modify the function \textsc{PL-Resolve($C_i$, $C_j$)} to find two variables complementary if one \textit{unifies} with the negation of the other. 
+				
+				To check if two variables can be unified, we will use the function \textsc{Unify}($x$, $y$, $\theta$) provided in Figure 9.1 of Russel and Norvig.
+				In the interest of efficiency, we will also implement a \textit{predicate indexing}, described in Section 9.2.3 of Russel and Norvig\cite{ai}.
+				The predicate index provides \textsc{Unify}() an efficient way to only attempt unification on sentences that are possible to be unified. 
+				We will accomplish this by constructing lists of all facts that use a certain predicate, e.g. all facts that contain the predicate $Adjacent(r,s)$ will be placed into a list.
+				Then, if \textsc{Unify()} is asked to unify a sentence containing $Adjacent(u,v)$, it will only have to search the list described in the previous sentence instead of the entire knowledge base.
+				
+			\subsubsection{Knowledge Base}
+			
+			\subsubsection{Pathfinding}
 			
 		\subsection{Reactive Agent}
 			
