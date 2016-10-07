@@ -15,7 +15,7 @@ Qt_world::Qt_world(int num_tiles) {
 
     // Initialize variables
     N = num_tiles;
-    win_sz = 1500;
+    win_sz = 1000;
     scale = win_sz / (num_tiles + 2);
 
     // Initialize Qt variables
@@ -30,7 +30,7 @@ Qt_world::Qt_world(int num_tiles) {
 Qt_world::Qt_world(int num_tiles, Human_agent * h_agent) {
     // Initialize variables
     N = num_tiles;
-    win_sz = 1500;
+    win_sz = 1000;
     scale = win_sz / (num_tiles + 2);
 
     // Initialize Qt variables
