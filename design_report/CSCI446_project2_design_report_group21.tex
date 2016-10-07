@@ -118,6 +118,8 @@
 				
 			\subsubsection{Knowledge Base}
 			
+				The knowledge base will be represented using an object-oriented approach. We will define a \texttt{Clause} object, that will contain a list of predicates that are assumed to be in a disjuction. The knowledge base will then be characterized by a list of \texttt{Clause}s that similarly are assumed to be in conjunction. The predicates will be represented by a class called \texttt{Predicate}, that will have an ``abstract'' function named \texttt{eval()}. Then, to make specific predicates, we will instantiate classes that inherit from \texttt{Predicate} and override the \texttt{eval()} function. This structure provides a way to represent logical facts in \textit{conjunctive normal form}(CNF).
+			
 			\subsubsection{Pathfinding}
 			
 		\subsection{Reactive Agent}
