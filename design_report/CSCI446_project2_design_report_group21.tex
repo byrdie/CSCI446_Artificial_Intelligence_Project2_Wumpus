@@ -95,13 +95,33 @@
 		The \texttt{EnvironmentEngine} is responsible for checking the move an agent selects and then telling the agent the result of the move.
 		Finally, the \texttt{agent} is an abstract class that uses information provided by the \texttt{EnvironmentEngine} to decide what the next move is. The three implemented versions of \texttt{Agent} are \texttt{HumanAgent}, \texttt{ReactiveAgent} , and \texttt{ReasoningAgent}.
 		
-		The \texttt{World} is used to create both the fully populated ''Master World`` and blank ''Agent World``. 
-		A world will consist of a vector of vectors that each hold an int.
-		Each int represents one square in the world, with each bit representing the presence of a certain feature. 
-		We chose to represent the board this way because it seemed more simple than using a whole object for each tile.
-		We decided to use a vector of vectors because they are much more forgiving to work with than two dimensional arrays in c++.
-		The \texttt{World} class will also be responsible for keeping some important data such as number of wumpi and pits for general usage throughout the program.
 		
+		
+	
+		
+		The implementation of the  \texttt{Agent} class is very important. 
+		We chose create an abstract class because we required three unique agents that had some of the same instance variable and methods. Each agent has an agent world variable that is blank except for the starting square initially. 
+		This world will be updated as each agent discovers things about the world and according to each agents abilities. 
+		The two methods that are shared across agents are \texttt{next\_move} and \texttt{update\_world}. 
+		\texttt{next\_move} is used called to see the results of the previous move and returns its choice for the next move. 
+		Each agent implements this method in a unique way since each agent determines it's next move differently. 
+		The other method, \texttt{update\_world}, is responsible for taking in the result of the previous move and adding it to the knowledge base. 
+		The agent can then use this updated world to make the best decision possible. 
+		Again, each agent updates the world differently and, therefore, the \texttt{update\_world} method is different for each agent.
+		
+	
+		   
+		
+		\subsection{Wumpus World Generation}
+		
+			The \texttt{World} is used to create both the fully populated ''Master World`` and blank ''Agent World``. 
+			A world will consist of a vector of vectors that each hold an int.
+			Each int represents one square in the world, with each bit representing the presence of a certain feature. 
+			We chose to represent the board this way because it seemed more simple than using a whole object for each tile.
+			We decided to use a vector of vectors because they are much more forgiving to work with than two dimensional arrays in c++.
+			The \texttt{World} class will also be responsible for keeping some important data such as number of wumpi and pits for general usage throughout the program.d 
+		
+		\subsection{Environment Engine}
 		The \texttt{EnvironmnetEngine} is responsible for holding the master world object telling the agents about the world as it is explored.
 		It's main job is to operate a loop that constantly calls the \texttt{update\_world} method in the agent. 
 		The idea is that the \texttt{update\_world} returns the agents next move. 
@@ -109,23 +129,8 @@
 		The next time \texttt{update\_world} is called the \texttt{EnvironmentEngine} includes the results of the attempted move.
 		These results include the agents new position, the integer that represents the facts about that square, and miscellaneous facts such as whether a bump was detected. 
 		This system is a good option because the same \texttt{EnvironmnentEngine} can be used for all of the agents. 
-		
-		The final, and most important class, is the \texttt{Agent} class. We chose create an abstract class because 
-		   
-		
-	
-		The design of our software is centered around the environment engine. 
-		This class servers to link all components of the program and drives the main processes involved with this project. 
-		
-
-		
-		\subsection{Wumpus World Generation}
-		
-			The wumpus world will be represented 
-		
-		\subsection{Environment Engine}
-		
 		\subsection{Reasoning Agent}
+		\label{reason}
 		
 			\subsubsection{Inference Engine}
 			
@@ -151,9 +156,10 @@
 			\subsubsection{Pathfinding}
 			
 		\subsection{Reactive Agent}
-			
+			The next agent to be implemented is the \texttt{ReactiveAgent}. This agent can only act on the information provided by the cell the agent is currently in. In this case the method \texttt{update\_world} will simply use  the information returned by the \texttt{EnvironmentEngine} as the entirety of the world. This agent won't have a whole world. it only knows about the square it is currently in. The implementation of the \texttt{next\_move} method will consist of some simple logical rules such as always choose a safe square if possible.
 		
-		
+		\subsection{Human Agent}
+		 The human agent is the most simple and will be mostly used for debugging purposes. The \texttt{next\_move} method will simply update the world and then use the result of user input to make moves. This Agent will be useful for testing our boards and making sure that everything is set up correctly. The \texttt{update\_world} will apply the results of the previous move to the local agent world. This world is persistent in that old facts are remembered and it can be determined if the agent has been in a square before or not. 
 	\section{Experiment Design}
 	
 	To analyze the performance of our agents, we are asked to vary various parameters of the wumpus World. These parameters include: the size of the board, and the number of wumpi, pits, and barriers. 
