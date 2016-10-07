@@ -102,13 +102,20 @@
 		
 			\subsubsection{Inference Engine}
 			
-				Our inference engine will use the function \textsc{PL-Resolution}($KB$, $\alpha$) described by Russel and Norvig in Figure 7.12 \cite{ai} to perform \textit{resolution}. Resolution allows the inference engine to use a knowledge base of facts to ascertain new details about the wumpus world. The function \textsc{PL-Resolution} accepts a knowledge base, $KB$ and $\alpha$, the query to be checked. Of course, \textsc{PL-Resolution} is based on propositional logic clauses, but according to Section 9.5.2 of Russel and Norvig, we can adapt it to operate using first order logic clauses if we we modify the function \textsc{PL-Resolve($C_i$, $C_j$)} to find two variables complementary if one unifies with the negation of the other. To perform the unification algorithm, we can use the function \textsc{Unify}($x$, $y$, $\theta$) provided in Figure 9.1 of Russel and Norvig.
+				Our inference engine will use the function \textsc{PL-Resolution}($KB$, $\alpha$) described by Russel and Norvig in Figure 7.12 \cite{ai} to perform \textit{resolution}. 
+				Resolution allows the inference engine to use a knowledge base of facts to ascertain new details about the wumpus world. 
+				The function \textsc{PL-Resolution} accepts a knowledge base, $KB$ and $\alpha$, the query to be checked. Of course, \textsc{PL-Resolution} is based on propositional logic clauses, but according to Section 9.5.2 of Russel and Norvig, we can adapt it to operate using first order logic clauses if we we modify the function \textsc{PL-Resolve($C_i$, $C_j$)} to find two variables complementary if one \textit{unifies} with the negation of the other. 
 				
-				CNF conversion algorithm
+				To check if two variables can be unified, we will use the function \textsc{Unify}($x$, $y$, $\theta$) provided in Figure 9.1 of Russel and Norvig.
+				In the interest of efficiency, we will also implement a \textit{predicate indexing}, described in Section 9.2.3 of Russel and Norvig\cite{ai}.
+				The predicate index provides \textsc{Unify}() an efficient way to only attempt unification on sentences that are possible to be unified. 
+				We will accomplish this by constructing lists of all facts that use a certain predicate, e.g. all facts that contain the predicate $Adjacent(r,s)$ will be placed into a list.
+				Then, if \textsc{Unify()} is asked to unify a sentence containing $Adjacent(u,v)$, it will only have to search the list described in the previous sentence instead of the entire knowledge base.
 			
-			\subsection{Knowledge Base}
+				
+			\subsubsection{Knowledge Base}
 			
-			\subsection{Pathfinding}
+			\subsubsection{Pathfinding}
 			
 		\subsection{Reactive Agent}
 			

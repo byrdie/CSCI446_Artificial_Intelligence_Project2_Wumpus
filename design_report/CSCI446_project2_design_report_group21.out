@@ -5,7 +5,7 @@
 \BOOKMARK [2][-]{subsection.3.2}{Environment\040Engine}{section.3}% 5
 \BOOKMARK [2][-]{subsection.3.3}{Reasoning\040Agent}{section.3}% 6
 \BOOKMARK [3][-]{subsubsection.3.3.1}{Inference\040Engine}{subsection.3.3}% 7
-\BOOKMARK [2][-]{subsection.3.4}{Knowledge\040Base}{section.3}% 8
-\BOOKMARK [2][-]{subsection.3.5}{Pathfinding}{section.3}% 9
-\BOOKMARK [2][-]{subsection.3.6}{Reactive\040Agent}{section.3}% 10
+\BOOKMARK [3][-]{subsubsection.3.3.2}{Knowledge\040Base}{subsection.3.3}% 8
+\BOOKMARK [3][-]{subsubsection.3.3.3}{Pathfinding}{subsection.3.3}% 9
+\BOOKMARK [2][-]{subsection.3.4}{Reactive\040Agent}{section.3}% 10
 \BOOKMARK [1][-]{section.4}{Experiment\040Design}{}% 11
