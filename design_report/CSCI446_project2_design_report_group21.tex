@@ -127,7 +127,10 @@
 		
 		\subsection{Reasoning Agent}
 		
+			Our reasoning agent will acquire knowledge about the world around it through its precepts, such as stench, breeze, and bump. These precepts will be inserted into the knowledge base, where the inference engine will use the precepts and logical implications to infer new information that could not be directly perceived (such as the location of the wumpus). The inference engine will only have the ability to answer specific questions, e.g. "Is there a wumpus at this square?" or "Is this square clear?", so our agent will need appropriate control logic to ensure that it queries the correct sequence of questions to the inference engine.  
+		
 			\subsubsection{Inference Engine}
+			\label{inference}
 			
 				Our inference engine will use the function \textsc{PL-Resolution}($KB$, $\alpha$) described by Russel and Norvig in Figure 7.12 \cite{ai} to perform \textit{resolution}. 
 				Resolution allows the inference engine to use a knowledge base of facts to ascertain new details about the wumpus world. 
@@ -143,12 +146,29 @@
 			
 				The knowledge base will be represented using an object-oriented approach.
 				We will define a \texttt{Clause} object, that will contain a list of predicates that are assumed to be in a disjuction. The knowledge base will then be characterized by a list of \texttt{Clause}s that similarly are assumed to be in conjunction. 
-				The predicates will be represented by a class called \texttt{Predicate}, that will have an ``abstract'' function named \texttt{eval()}. Then, to make specific predicates, we will instantiate classes that inherit from \texttt{Predicate} and override the \texttt{eval()} function. This structure provides a way to represent logical facts in \textit{conjunctive normal form}(CNF).
+				The predicates will be represented by a class called \texttt{Predicate}, that will have an ``abstract'' function named \texttt{eval()}.
+				Then, to make specific predicates, we will instantiate classes that inherit from \texttt{Predicate} and override the \texttt{eval()} function.
+				This structure provides a way to represent logical facts in \textit{conjunctive normal form}(CNF).
 				
-				Since our knowledge base can only represent sentences in conjunctive normal form, 
+				Since our knowledge base can only represent sentences in conjunctive normal form, we will need to ensure all of the rules for the wumpus world are expressed in this form.
+				To accomplish this, we will create first-order logic rules for the wumpus world in the spirit of Section 8.3.4 in Russel and Norvig.
+				We can then convert these rules to CNF using the process described in Section 9.5.1 in Russel and Norvig, or using \textit{Mathematica} if it is acceptable for this project.
+				Since all of our rules will be provided in CNF, there will be no reason to do further CNF conversion, as the resolution process produces clauses that are also in CNF.
+				
+				Each call to the resolution algorithm will use the information in the knowledge base to find new facts about the wumpus world.
+				These facts, in turn will be inserted into the knowledge base to be used in further resolution operations.
+				As such, the knowledge base will increase in size as the explorer uncovers new information about a particular wumpus world.
+				Great care should be taken to ensure that the knowledge base does grow so large, or become so disorganized that it cannot be searched efficiently.
+				A strategy known as predicate indexing has already been described in the second paragraph of Section \ref{inference} and is one example of how searching the knowledge base can be made more efficient.
+				Another possible way to make searching the knowledge base more economical is to organize information by location.
+				Many of the logical rules in the wumpus world use the $Adjacent(r,s)$ predicate defined in Section 8.3.4 of Russel and Norvig.
+				This implies that the facts pertinent to the resolution process are very often in close spatial proximity, so it seems reasonable that the resolution algorithm should resolve clauses with similar spatial locations first.
 			
 			
 			\subsubsection{Pathfinding}
+			
+				In the previous sections, we have discussed the role of the inference engine in determining whether a square is safe. We propose to also use the inference engine to inform the agent where to move next.
+				We will provide the inference engine with a series of logical statements describing the preferences associated with each actuator e.g. "If there is an obstacle in the way, rotate to the right, otherwise move forward." Using these rules, the agent can ask questions such as "Is the best actuator move forward?", "Is the best actuator rotate to the left?", etc. In this way, our agent will be able to explore the map using only the inference engine and the knowledge base.
 			
 		\subsection{Reactive Agent}
 			
