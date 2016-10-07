@@ -87,6 +87,13 @@
 	\section{Problem Statement}
 	
 		To solve the Wumpus World problem, we will develop a problem generator that creates the Wumpus worlds in which the agent will navigate.  We will then implement a logic system that uses unification and resolution on first-order rules that allow the agent to navigate.  The reasoning system will use the following information: the stench when near a Wumpus, the breeze when near a pit, the scream of a Wumpus as it is killed, and the wall when ran into.  Additionally, a reactive agent will be created that makes decisions based upon random decisions regarding which cells are safe and which are not.  We will test the logic system on Wumpus worlds of sizes {5x5, 10x10,…, 25x25}.  Our performance metrics are as follows: number of times the gold is found, number of Wumpus killed, number of times the explorer falls into a pit, number of times the Wumpus kills the explorer, and number of cells explored.
+		
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.5\textwidth]{images/ex_ww}
+			\caption{An example of a wumpus world produced by our problem generator. The green haze represents stench and the blue tiles represent breezy squares.}
+			\label{ex_ww}
+		\end{figure}
 	
 	\section{Software Design}
 		Our design will incorporate three main classes: \texttt{World}, \texttt{EnvironmentEngine}, and \texttt{Agent}. 
@@ -176,7 +183,12 @@
 		
 	\section{Experiment Design}
 	
-	To analyze the performance of our agents, we are asked to vary various parameters of the wumpus World. These parameters include: the size of the board, and the number of wumpi, pits, and barriers. 
+	To measure the performance of our agents, we will tally the following statistics: number of times the gold is found, number of wumpus killed, number of times the explorer fall into a pit, number of times the wumpus kills the explorer, and total number of cells explored. These statistics will be tracked independently, but they can also be combined into one statistic using the scoring system for the wumpus world described in Section 7.2 of Russel and Norvig. This scoring system provides point values to each of the statistics enumerated above, e.g. $+1000$ for finding the gold. This scoring system will provide a convenient way to measure the overall performance of our agents.
+	
+	Using the performance measurement, we will then vary the parameters of the wumpus world such as the size, number of wumpi, number of pits, etc. and plot the relationship between the size of the world, number of obstacles, and the score in each of the categories described in the preceding paragraph. We will then use the curve-fitting procedures in \textit{Mathematica} to provide an analytic function describing the performance vs size and number of obstacles. Finally, we will produce 3D plots displaying the data and the curve of best fit of performance vs. size and number of obstacles.
+	
+	We would also like to develop a method to estimate the time-complexity of the inference procedure vs. size and number of obstacles.
+	To quantify the time complexity of inference, we propose to track the number of times the resolution and unification algorithms are called. This will provide a good lower-bound on the amount of computational resources consumed by the inference process. As with the performance measurement, we will implement a curve fitting procedure in \textit{Mathematica} to represent the time-complexity as an analytic function. This function will be plotted with the data on a 3D logarithmic plot for visualization.
 	
 	
 	
