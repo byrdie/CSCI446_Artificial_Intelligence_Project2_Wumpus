@@ -82,11 +82,11 @@
 
 	\section{Introduction}
 	
-		\textit{Logic and the Wumpus World} is an artificial intelligence problem first proposed by Michael Genesereth, and described in detail by his student Stuart Russel\cite{ai}.  The problem involves navigating an environment known as the Wumpus World using logic to avoid dangers as the agent attempts to reach a goal.  The environment is a square grid of tiles that can be empty or contain gold for the goal state, a pit that the agent will fall into, or a monster known as a Wumpus.  As the agent navigates the environment, a score is calculated from the various actions that the agent makes.  The objective of the game is thus to maximize the score, which can be achieved by using logic to find the most efficient route.
+		\textit{Logic and the Wumpus World} is an artificial intelligence problem first proposed by Michael Genesereth, and described in detail by his student Stuart Russel\cite{ai}.  The problem involves navigating an environment known as the Wumpus World using logic to avoid dangers as the agent attempts to reach a goal.  The environment is a square grid of tiles that can be empty or contain gold for the goal state, a pit that the agent will fall into, or a monster known as a wumpus.  As the agent navigates the environment, a score is calculated from the various actions that the agent makes.  The objective of the game is thus to maximize the score, which can be achieved by using logic to find the most efficient route.
 	
 	\section{Problem Statement}
 	
-		To solve the Wumpus World problem, we will develop a problem generator that creates the Wumpus worlds in which the agent will navigate.  We will then implement a logic system that uses unification and resolution on first-order rules that allow the agent to navigate.  The reasoning system will use the following information: the stench when near a Wumpus, the breeze when near a pit, the scream of a Wumpus as it is killed, and the wall when ran into.  Additionally, a reactive agent will be created that makes decisions based upon random decisions regarding which cells are safe and which are not.  We will test the logic system on Wumpus worlds of sizes {5x5, 10x10,…, 25x25}.  Our performance metrics are as follows: number of times the gold is found, number of Wumpus killed, number of times the explorer falls into a pit, number of times the Wumpus kills the explorer, and number of cells explored.
+		To solve the Wumpus World problem, we will develop a problem generator that creates the wumpus worlds in which the agent will navigate.  We will then implement a logic system that uses unification and resolution on first-order rules that allow the agent to navigate.  The reasoning system will use the following information: the stench when near a Wumpus, the breeze when near a pit, the scream of a wumpus as it is killed, and the wall when ran into.  Additionally, a reactive agent will be created that makes decisions based upon random decisions regarding which cells are safe and which are not.  We will test the logic system on wumpus worlds of sizes {5x5, 10x10,…, 25x25}.  Our performance metrics are as follows: number of times the gold is found, number of wumpi killed, number of times the explorer falls into a pit, number of times the wumpus kills the explorer, and number of cells explored.
 	
 	\section{Software Design}
 		Our design will incorporate three main classes: \texttt{World}, \texttt{EnvironmentEngine}, and \texttt{Agent}. 
@@ -100,7 +100,7 @@
 	
 		
 		The implementation of the  \texttt{Agent} class is very important. 
-		We chose create an abstract class because we required three unique agents that had some of the same instance variable and methods. Each agent has an agent world variable that is blank except for the starting square initially. 
+		We chose to create an abstract class because we required three unique agents that had some of the same instance variable and methods. Each agent has an agent world variable that is blank except for the starting square initially. 
 		This world will be updated as each agent discovers things about the world and according to each agents abilities. 
 		The two methods that are shared across agents are \texttt{next\_move} and \texttt{update\_world}. 
 		\texttt{next\_move} is used called to see the results of the previous move and returns its choice for the next move. 
@@ -110,19 +110,24 @@
 		Again, each agent updates the world differently and, therefore, the \texttt{update\_world} method is different for each agent.
 		
 	
-		   
+		   \begin{figure}[h!]
+		   	\centering
+		   	\includegraphics[width = 1\textwidth]{diagrams/uml_project2}
+		   	\caption{A UML diagram describing the proposed layout for our program.}
+		   	\label{uml}
+		   \end{figure}
 		
 		\subsection{Wumpus World Generation}
 		
-			The \texttt{World} is used to create both the fully populated ''Master World`` and blank ''Agent World``. 
+			The \texttt{World} class is used to create both the fully populated ''Master World`` and the blank ''Agent World``. 
 			A world will consist of a vector of vectors that each hold an int.
 			Each int represents one square in the world, with each bit representing the presence of a certain feature. 
 			We chose to represent the board this way because it seemed more simple than using a whole object for each tile.
 			We decided to use a vector of vectors because they are much more forgiving to work with than two dimensional arrays in c++.
-			The \texttt{World} class will also be responsible for keeping some important data such as number of wumpi and pits for general usage throughout the program.d 
+			The \texttt{World} class will also be responsible for keeping some important data such as number of wumpi and pits for general usage throughout the program.
 		
 		\subsection{Environment Engine}
-		The \texttt{EnvironmnetEngine} is responsible for holding the master world object telling the agents about the world as it is explored.
+		The \texttt{EnvironmnetEngine} is responsible for holding the master world object and  telling the agents about the world as it is explored.
 		It's main job is to operate a loop that constantly calls the \texttt{update\_world} method in the agent. 
 		The idea is that the \texttt{update\_world} returns the agents next move. 
 		The \texttt{EnvironmentEngine} then applies that move to the master world.
@@ -132,7 +137,10 @@
 		\subsection{Reasoning Agent}
 		\label{reason}
 		
+			Our reasoning agent will acquire knowledge about the world around it through its precepts, such as stench, breeze, and bump. These precepts will be inserted into the knowledge base, where the inference engine will use the precepts and logical implications to infer new information that could not be directly perceived (such as the location of the wumpus). The inference engine will only have the ability to answer specific questions, e.g. "Is there a wumpus at this square?" or "Is this square clear?", so our agent will need appropriate control logic to ensure that it queries the correct sequence of questions to the inference engine.  
+		
 			\subsubsection{Inference Engine}
+			\label{inference}
 			
 				Our inference engine will use the function \textsc{PL-Resolution}($KB$, $\alpha$) described by Russel and Norvig in Figure 7.12 \cite{ai} to perform \textit{resolution}. 
 				Resolution allows the inference engine to use a knowledge base of facts to ascertain new details about the wumpus world. 
@@ -148,15 +156,32 @@
 			
 				The knowledge base will be represented using an object-oriented approach.
 				We will define a \texttt{Clause} object, that will contain a list of predicates that are assumed to be in a disjuction. The knowledge base will then be characterized by a list of \texttt{Clause}s that similarly are assumed to be in conjunction. 
-				The predicates will be represented by a class called \texttt{Predicate}, that will have an ``abstract'' function named \texttt{eval()}. Then, to make specific predicates, we will instantiate classes that inherit from \texttt{Predicate} and override the \texttt{eval()} function. This structure provides a way to represent logical facts in \textit{conjunctive normal form}(CNF).
+				The predicates will be represented by a class called \texttt{Predicate}, that will have an ``abstract'' function named \texttt{eval()}.
+				Then, to make specific predicates, we will instantiate classes that inherit from \texttt{Predicate} and override the \texttt{eval()} function.
+				This structure provides a way to represent logical facts in \textit{conjunctive normal form}(CNF).
 				
-				Since our knowledge base can only represent sentences in conjunctive normal form, 
+				Since our knowledge base can only represent sentences in conjunctive normal form, we will need to ensure all of the rules for the wumpus world are expressed in this form.
+				To accomplish this, we will create first-order logic rules for the wumpus world in the spirit of Section 8.3.4 in Russel and Norvig.
+				We can then convert these rules to CNF using the process described in Section 9.5.1 in Russel and Norvig, or using \textit{Mathematica} if it is acceptable for this project.
+				Since all of our rules will be provided in CNF, there will be no reason to do further CNF conversion, as the resolution process produces clauses that are also in CNF.
+				
+				Each call to the resolution algorithm will use the information in the knowledge base to find new facts about the wumpus world.
+				These facts, in turn will be inserted into the knowledge base to be used in further resolution operations.
+				As such, the knowledge base will increase in size as the explorer uncovers new information about a particular wumpus world.
+				Great care should be taken to ensure that the knowledge base does not grow so large, or become so disorganized that it cannot be searched efficiently.
+				A strategy known as predicate indexing has already been described in the second paragraph of Section \ref{inference} and is one example of how searching the knowledge base can be made more efficient.
+				Another possible way to make searching the knowledge base more economical is to organize information by location.
+				Many of the logical rules in the wumpus world use the $Adjacent(r,s)$ predicate defined in Section 8.3.4 of Russel and Norvig.
+				This implies that the facts pertinent to the resolution process are very often in close spatial proximity, so it seems reasonable that the resolution algorithm should resolve clauses with similar spatial locations first.
 			
 			
 			\subsubsection{Pathfinding}
 			
+				In the previous sections, we have discussed the role of the inference engine in determining whether a square is safe. We propose to also use the inference engine to inform the agent where to move next.
+				We will provide the inference engine with a series of logical statements describing the preferences associated with each actuator e.g. "If there is an obstacle in the way, rotate to the right, otherwise move forward." Using these rules, the agent can ask questions such as "Is the best actuator move forward?", "Is the best actuator rotate to the left?", etc. In this way, our agent will be able to explore the map using only the inference engine and the knowledge base.
+			
 		\subsection{Reactive Agent}
-			The next agent to be implemented is the \texttt{ReactiveAgent}. This agent can only act on the information provided by the cell the agent is currently in. In this case the method \texttt{update\_world} will simply use  the information returned by the \texttt{EnvironmentEngine} as the entirety of the world. This agent won't have a whole world. it only knows about the square it is currently in. The implementation of the \texttt{next\_move} method will consist of some simple logical rules such as always choose a safe square if possible.
+			The next agent to be implemented is the \texttt{ReactiveAgent}. This agent can only act on the information provided by the cell the agent is currently in. In this case the method \texttt{update\_world} will simply use  the information returned by the \texttt{EnvironmentEngine} as the entirety of the world. This agent won't have a whole world. It only knows about the square it is currently in. The implementation of the \texttt{next\_move} method will consist of some simple logical rules such as always choose a safe square if possible.
 		
 		\subsection{Human Agent}
 		 The human agent is the most simple and will be mostly used for debugging purposes. The \texttt{next\_move} method will simply update the world and then use the result of user input to make moves. This Agent will be useful for testing our boards and making sure that everything is set up correctly. The \texttt{update\_world} will apply the results of the previous move to the local agent world. This world is persistent in that old facts are remembered and it can be determined if the agent has been in a square before or not. 
