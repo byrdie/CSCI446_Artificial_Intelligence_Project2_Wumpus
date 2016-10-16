@@ -10,8 +10,8 @@ bool Predicate::operator ()(){
     return false;
 }
 
-Breezy::Breezy(bool neg, Term inp):Predicate(neg){
-    
+Breezy::Breezy(bool neg, Term * inp1):Predicate(neg){
+    arg1 = inp1;
 }
 
 bool Breezy::operator ()(){

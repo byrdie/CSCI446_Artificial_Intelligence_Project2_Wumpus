@@ -16,51 +16,58 @@
 
 #include "typedef.h"
 
+using namespace std;
+
+/* Class that serves as the basis of inputs to predicates */
 class Term {
 public:
-    Term();
-    
-    virtual Point * operator()();
-    
+    Term();     
 };
 
-class ConstPoint : public Term {
+/* Type of Term with an X and Y coordinate */
+class Vec: public Term {
 public:
-    Point * value;
-    Const(Point * val);
-    virtual Point * operator()();
+    Point * pt;  
+    Vec();
+    virtual Point * operator()();    // General vec evaluation function
+};
+
+class ConstVec : public Vec {
+public:
+    Const(Point * pt);
+    type operator()();
     
 };
 
-class Var : public Term {
+class VarVec : public Vec {
 public:
     Var();
-    virtual Point * operator()(Point * pt);
+    virtual Point * operator()();
     
 };
 
-class North : public Term {
+class North : public Vec {
 public:
-    North();
-    virtual Point * operator()(Point * pt);
+    North(Vec * input);
+    virtual Point * operator()();
 };
 
-class South : public Term {
+class South : public Vec {
 public:
-    South();
-    virtual Point * operator()(Point * pt);
+    South(Vec * input);
+    virtual Point * operator()();
 };
 
-class East : public Term {
+class East : public Vec {
 public:
-    East();
-    virtual Point * operator()(Point * pt);
+    East(Vec * input);
+    virtual Point * operator()();
 };
 
-class West : public Term {
+class West : public Vec {
 public:
-    West();
-    virtual Point * operator()(Point * pt);
+    West(Vec * input);
+    virtual Point * operator()();
 };
 
 #endif /* TERM_H */

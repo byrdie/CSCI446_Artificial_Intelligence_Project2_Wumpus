@@ -5,6 +5,6 @@ Knowledge::Knowledge(){
     
     /* Add static rules to the knowledge base */
     vector<Predicate> clause;
-    Predicate * pred = new Breezy(false);
+    Predicate * pred = new Breezy(false, new Var);
     
 }

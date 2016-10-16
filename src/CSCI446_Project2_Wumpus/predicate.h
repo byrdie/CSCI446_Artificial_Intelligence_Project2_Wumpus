@@ -17,6 +17,7 @@
 #include <iostream>
 
 #include "typedef.h"
+#include "term.h"
 
 using namespace std;
 
@@ -33,9 +34,9 @@ public:
     
     Term * arg1;
     
-    virtual bool operator()(Term * term);
+    virtual bool operator()();
     
-    Breezy(bool neg, Term * );
+    Breezy(bool neg, Term * inp1);
     
 };
 
