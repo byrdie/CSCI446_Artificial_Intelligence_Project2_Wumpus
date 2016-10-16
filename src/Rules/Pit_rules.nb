@@ -1,0 +1,386 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     12092,        378]
+NotebookOptionsPosition[     10915,        333]
+NotebookOutlinePosition[     11250,        348]
+CellTagsIndexPosition[     11207,        345]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Logic and the Wumpus World", "Section",
+ CellChangeTimes->{{3.685387579073148*^9, 3.6853875882179832`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["First-order logic rules", "Subsection",
+ CellChangeTimes->{{3.685387594365141*^9, 3.685387599096513*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Define the percepts", "Subsubsection",
+ CellChangeTimes->{{3.6854693896324863`*^9, 3.685469392288374*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"a", " ", "=", " ", 
+  RowBox[{
+   RowBox[{"Breezy", "[", "s", "]"}], " ", "\[Implies]", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Pit", "[", 
+      RowBox[{"North", "[", "s", "]"}], "]"}], " ", "\[Or]", " ", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"South", "[", "s", "]"}], "]"}], " ", "\[Or]", " ", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"East", "[", "s", "]"}], "]"}], " ", "\[Or]", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"West", "[", "s", "]"}], "]"}]}], 
+    ")"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"b", "=", " ", 
+  RowBox[{
+   RowBox[{"\[Not]", 
+    RowBox[{"Breezy", "[", "s", "]"}]}], " ", "\[Implies]", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"\[Not]", 
+      RowBox[{"Pit", "[", 
+       RowBox[{"North", "[", "s", "]"}], "]"}]}], " ", "\[And]", 
+     RowBox[{"\[Not]", " ", 
+      RowBox[{"Pit", "[", 
+       RowBox[{"South", "[", "s", "]"}], "]"}]}], " ", "\[And]", " ", 
+     RowBox[{"\[Not]", 
+      RowBox[{"Pit", "[", 
+       RowBox[{"East", "[", "s", "]"}], "]"}]}], " ", "\[And]", 
+     RowBox[{"\[Not]", 
+      RowBox[{"Pit", "[", 
+       RowBox[{"West", "[", "s", "]"}], "]"}]}]}], 
+    ")"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"c", " ", "=", " ", 
+  RowBox[{
+   RowBox[{"Safe", "[", "s", "]"}], " ", "\[Implies]", " ", 
+   RowBox[{"\[Not]", 
+    RowBox[{"Pit", "[", "s", "]"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"d", "=", 
+  RowBox[{
+   RowBox[{"\[Not]", 
+    RowBox[{"Safe", "[", "s", "]"}]}], " ", "\[Implies]", " ", 
+   RowBox[{"Pit", "[", "s", "]"}]}]}]}], "Input",
+ CellChangeTimes->{{3.68546940146517*^9, 3.685469403732677*^9}, {
+  3.685476925922876*^9, 3.6854769324982862`*^9}, {3.6855401376934433`*^9, 
+  3.685540199380109*^9}, {3.685540396357297*^9, 3.685540461319087*^9}, {
+  3.685540726343045*^9, 3.685540738070651*^9}, {3.68554266054578*^9, 
+  3.685542681537118*^9}, {3.685542723164373*^9, 3.6855427327680063`*^9}, {
+  3.685549005601035*^9, 3.685549034948392*^9}, {3.685549322811255*^9, 
+  3.685549416111616*^9}, {3.685549447593689*^9, 3.68554945969652*^9}, {
+  3.685553390850504*^9, 3.685553493457354*^9}, {3.68555352914277*^9, 
+  3.685553548099215*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Breezy", "[", "s", "]"}], "\[Implies]", 
+  RowBox[{
+   RowBox[{"Pit", "[", 
+    RowBox[{"North", "[", "s", "]"}], "]"}], "||", 
+   RowBox[{"Pit", "[", 
+    RowBox[{"South", "[", "s", "]"}], "]"}], "||", 
+   RowBox[{"Pit", "[", 
+    RowBox[{"East", "[", "s", "]"}], "]"}], "||", 
+   RowBox[{"Pit", "[", 
+    RowBox[{"West", "[", "s", "]"}], "]"}]}]}]], "Output",
+ CellChangeTimes->{3.685553493963449*^9, 3.685553548738949*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"!", 
+   RowBox[{"Breezy", "[", "s", "]"}]}], "\[Implies]", 
+  RowBox[{
+   RowBox[{"!", 
+    RowBox[{"Pit", "[", 
+     RowBox[{"North", "[", "s", "]"}], "]"}]}], "&&", 
+   RowBox[{"!", 
+    RowBox[{"Pit", "[", 
+     RowBox[{"South", "[", "s", "]"}], "]"}]}], "&&", 
+   RowBox[{"!", 
+    RowBox[{"Pit", "[", 
+     RowBox[{"East", "[", "s", "]"}], "]"}]}], "&&", 
+   RowBox[{"!", 
+    RowBox[{"Pit", "[", 
+     RowBox[{"West", "[", "s", "]"}], "]"}]}]}]}]], "Output",
+ CellChangeTimes->{3.685553493963449*^9, 3.685553548743524*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Safe", "[", "s", "]"}], "\[Implies]", 
+  RowBox[{"!", 
+   RowBox[{"Pit", "[", "s", "]"}]}]}]], "Output",
+ CellChangeTimes->{3.685553493963449*^9, 3.685553548744761*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"!", 
+   RowBox[{"Safe", "[", "s", "]"}]}], "\[Implies]", 
+  RowBox[{"Pit", "[", "s", "]"}]}]], "Output",
+ CellChangeTimes->{3.685553493963449*^9, 3.685553548746064*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"w", "=", 
+  RowBox[{"BooleanConvert", "[", 
+   RowBox[{"a", ",", "\"\<CNF\>\""}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"x", "=", 
+  RowBox[{"BooleanConvert", "[", 
+   RowBox[{"b", ",", "\"\<CNF\>\""}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"y", "=", 
+  RowBox[{"BooleanConvert", "[", 
+   RowBox[{"c", ",", "\"\<CNF\>\""}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"z", "=", 
+  RowBox[{"BooleanConvert", "[", 
+   RowBox[{"d", ",", "\"\<CNF\>\""}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.685540484761435*^9, 3.68554050974676*^9}, {
+  3.685542739959757*^9, 3.685542742656783*^9}, {3.685549913234438*^9, 
+  3.68554993505497*^9}, {3.685562792441386*^9, 3.685562806142024*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"!", 
+   RowBox[{"Breezy", "[", "s", "]"}]}], "||", 
+  RowBox[{"Pit", "[", 
+   RowBox[{"East", "[", "s", "]"}], "]"}], "||", 
+  RowBox[{"Pit", "[", 
+   RowBox[{"North", "[", "s", "]"}], "]"}], "||", 
+  RowBox[{"Pit", "[", 
+   RowBox[{"South", "[", "s", "]"}], "]"}], "||", 
+  RowBox[{"Pit", "[", 
+   RowBox[{"West", "[", "s", "]"}], "]"}]}]], "Output",
+ CellChangeTimes->{3.6855405104325647`*^9, 3.685540741722022*^9, 
+  3.685542743043005*^9, 3.6855534994791403`*^9, 3.68555355067981*^9, 
+  3.685562807240988*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Breezy", "[", "s", "]"}], "||", 
+    RowBox[{"!", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"East", "[", "s", "]"}], "]"}]}]}], ")"}], "&&", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Breezy", "[", "s", "]"}], "||", 
+    RowBox[{"!", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"North", "[", "s", "]"}], "]"}]}]}], ")"}], "&&", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Breezy", "[", "s", "]"}], "||", 
+    RowBox[{"!", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"South", "[", "s", "]"}], "]"}]}]}], ")"}], "&&", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Breezy", "[", "s", "]"}], "||", 
+    RowBox[{"!", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"West", "[", "s", "]"}], "]"}]}]}], ")"}]}]], "Output",
+ CellChangeTimes->{3.6855405104325647`*^9, 3.685540741722022*^9, 
+  3.685542743043005*^9, 3.6855534994791403`*^9, 3.68555355067981*^9, 
+  3.685562807246901*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"!", 
+   RowBox[{"Pit", "[", "s", "]"}]}], "||", 
+  RowBox[{"!", 
+   RowBox[{"Safe", "[", "s", "]"}]}]}]], "Output",
+ CellChangeTimes->{3.6855405104325647`*^9, 3.685540741722022*^9, 
+  3.685542743043005*^9, 3.6855534994791403`*^9, 3.68555355067981*^9, 
+  3.6855628072492237`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Pit", "[", "s", "]"}], "||", 
+  RowBox[{"Safe", "[", "s", "]"}]}]], "Output",
+ CellChangeTimes->{3.6855405104325647`*^9, 3.685540741722022*^9, 
+  3.685542743043005*^9, 3.6855534994791403`*^9, 3.68555355067981*^9, 
+  3.6855628072511787`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"kb", " ", "=", " ", 
+  RowBox[{
+  "w", " ", "\[And]", " ", "x", " ", "\[And]", " ", "y", "\[And]", " ", 
+   "z"}]}]], "Input",
+ CellChangeTimes->{{3.6856423543557796`*^9, 3.685642374541154*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"!", 
+     RowBox[{"Breezy", "[", "s", "]"}]}], "||", 
+    RowBox[{"Pit", "[", 
+     RowBox[{"East", "[", "s", "]"}], "]"}], "||", 
+    RowBox[{"Pit", "[", 
+     RowBox[{"North", "[", "s", "]"}], "]"}], "||", 
+    RowBox[{"Pit", "[", 
+     RowBox[{"South", "[", "s", "]"}], "]"}], "||", 
+    RowBox[{"Pit", "[", 
+     RowBox[{"West", "[", "s", "]"}], "]"}]}], ")"}], "&&", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Breezy", "[", "s", "]"}], "||", 
+    RowBox[{"!", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"East", "[", "s", "]"}], "]"}]}]}], ")"}], "&&", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Breezy", "[", "s", "]"}], "||", 
+    RowBox[{"!", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"North", "[", "s", "]"}], "]"}]}]}], ")"}], "&&", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Breezy", "[", "s", "]"}], "||", 
+    RowBox[{"!", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"South", "[", "s", "]"}], "]"}]}]}], ")"}], "&&", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Breezy", "[", "s", "]"}], "||", 
+    RowBox[{"!", 
+     RowBox[{"Pit", "[", 
+      RowBox[{"West", "[", "s", "]"}], "]"}]}]}], ")"}], "&&", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"!", 
+     RowBox[{"Pit", "[", "s", "]"}]}], "||", 
+    RowBox[{"!", 
+     RowBox[{"Safe", "[", "s", "]"}]}]}], ")"}], "&&", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"Pit", "[", "s", "]"}], "||", 
+    RowBox[{"Safe", "[", "s", "]"}]}], ")"}]}]], "Output",
+ CellChangeTimes->{3.685642375003037*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ToString", "[", "kb", "]"}]], "Input",
+ CellChangeTimes->{{3.685648746884385*^9, 3.685648752837887*^9}}],
+
+Cell[BoxData["\<\"(!Breezy[s] || Pit[East[s]] || Pit[North[s]] || \
+Pit[South[s]] || Pit[West[s]]) && (Breezy[s] || !Pit[East[s]]) && (Breezy[s] \
+|| !Pit[North[s]]) && (Breezy[s] || !Pit[South[s]]) && (Breezy[s] || \
+!Pit[West[s]]) && (!Pit[s] || !Safe[s]) && (Pit[s] || Safe[s])\"\>"], "Output",\
+
+ CellChangeTimes->{3.685648753278096*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"i", "=", "1"}], ",", " ", 
+   RowBox[{"i", " ", "<=", " ", 
+    RowBox[{"Length", "[", "kb", "]"}]}], ",", 
+   RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"WriteString", "[", 
+     RowBox[{
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<test.txt\>\""}], 
+        "}"}], "]"}], ",", 
+      RowBox[{"ToString", "[", 
+       RowBox[{"kb", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "]"}]}], "]"}], "\[IndentingNewLine]", 
+    RowBox[{"WriteString", "[", 
+     RowBox[{
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<test.txt\>\""}], 
+        "}"}], "]"}], ",", "\"\<\\n\>\""}], "]"}]}]}], "\[IndentingNewLine]", 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.685648885370407*^9, 3.685648916617136*^9}, {
+   3.6856489735769777`*^9, 3.685649040578968*^9}, 3.685649101827916*^9}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.6856487828092422`*^9, 3.685648800198455*^9}, {
+   3.685648856093761*^9, 3.68564885965421*^9}, 3.685648915496251*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{959, 1029},
+WindowMargins->{{113, Automatic}, {-41, 67}},
+FrontEndVersion->"11.0 for Linux x86 (64-bit) (September 21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 113, 1, 65, "Section"],
+Cell[CellGroupData[{
+Cell[718, 27, 111, 1, 45, "Subsection"],
+Cell[CellGroupData[{
+Cell[854, 32, 112, 1, 35, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[991, 37, 2141, 52, 99, "Input"],
+Cell[3135, 91, 460, 12, 32, "Output"],
+Cell[3598, 105, 563, 17, 32, "Output"],
+Cell[4164, 124, 203, 5, 32, "Output"],
+Cell[4370, 131, 203, 5, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4610, 141, 709, 15, 103, "Input"],
+Cell[5322, 158, 547, 14, 32, "Output"],
+Cell[5872, 174, 920, 28, 55, "Output"],
+Cell[6795, 204, 313, 8, 32, "Output"],
+Cell[7111, 214, 275, 6, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7423, 225, 218, 5, 32, "Input"],
+Cell[7644, 232, 1505, 48, 77, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9186, 285, 128, 2, 32, "Input"],
+Cell[9317, 289, 341, 5, 77, "Output"]
+}, Open  ]],
+Cell[9673, 297, 1034, 27, 159, "Input"],
+Cell[10710, 326, 165, 2, 32, "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

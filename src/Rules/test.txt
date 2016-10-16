@@ -1,0 +1,7 @@
+!Breezy[s] || Pit[East[s]] || Pit[North[s]] || Pit[South[s]] || Pit[West[s]]
+Breezy[s] || !Pit[East[s]]
+Breezy[s] || !Pit[North[s]]
+Breezy[s] || !Pit[South[s]]
+Breezy[s] || !Pit[West[s]]
+!Pit[s] || !Safe[s]
+Pit[s] || Safe[s]
