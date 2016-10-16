@@ -37,7 +37,7 @@ public:
     int num_wumpi;
     int num_pits;
     int num_barriers;
-    vector<vector<int>> world_vec;
+    vector<vector<int> > world_vec;
     
     Qt_world * qt_world;
     

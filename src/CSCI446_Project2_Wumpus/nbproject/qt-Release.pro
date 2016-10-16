@@ -8,8 +8,8 @@ CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += release 
 PKGCONFIG +=
 QT = core gui widgets
-SOURCES += engine.cpp human_agent.cpp knowledge.cpp main.cpp predicate.cpp qt_world.cpp term.cpp typedef.cpp world_gen.cpp
-HEADERS += engine.h human_agent.h knowledge.h main.h predicate.h qt_world.h term.h typedef.h world_gen.h
+SOURCES += engine.cpp human_agent.cpp knowledge.cpp main.cpp predicate.cpp qt_world.cpp rule_parser.cpp term.cpp typedef.cpp world_gen.cpp
+HEADERS += engine.h human_agent.h knowledge.h main.h predicate.h qt_world.h rule_parser.h term.h typedef.h world_gen.h
 FORMS +=
 RESOURCES +=
 TRANSLATIONS +=
@@ -22,3 +22,9 @@ QMAKE_CXX = g++
 DEFINES += 
 INCLUDEPATH += 
 LIBS += 
+equals(QT_MAJOR_VERSION, 4) {
+QMAKE_CXXFLAGS += -std=c++11
+}
+equals(QT_MAJOR_VERSION, 5) {
+CONFIG += c++11
+}

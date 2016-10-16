@@ -16,7 +16,7 @@
 
 #include "world_gen.h"
 #include "qt_world.h"
-
+#include "rule_parser.h"
 using namespace std;
 
 int main(int argc, char *argv[]);

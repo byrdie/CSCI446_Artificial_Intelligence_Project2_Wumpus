@@ -22,7 +22,7 @@ using namespace std;
 
 class Knowledge {
     
-    vector<vector<Predicate>> static_kb;
+    vector<vector<Predicate> > static_kb;
     
     Knowledge();
             

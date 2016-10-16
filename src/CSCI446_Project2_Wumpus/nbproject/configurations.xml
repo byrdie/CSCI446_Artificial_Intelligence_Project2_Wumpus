@@ -10,6 +10,7 @@
       <itemPath>main.h</itemPath>
       <itemPath>predicate.h</itemPath>
       <itemPath>qt_world.h</itemPath>
+      <itemPath>rule_parser.h</itemPath>
       <itemPath>term.h</itemPath>
       <itemPath>typedef.h</itemPath>
       <itemPath>world_gen.h</itemPath>
@@ -27,6 +28,8 @@
       <itemPath>main.cpp</itemPath>
       <itemPath>predicate.cpp</itemPath>
       <itemPath>qt_world.cpp</itemPath>
+      <itemPath>rule_parser.cpp</itemPath>
+      <itemPath>rules.txt</itemPath>
       <itemPath>term.cpp</itemPath>
       <itemPath>typedef.cpp</itemPath>
       <itemPath>world_gen.cpp</itemPath>
@@ -83,6 +86,12 @@
       </item>
       <item path="qt_world.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="rule_parser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="rule_parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="rules.txt" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="term.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="term.h" ex="false" tool="3" flavor2="0">
@@ -112,6 +121,7 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <standard>8</standard>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -143,6 +153,12 @@
       <item path="qt_world.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="qt_world.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="rule_parser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="rule_parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="rules.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="term.cpp" ex="false" tool="1" flavor2="0">
       </item>
