@@ -6,8 +6,11 @@
                    projectFiles="true">
       <itemPath>engine.h</itemPath>
       <itemPath>human_agent.h</itemPath>
+      <itemPath>knowledge.h</itemPath>
       <itemPath>main.h</itemPath>
+      <itemPath>predicate.h</itemPath>
       <itemPath>qt_world.h</itemPath>
+      <itemPath>term.h</itemPath>
       <itemPath>typedef.h</itemPath>
       <itemPath>world_gen.h</itemPath>
     </logicalFolder>
@@ -20,8 +23,11 @@
                    projectFiles="true">
       <itemPath>engine.cpp</itemPath>
       <itemPath>human_agent.cpp</itemPath>
+      <itemPath>knowledge.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
+      <itemPath>predicate.cpp</itemPath>
       <itemPath>qt_world.cpp</itemPath>
+      <itemPath>term.cpp</itemPath>
       <itemPath>typedef.cpp</itemPath>
       <itemPath>world_gen.cpp</itemPath>
     </logicalFolder>
@@ -61,13 +67,25 @@
       </item>
       <item path="human_agent.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="knowledge.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="knowledge.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="main.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="predicate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="predicate.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="qt_world.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="qt_world.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="term.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="term.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="typedef.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -110,13 +128,25 @@
       </item>
       <item path="human_agent.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="knowledge.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="knowledge.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="main.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="predicate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="predicate.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="qt_world.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="qt_world.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="term.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="term.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="typedef.cpp" ex="false" tool="1" flavor2="0">
       </item>
