@@ -8,6 +8,14 @@ Knowledge::Knowledge() {
 
 }
 
+bool is_neg(pred p){
+    if((p & P_NEGATION) > 0){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 /**
  * Apply a substitution provided by the unification algorithm
  * Please note that this modifies the provided clause, If you value your life, 

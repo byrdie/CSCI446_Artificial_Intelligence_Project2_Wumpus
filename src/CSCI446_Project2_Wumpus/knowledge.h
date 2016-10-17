@@ -61,6 +61,8 @@ public:
 
     Knowledge();
     
+    bool is_neg(pred p);
+    
     clause apply_sub_to_clause(clause c, vector<uint> sub);
     pred apply_sub_to_pred(pred p, vector<uint> sub);
     pred_args apply_sub_to_pred_args(pred_args pa, vector<uint> sub);
