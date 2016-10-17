@@ -29,7 +29,7 @@
 
 #include <vector>
 
-#include "rule_parser.h"
+
 
 using namespace std;
 
@@ -37,7 +37,10 @@ typedef vector<int>             func_args;  // integer represents function param
 typedef tuple<int, func_args>   func;       // integer represents function name, variable type, or constant type
 typedef vector<func>            pred_args;  // Arguments to predicates
 typedef tuple<int, pred_args>   pred;       // Integer represents predicate name
-typedef vector<vector<pred>>    cnf;        // CNF representation of all predicates
+typedef vector<pred>            clause;     // Clauses are ORs of predicates
+typedef vector<clause>          cnf;        // CNF representation of all clauses
+
+#include "rule_parser.h"
 
 class Knowledge {
     
