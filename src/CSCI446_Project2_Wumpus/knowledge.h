@@ -22,6 +22,7 @@
 #define P_SAFE          0x00000004      // safe predicate
 
 // Define Functions
+
 #define F_IDENTITY      0x00010000      // Identity function returns itself
 #define F_NORTH         0x00020000      // Returns the tile to the north
 #define F_SOUTH         0x00040000      // Returns the tile to the south
@@ -33,10 +34,10 @@
 #define A_UNCONST   0x7FFFFFFF                   
 
 #include <vector>
-#include <iterator>
+#include <iterator>                                                                                                                                                                                                                                                   
 
 
-
+ 
 using namespace std;
 
 

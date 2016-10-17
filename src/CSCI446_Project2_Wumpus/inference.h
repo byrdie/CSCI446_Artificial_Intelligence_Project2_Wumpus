@@ -9,15 +9,14 @@
 #ifndef INFERENCE_H
 #define INFERENCE_H
 
+#include "knowledge.h"
 
 using namespace std;
-
-typedef 
 
 class Inference {
     
     Inference();
-    vector<func> unification();
+    vector<uint> unification(pred x, pred y, vector<uint> theta);
     bool resolution(cnf kb, clause query);
     cnf resolve(clause c_i, clause c_j);
     
