@@ -37,6 +37,7 @@ pred        parse_pred(string str, int * index);
 pred_args   parse_pred_args(string str, int * index);
 func        parse_func(string str, int * index);
 func_args   parse_func_args(string str, int * index);
+int         parse_arg(string str, int * index);
 
 int find_next_delim(string str, int * index);
 #endif /* RULE_PARSER_H */

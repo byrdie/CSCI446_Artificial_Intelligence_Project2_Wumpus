@@ -74,6 +74,7 @@ pred_args parse_pred_args(string str, int * index) {
             return ret_pred_args;
         } else {
             cout << "SYNTAX ERROR: 'parse_pred_args' missing closing brace" << endl;
+            return ret_pred_args;
         }
     }
 }
@@ -85,19 +86,51 @@ func parse_func(string str, int * index) {
     *index += d_i + 1; // Move the index to the next space after the delimiter
     char next_d = str[d_i]; // Find value of the next delimiter
 
-    pred ret_pred; // allocate space for return predicate   
-    if (next_d == '[') { // The next terms are arguments for the predicate
+    func ret_func;          // allocate space for return function   
+    if (next_d == '[') {    // The next terms are arguments for the function
 
-        get<1>(ret_pred) = parse_pred_args(str, index);
+        get<1>(ret_func) = parse_func_args(str, index);
 
     } else if (next_d == ',') {
-        cout << "Syntax Error in 'parse_pred', early comma detected" << endl;
-    } else if (next_d == ']') {
-        cout << "Syntax Error in 'parse_pred', early closing brace detected" << endl;
+        cout << "SYNTAX ERROR: 'parse_func', early comma detected" << endl;
+    } else if (next_d == ']') {     // This is a variable
+        
     }
 
     return ret_pred;
 
+}
+
+func_args parse_func_args(string str, int * index){
+    
+    func_args ret_func_args;
+    
+    while(true){
+        ret_func_args.push_back(parse_arg(str, index));
+        
+        
+        char cur_char = str[*index];
+        if (cur_char == ',') {
+            continue;
+        } else if (cur_char == ']') {
+            return ret_func_args;
+        } else {
+            cout << "SYNTAX ERROR: 'parse_func_args' missing closing brace" << endl;
+            return ret_func_args;
+        }      
+    }   
+}
+
+/**
+ * 
+ * @param str
+ * @param index
+ * @return 
+ */
+int parse_arg(string str, int* index){
+    
+    
+    
 }
 
 int find_next_delim(string str, int * index) {
