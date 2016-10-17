@@ -53,5 +53,7 @@ class Knowledge {
     
 };
 
+void print (cnf kb );
+
 #endif /* KNOWLEDGE_H */
 

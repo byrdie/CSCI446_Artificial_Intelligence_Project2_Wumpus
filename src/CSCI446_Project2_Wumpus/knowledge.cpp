@@ -19,3 +19,11 @@ void initialize_token_map() {
     func_tok_map["West"] = F_WEST;
    
 }
+
+void print (cnf kb) {
+    for(cnf :: iterator i = kb.begin(); i != kb.end(); ++i){
+        for (clause :: iterator j = i->begin; i != i->end(); ++j){
+            break;
+        }
+    }
+}
