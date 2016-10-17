@@ -8,7 +8,7 @@
  * File:   main.cpp
  * Author: byrdie
  *
- * Created on October 1, 2016, 3:48 PM
+/ * Created on October 1, 2016, 3:48 PM
  */
 
 
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     Knowledge * kb = new Knowledge();
     kb->print_kb();
     
-//    return app.exec();
+    return app.exec();
 
 }
 
