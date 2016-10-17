@@ -9,6 +9,56 @@ Knowledge::Knowledge() {
 }
 
 /**
+ * Apply a substitution provided by the unification algorithm
+ * Please note that this modifies the provided clause, If you value your life, 
+ * you will not call this function with the master knowledge base.
+ * @param c
+ * @param 
+ * @return the clause with substitutions applied.
+ */
+clause Knowledge::apply_sub_to_clause(clause c, vector<uint> sub) {
+    for (uint j = 0; j < c.size(); j++) {
+        c[j]=apply_sub_to_pred(c[j], sub);
+    }
+    return c;
+}
+
+pred Knowledge::apply_sub_to_pred(pred p, vector<uint> sub) {
+    get<1>(p) = apply_sub_to_pred_args(get<1>(p), sub);
+    return p;
+}
+
+
+pred_args Knowledge::apply_sub_to_pred_args(pred_args pa, vector<uint> sub) {
+    for (uint k = 0; k < pa.size(); k++) {
+        pa[k] = apply_sub_to_func(pa[k], sub);
+    }
+    return pa;
+}
+
+func Knowledge::apply_sub_to_func(func f, vector<uint> sub) {
+
+    get<1>(f) = apply_sub_to_func_args(get<1>(f), sub);
+    return f;
+
+}
+
+func_args Knowledge::apply_sub_to_func_args(func_args fa, vector<uint> sub) {
+
+    uint cur_arg;
+    uint test_arg = sub[0];
+
+    for (uint l = 0; l < fa.size(); l++) {
+        cur_arg = fa[l];
+        if (cur_arg == test_arg) {
+            fa[l] = sub[1];
+        }
+    }
+    return fa;
+
+}
+
+/**
  * Returns the combination of two lists of clauses
  * @param c1    The first list of clauses
  * @param c2    The second list of clauses
@@ -35,6 +85,7 @@ cnf Knowledge::copy_kb(cnf kb) {
     }
     return kb_copy;
 }
+
 clause Knowledge::copy_clause(clause c) {
     clause c_copy;
     for (uint j = 0; j < c.size(); j++) {
@@ -42,6 +93,7 @@ clause Knowledge::copy_clause(clause c) {
     }
     return c_copy;
 }
+
 pred Knowledge::copy_pred(pred p) {
     pred p_copy;
     get<0>(p_copy) = get<0>(p);
@@ -49,6 +101,7 @@ pred Knowledge::copy_pred(pred p) {
     return p_copy;
 
 }
+
 pred_args Knowledge::copy_pred_args(pred_args pa) {
     pred_args pa_copy;
     for (uint k = 0; k < pa.size(); k++) {
@@ -63,9 +116,10 @@ func Knowledge::copy_func(func f) {
     get<1>(f_copy) = copy_func_args(get<1>(f));
     return f_copy;
 }
+
 func_args Knowledge::copy_func_args(func_args fa) {
     func_args fa_copy;
-    for (int l = 0; l < fa.size(); l++) {
+    for (uint l = 0; l < fa.size(); l++) {
         fa_copy.push_back(fa[l]);
     }
     return fa_copy;
@@ -75,34 +129,38 @@ func_args Knowledge::copy_func_args(func_args fa) {
  * Series of functions to delete knowledge bases after we are finished with them
  * @param kb
  */
-void Knowledge::del_kb(cnf kb){
+void Knowledge::del_kb(cnf kb) {
     for (uint i = 0; i < kb.size(); i++) {
         del_clause(kb[i]);
     }
     kb.clear();
 }
-void Knowledge::del_clause(clause c){
+
+void Knowledge::del_clause(clause c) {
     for (uint j = 0; j < c.size(); j++) {
         del_pred(c[j]);
     }
     c.clear();
 }
-void Knowledge::del_pred(pred p){
+
+void Knowledge::del_pred(pred p) {
     del_pred_args(get<1>(p));
 }
-void Knowledge::del_pred_args(pred_args pa){
+
+void Knowledge::del_pred_args(pred_args pa) {
     for (uint k = 0; k < pa.size(); k++) {
         del_func(pa[k]);
     }
     pa.clear();
 }
-void Knowledge::del_func(func f){
+
+void Knowledge::del_func(func f) {
     del_func_args(get<1>(f));
 }
-void Knowledge::del_func_args(func_args fa){
+
+void Knowledge::del_func_args(func_args fa) {
     fa.clear();
 }
-    
 
 /**
  * Series of function to print out a knowledge base for viewing
@@ -114,6 +172,7 @@ void Knowledge::print_kb(cnf kb) {
         cout << endl;
     }
 }
+
 void Knowledge::print_clause(clause c) {
     for (uint j = 0; j < c.size(); j++) {
         print_pred(c[j]);
@@ -122,6 +181,7 @@ void Knowledge::print_clause(clause c) {
         }
     }
 }
+
 void Knowledge::print_pred(pred p) {
 
     int pred_tok = get<0>(p);
@@ -137,6 +197,7 @@ void Knowledge::print_pred(pred p) {
     print_pred_args(get<1>(p));
     cout << ")";
 }
+
 void Knowledge::print_pred_args(pred_args pa) {
 
     for (uint k = 0; k < pa.size(); k++) {
@@ -146,6 +207,7 @@ void Knowledge::print_pred_args(pred_args pa) {
         }
     }
 }
+
 void Knowledge::print_func(func f) {
     int func_tok = get<0>(f);
 
@@ -160,9 +222,10 @@ void Knowledge::print_func(func f) {
         cout << ")";
     }
 }
+
 void Knowledge::print_func_args(func_args fa) {
 
-    for (int l = 0; l < fa.size(); l++) {
+    for (uint l = 0; l < fa.size(); l++) {
         cout << fa[l];
         if (l != fa.size() - 1) {
             cout << ",";

@@ -19,7 +19,7 @@
 
 int main(int argc, char *argv[]) {
 
-    QApplication app(argc, argv);
+//    QApplication app(argc, argv);
 //    app.installEventFilter(new QApplicationFilter());
     
 //    init_rand();
@@ -30,9 +30,18 @@ int main(int argc, char *argv[]) {
 //    Engine * engine = new Engine(world);
 //    Human_agent * player = new Human_agent(engine, N);
     Knowledge * kb = new Knowledge();
-    kb->print_kb(kb->static_kb);
     
-    return app.exec();
+    cnf new_kb = kb->static_kb;
+    kb->print_kb(new_kb);
+    vector<uint> sub;
+    sub.push_back(4);
+    sub.push_back(5);
+    new_kb[2] = kb->apply_sub_to_clause(new_kb[2], sub);
+    
+    kb->print_kb(kb->static_kb);
+    kb->print_kb(new_kb);
+    
+//    return app.exec();
 
 }
 

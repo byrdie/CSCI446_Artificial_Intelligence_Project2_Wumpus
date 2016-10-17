@@ -1,8 +1,8 @@
 
-
-cnf resolve(clause c_i, clause c_j){
-    
-    for()
-    
-}
+//
+//cnf resolve(clause c_i, clause c_j){
+//    
+//    for()
+//    
+//}
 

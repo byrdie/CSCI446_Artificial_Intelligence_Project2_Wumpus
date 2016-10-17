@@ -12,11 +12,12 @@
 
 using namespace std;
 
+typedef 
 
 class Inference {
     
     Inference();
-    vector<int> unification();
+    vector<func> unification();
     bool resolution(cnf kb, clause query);
     cnf resolve(clause c_i, clause c_j);
     

@@ -22,12 +22,15 @@
 #define P_SAFE          0x00000004      // safe predicate
 
 // Define Functions
-#define F_CONST         0x00010000      // Identity function returns itself
-#define F_VAR           0x00200000
+#define F_IDENTITY      0x00010000      // Identity function returns itself
 #define F_NORTH         0x00020000      // Returns the tile to the north
 #define F_SOUTH         0x00040000      // Returns the tile to the south
 #define F_EAST          0x00080000
 #define F_WEST          0x00100000
+
+// Define Argument types
+#define A_CONST     0x80000000      // predicate inversion
+#define A_UNCONST   0x7FFFFFFF                   
 
 #include <vector>
 #include <iterator>
@@ -37,10 +40,10 @@
 using namespace std;
 
 
-typedef vector<int> func_args; // integer represents function parameters, variable index, or constant value
-typedef tuple<int, func_args> func; // integer represents function name, variable type, or constant type
+typedef vector<uint> func_args; // integer represents function parameters, variable index, or constant value
+typedef tuple<uint, func_args> func; // integer represents function name, variable type, or constant type
 typedef vector<func> pred_args; // Arguments to predicates
-typedef tuple<int, pred_args> pred; // Integer represents predicate name
+typedef tuple<uint, pred_args> pred; // Integer represents predicate name
 typedef vector<pred> clause; // Clauses are ORs of predicates
 typedef vector<clause> cnf; // CNF representation of all clauses
 
@@ -56,6 +59,12 @@ public:
     cnf total_kb;
 
     Knowledge();
+    
+    clause apply_sub_to_clause(clause c, vector<uint> sub);
+    pred apply_sub_to_pred(pred p, vector<uint> sub);
+    pred_args apply_sub_to_pred_args(pred_args pa, vector<uint> sub);
+    func apply_sub_to_func(func f, vector<uint> sub);
+    func_args apply_sub_to_func_args(func_args fa, vector<uint> sub);
 
     cnf concat_kb(cnf c1, cnf c2);
     
