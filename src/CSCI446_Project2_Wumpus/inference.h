@@ -9,14 +9,16 @@
 #ifndef INFERENCE_H
 #define INFERENCE_H
 
-
+#include "knowledge.h"
 
 
 
 class Inference {
     
     Inference();
-    vector<int> unification();
+    vector<uint> unification(pred x, pred y, vector<uint> theta);
+    
+    
     
     
     
