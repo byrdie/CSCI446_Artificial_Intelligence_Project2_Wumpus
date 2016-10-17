@@ -11,7 +11,6 @@
       <itemPath>predicate.h</itemPath>
       <itemPath>qt_world.h</itemPath>
       <itemPath>rule_parser.h</itemPath>
-      <itemPath>term.h</itemPath>
       <itemPath>typedef.h</itemPath>
       <itemPath>world_gen.h</itemPath>
     </logicalFolder>
@@ -26,11 +25,9 @@
       <itemPath>human_agent.cpp</itemPath>
       <itemPath>knowledge.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
-      <itemPath>predicate.cpp</itemPath>
       <itemPath>qt_world.cpp</itemPath>
       <itemPath>rule_parser.cpp</itemPath>
       <itemPath>rules.txt</itemPath>
-      <itemPath>term.cpp</itemPath>
       <itemPath>typedef.cpp</itemPath>
       <itemPath>world_gen.cpp</itemPath>
     </logicalFolder>
@@ -78,8 +75,6 @@
       </item>
       <item path="main.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="predicate.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="predicate.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="qt_world.cpp" ex="false" tool="1" flavor2="0">
@@ -91,10 +86,6 @@
       <item path="rule_parser.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="rules.txt" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="term.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="term.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="typedef.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -146,8 +137,6 @@
       </item>
       <item path="main.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="predicate.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="predicate.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="qt_world.cpp" ex="false" tool="1" flavor2="0">
@@ -159,10 +148,6 @@
       <item path="rule_parser.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="rules.txt" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="term.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="term.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="typedef.cpp" ex="false" tool="1" flavor2="0">
       </item>
