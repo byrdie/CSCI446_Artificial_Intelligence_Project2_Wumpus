@@ -10,14 +10,15 @@
 #define INFERENCE_H
 
 
-
+using namespace std;
 
 
 class Inference {
     
     Inference();
     vector<int> unification();
-    
+    bool resolution(cnf kb, clause query);
+    cnf resolve(clause c_i, clause c_j);
     
     
 };

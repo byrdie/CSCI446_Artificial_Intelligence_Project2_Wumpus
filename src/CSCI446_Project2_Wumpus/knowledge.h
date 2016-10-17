@@ -22,7 +22,8 @@
 #define P_SAFE          0x00000004      // safe predicate
 
 // Define Functions
-#define F_IDENTITY      0x00010000      // Identity function returns itself
+#define F_CONST         0x00010000      // Identity function returns itself
+#define F_VAR           0x00200000
 #define F_NORTH         0x00020000      // Returns the tile to the north
 #define F_SOUTH         0x00040000      // Returns the tile to the south
 #define F_EAST          0x00080000
@@ -51,15 +52,35 @@ class Knowledge {
 public:
     RuleParser * rule_parser;
     cnf static_kb;
+    cnf dynamic_kb;
+    cnf total_kb;
 
     Knowledge();
 
-    void print_kb();
+    cnf concat_kb(cnf c1, cnf c2);
+    
+    cnf copy_kb(cnf kb);
+    clause copy_clause(clause c);
+    pred copy_pred(pred p);
+    pred_args copy_pred_args(pred_args pa);
+    func copy_func(func f);
+    func_args copy_func_args(func_args fa);
+    
+    void del_kb(cnf kb);
+    void del_clause(clause c);
+    void del_pred(pred p);
+    void del_pred_args(pred_args pa);
+    void del_func(func f);
+    void del_func_args(func_args fa);
+    
+    void print_kb(cnf kb);
     void print_clause(clause c);
     void print_pred(pred p);
     void print_pred_args(pred_args pa);
     void print_func(func f);
     void print_func_args(func_args fa);
+    
+    
 
 };
 

@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 //    Engine * engine = new Engine(world);
 //    Human_agent * player = new Human_agent(engine, N);
     Knowledge * kb = new Knowledge();
-    kb->print_kb();
+    kb->print_kb(kb->static_kb);
     
     return app.exec();
 
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 /* Prepare random number generation */
 void init_rand(unsigned long int seed) {
     srand(seed);
-    printf("Seed: %u\n", seed);
+    printf("Seed: %lu\n", seed);
 }
 
 void init_rand() {
