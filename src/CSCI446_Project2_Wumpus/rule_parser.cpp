@@ -7,13 +7,22 @@
 
 void  parse() 
 {   
-    vector <int> a;
+    cnf rules;
+    
     
     vector <vector<tuple<int, vector<tuple<int, vector<int> > > > > >  conjuncts;
-    ifstream file("rules.txt");
+    ifstream file("test.txt");
     string str; 
-    while (getline(file, str))
-    {
-        cout << "fadfsdf";
+    vector<pred> predicates;
+    while (getline(file, str ))
+    {   
+       cnf.push_back(predicate(str));
+            
+        
     }
 }
+
+vector<pred> predicate(string str){
+    
+}
+

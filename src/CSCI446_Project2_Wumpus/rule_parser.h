@@ -19,6 +19,7 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
+#include <string.h>
 
 
 using namespace std;
@@ -34,5 +35,6 @@ typedef tuple<int, pred_args>   pred;       // Integer represents predicate name
 typedef vector<vector<pred>>    cnf;        // CNF representation of all predicates
 
 void parse();
+void predicates(string str);
 #endif /* RULE_PARSER_H */
 
