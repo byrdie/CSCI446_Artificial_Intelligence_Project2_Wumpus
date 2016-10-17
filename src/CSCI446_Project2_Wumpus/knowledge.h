@@ -33,8 +33,7 @@
 
 using namespace std;
 
-map<string, int>                pred_tok_map;
-map<string, int>                func_tok_map;
+
 typedef vector<int>             func_args;  // integer represents function parameters, variable index, or constant value
 typedef tuple<int, func_args>   func;       // integer represents function name, variable type, or constant type
 typedef vector<func>            pred_args;  // Arguments to predicates
