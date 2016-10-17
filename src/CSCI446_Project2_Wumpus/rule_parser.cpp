@@ -9,7 +9,7 @@
 
 RuleParser::RuleParser() {
 
-    num_var = 0;
+    num_var = 1;
     initialize_token_map();
 
 }
@@ -24,8 +24,9 @@ cnf RuleParser::parse_cnf() {
     while (getline(file, str)) {
         int index = 0;
         rules.push_back(parse_clause(str, &index));
-        cout << str << endl;
     }
+    
+    return rules;
 }
 
 clause RuleParser::parse_clause(string str, int * index) {
@@ -131,9 +132,7 @@ func RuleParser::parse_func(string str, int * index) {
 
         }
 
-    } else if (next_d == ',') {
-        cout << "SYNTAX ERROR: 'parse_func', early comma detected" << endl;
-    } else if (next_d == ']') { // This is a variable
+    } else if (next_d == ']' or next_d == ',') { // This is a variable
 
         func_args var_args;
         var_args.push_back(parse_arg(str, index)); // Read in argument
@@ -220,5 +219,14 @@ void RuleParser::initialize_token_map() {
     func_tok_map["South"] = F_SOUTH;
     func_tok_map["East"] = F_EAST;
     func_tok_map["West"] = F_WEST;
+
+    pred_str_map[P_BREEZY] = "Breezy";
+    pred_str_map[P_PIT] = "Pit";
+    pred_str_map[P_SAFE] = "Safe";
+    
+    func_str_map[F_NORTH] = "North";
+    func_str_map[F_SOUTH] = "South";
+    func_str_map[F_EAST] = "East";
+    func_str_map[F_WEST] = "West";
 
 }

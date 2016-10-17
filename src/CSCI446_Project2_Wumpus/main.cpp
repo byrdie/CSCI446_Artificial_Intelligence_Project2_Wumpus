@@ -29,10 +29,10 @@ int main(int argc, char *argv[]) {
 //    World * world = new World(N, 3, 3, 3);
 //    Engine * engine = new Engine(world);
 //    Human_agent * player = new Human_agent(engine, N);
-    RuleParser * rule_parser = new RuleParser();
-    cnf rules = rule_parser->parse_cnf();
+    Knowledge * kb = new Knowledge();
+    kb->print_kb();
     
-    return app.exec();
+//    return app.exec();
 
 }
 

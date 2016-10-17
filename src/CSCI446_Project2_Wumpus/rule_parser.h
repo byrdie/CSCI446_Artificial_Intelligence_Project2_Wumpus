@@ -23,6 +23,8 @@
 #include <algorithm>
 #include <map>
 
+class RuleParser;
+
 #include "knowledge.h"
 
 using namespace std;
@@ -31,12 +33,13 @@ class RuleParser {
 public:
     RuleParser();
     cnf parse_cnf();
-private:
-    int num_var;
-    map<char, int> sym_map;
     map<string, int> pred_tok_map;
     map<string, int> func_tok_map;
-    
+    map<int, string> pred_str_map;
+    map<int, string> func_str_map;
+    int num_var;
+    map<char, int> sym_map;
+
     void initialize_token_map();
     clause parse_clause(string str, int * index);
     pred parse_pred(string str, int * index);
