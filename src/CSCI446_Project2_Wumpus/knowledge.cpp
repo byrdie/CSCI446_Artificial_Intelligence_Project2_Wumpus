@@ -8,6 +8,54 @@ Knowledge::Knowledge() {
 
 }
 
+vector<uint> Knowledge::unification(pred x, pred y, vector<vector<uint>> theta) {
+    //Check that the same predicates are used and the same number of arguments are used.
+    if ((get<0>(x) != get<0>(y)) || (get<1>(x).size() != get<1>(y).size())) {
+        return theta;
+    }
+    for (int i = 0; i < get<1>(x).size(); i++) {
+        if ((get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i]))) {
+            return theta;
+        }
+    }
+}
+
+cnf Knowledge::resolve(clause ci, clause cj) {
+
+    cnf resolvents; // Allocate space for the new formulae
+
+    /* Loop through every literal in both clauses */
+    for (int i = 0; i < ci.size(); i++) {
+        for (int j = 0; j < cj.size(); j++) {
+
+            /* Select the next two predicates */
+            pred pi = ci[i];
+            pred pj = cj[j];
+
+            /* Check that one (not both) of the objects are negated */
+            if (is_neg(pi) xor is_neg(pj)) {
+
+                vector<vector < uint>> theta; // theta is a list of substitutions
+                theta = unification(pi, pj theta); // Attempt to unify the two predicates
+
+                /* Check if the unification process succeeded before continuing */
+                if (!theta.empty()) { // Substitution is non-empty
+
+                    /* Loop through list of substitutions */
+                    for (int k = 0; k < theta.size(); k++) {
+
+                        /* Make a copy of the input clauses to modify */
+                        
+                        
+                    }
+                }
+            }
+
+        }
+    }
+
+}
+
 bool is_neg(pred p){
     if((p & P_NEGATION) > 0){
         return true;

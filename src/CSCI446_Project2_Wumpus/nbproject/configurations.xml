@@ -6,7 +6,6 @@
                    projectFiles="true">
       <itemPath>engine.h</itemPath>
       <itemPath>human_agent.h</itemPath>
-      <itemPath>inference.h</itemPath>
       <itemPath>knowledge.h</itemPath>
       <itemPath>main.h</itemPath>
       <itemPath>predicate.h</itemPath>
@@ -24,7 +23,6 @@
                    projectFiles="true">
       <itemPath>engine.cpp</itemPath>
       <itemPath>human_agent.cpp</itemPath>
-      <itemPath>inference.cpp</itemPath>
       <itemPath>knowledge.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>qt_world.cpp</itemPath>
@@ -68,10 +66,6 @@
       <item path="human_agent.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="human_agent.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="inference.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="inference.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="knowledge.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -134,10 +128,6 @@
       <item path="human_agent.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="human_agent.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="inference.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="inference.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="knowledge.cpp" ex="false" tool="1" flavor2="0">
       </item>

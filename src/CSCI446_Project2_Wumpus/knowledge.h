@@ -37,7 +37,7 @@
 #include <iterator>                                                                                                                                                                                                                                                   
 
 
- 
+
 using namespace std;
 
 
@@ -60,9 +60,13 @@ public:
     cnf total_kb;
 
     Knowledge();
-    
+
+    vector<uint> unification(pred x, pred y, vector<vector<uint>. theta);
+    bool resolution(cnf kb, clause query);
+    cnf resolve(clause c_i, clause c_j);
+
     bool is_neg(pred p);
-    
+
     clause apply_sub_to_clause(clause c, vector<uint> sub);
     pred apply_sub_to_pred(pred p, vector<uint> sub);
     pred_args apply_sub_to_pred_args(pred_args pa, vector<uint> sub);
@@ -70,29 +74,29 @@ public:
     func_args apply_sub_to_func_args(func_args fa, vector<uint> sub);
 
     cnf concat_kb(cnf c1, cnf c2);
-    
+
     cnf copy_kb(cnf kb);
     clause copy_clause(clause c);
     pred copy_pred(pred p);
     pred_args copy_pred_args(pred_args pa);
     func copy_func(func f);
     func_args copy_func_args(func_args fa);
-    
+
     void del_kb(cnf kb);
     void del_clause(clause c);
     void del_pred(pred p);
     void del_pred_args(pred_args pa);
     void del_func(func f);
     void del_func_args(func_args fa);
-    
+
     void print_kb(cnf kb);
     void print_clause(clause c);
     void print_pred(pred p);
     void print_pred_args(pred_args pa);
     void print_func(func f);
     void print_func_args(func_args fa);
-    
-    
+
+#include "inference.h"
 
 };
 
