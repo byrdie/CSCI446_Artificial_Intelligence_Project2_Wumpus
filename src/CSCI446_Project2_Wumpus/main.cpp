@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
 //    Human_agent * player = new Human_agent(engine, N);
     Knowledge * kb = new Knowledge();
     
+    
     cnf new_kb = kb->static_kb;
     kb->print_kb(new_kb);
     vector<uint> sub;

@@ -1,6 +1,6 @@
 
 #include "knowledge.h"
-
+#include <typeinfo>
 Knowledge::Knowledge() {
 
     rule_parser = new RuleParser();
@@ -9,15 +9,61 @@ Knowledge::Knowledge() {
 }
 
 theta Knowledge::unification(pred x, pred y, theta sub_list) {
+    pred_args x_args;
+    pred_args y_args;
+
     //Check that the same predicates are used and the same number of arguments are used.
     if ((get<0>(x) != get<0>(y)) || (get<1>(x).size() != get<1>(y).size())) {
         return sub_list;
     }
+    
+    //checks that the same functions are used
     for (uint i = 0; i < get<1>(x).size(); i++) {
-        if ((get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i]))) {
+        if (get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i])) {
             return sub_list;
         }
+        cout << typeid(get<0>(get<1>(x)[i])).name() << '\n';
+        func x_func = get<1>(x)[i];
+        func y_func = get<1>(y)[i];
+        x_args.push_back(x_func);
+        y_args.push_back(y_func);
     }
+
+    for (uint i = 0; i < x_args.size(); i++) {
+        func_args x_vars = get<1>(x_args[i]);
+        func_args y_vars = get<1>(y_args[i]);
+        
+        for (uint j = 0; j < x_vars.size(); j++){
+            sub_list = unify_var(x_vars[j], y_vars[j], sub_list);
+        }
+    }
+    return sub_list;
+}
+
+theta Knowledge :: unify_var(uint x, uint y, theta sub_list){
+    //check if x or y are already in the the sublist
+    for (uint i = 0; i < sub_list.size(); i++){
+        if (x = sub_list[i][0]){
+            x = sub_list[i][1];
+        }
+        if (y = sub_list[i][0]){
+            y = sub_list[i][1];
+        }
+    }
+    if (x == y){
+        ;
+    }else if(x & A_CONST == 0){
+        vector<uint> s_sub_list;
+        s_sub_list.push_back(x);
+        s_sub_list.push_back(y);
+        sub_list.push_back(s_sub_list);
+    }else if(y & A_CONST == 0){
+        vector<uint> s_sub_list;
+        s_sub_list.push_back(y);
+        s_sub_list.push_back(x);
+        sub_list.push_back(s_sub_list);
+    }
+    return sub_list;
 }
 
 cnf Knowledge::resolve(clause ci, clause cj) {
@@ -45,8 +91,8 @@ cnf Knowledge::resolve(clause ci, clause cj) {
                     for (uint k = 0; k < sub_list.size(); k++) {
 
                         /* Make a copy of the input clauses to modify */
-                        
-                        
+
+
                     }
                 }
             }
@@ -56,8 +102,8 @@ cnf Knowledge::resolve(clause ci, clause cj) {
 
 }
 
-bool Knowledge::is_neg(pred p){
-    if((get<0>(p) & P_NEGATION) > 0){
+bool Knowledge::is_neg(pred p) {
+    if ((get<0>(p) & P_NEGATION) > 0) {
         return true;
     } else {
         return false;
@@ -74,7 +120,7 @@ bool Knowledge::is_neg(pred p){
  */
 clause Knowledge::apply_sub_to_clause(clause c, vector<uint> sub) {
     for (uint j = 0; j < c.size(); j++) {
-        c[j]=apply_sub_to_pred(c[j], sub);
+        c[j] = apply_sub_to_pred(c[j], sub);
     }
     return c;
 }
@@ -83,7 +129,6 @@ pred Knowledge::apply_sub_to_pred(pred p, vector<uint> sub) {
     get<1>(p) = apply_sub_to_pred_args(get<1>(p), sub);
     return p;
 }
-
 
 pred_args Knowledge::apply_sub_to_pred_args(pred_args pa, vector<uint> sub) {
     for (uint k = 0; k < pa.size(); k++) {

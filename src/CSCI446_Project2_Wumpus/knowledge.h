@@ -64,6 +64,7 @@ public:
     Knowledge();
 
     theta unification(pred x, pred y, theta sub_list);
+    theta unify_var(uint x, uint y, theta sub_list);
     bool resolution(cnf kb, clause query);
     cnf resolve(clause c_i, clause c_j);
 
