@@ -136,7 +136,7 @@ func RuleParser::parse_func(string str, int * index) {
 
         func_args var_args;
         var_args.push_back(parse_arg(str, index)); // Read in argument
-        get<0>(ret_func) = F_IDENTITY; // Variables use the identity function
+        get<0>(ret_func) = F_VAR; // Variables use the identity function
         get<1>(ret_func) = var_args;
 
     } else {

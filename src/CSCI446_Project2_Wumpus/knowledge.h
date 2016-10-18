@@ -23,7 +23,8 @@
 
 // Define Functions
 
-#define F_IDENTITY      0x00010000      // Identity function returns itself
+#define F_CONST         0x00200000      // Constant function
+#define F_VAR           0x00010000      // Variable function
 #define F_NORTH         0x00020000      // Returns the tile to the north
 #define F_SOUTH         0x00040000      // Returns the tile to the south
 #define F_EAST          0x00080000
@@ -33,8 +34,10 @@
 #define A_CONST     0x80000000      // predicate inversion
 #define A_UNCONST   0x7FFFFFFF                   
 
+#include <iostream>
 #include <vector>
-#include <iterator>                                                                                                                                                                                                                                                   
+#include <iterator>       
+#include <functional>
 
 
 
@@ -48,7 +51,7 @@ typedef tuple<uint, pred_args> pred; // Integer represents predicate name
 typedef vector<pred> clause; // Clauses are ORs of predicates
 typedef vector<clause> cnf; // CNF representation of all clauses
 
-typedef vector<vector<uint>> theta;     // A list of substitutions
+typedef vector<vector<func>> theta;     // A list of substitutions
 
 class Knowledge;
 
@@ -56,6 +59,7 @@ class Knowledge;
 
 class Knowledge {
 public:
+    
     RuleParser * rule_parser;
     cnf static_kb;
     cnf dynamic_kb;
@@ -63,36 +67,25 @@ public:
 
     Knowledge();
 
-    theta unification(pred x, pred y, theta sub_list);
-    theta unify_var(uint x, uint y, theta sub_list);
+    theta unification(pred x, pred y, theta sub_list);  
+    theta unify_func(func x, func y, theta sub_list);
+    vector<vector<uint>> unify_var(uint x, uint y, vector<vector<uint>> sub_list);
+            
     bool resolution(cnf kb, clause query);
     cnf resolve(clause c_i, clause c_j);
 
     bool is_neg(pred p);
     cnf negate_clause(clause c);
 
-    clause apply_sub_to_clause(clause c, vector<uint> sub);
-    pred apply_sub_to_pred(pred p, vector<uint> sub);
-    pred_args apply_sub_to_pred_args(pred_args pa, vector<uint> sub);
-    func apply_sub_to_func(func f, vector<uint> sub);
-    func_args apply_sub_to_func_args(func_args fa, vector<uint> sub);
+    clause apply_sub_to_clause(clause c, vector<func> sub);
+    pred apply_sub_to_pred(pred p, vector<func> sub);
+    pred_args apply_sub_to_pred_args(pred_args pa, vector<func> sub);
+    func apply_sub_to_func(func f, vector<func> sub);
+    
+    bool func_eq(func f, func g);
 
     cnf concat_cnf(cnf c1, cnf c2);
     clause concat_clause(clause c1, clause c2);
-
-    cnf copy_kb(cnf kb);
-    clause copy_clause(clause c);
-    pred copy_pred(pred p);
-    pred_args copy_pred_args(pred_args pa);
-    func copy_func(func f);
-    func_args copy_func_args(func_args fa);
-
-    void del_kb(cnf kb);
-    void del_clause(clause c);
-    void del_pred(pred p);
-    void del_pred_args(pred_args pa);
-    void del_func(func f);
-    void del_func_args(func_args fa);
 
     void print_kb(cnf kb);
     void print_clause(clause c);

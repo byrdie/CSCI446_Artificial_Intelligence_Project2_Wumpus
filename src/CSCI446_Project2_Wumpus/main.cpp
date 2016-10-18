@@ -29,25 +29,28 @@ int main(int argc, char *argv[]) {
     //    Human_agent * player = new Human_agent(engine, N);
     Knowledge * kb = new Knowledge();
     kb->print_kb(kb->static_kb);
+    cout << endl;
 
 
-    pred p1 = kb->static_kb[6][0];
-    pred p2 = kb->static_kb[0][1];
+    pred p1 = kb->static_kb[0][0];
+    pred p2 = kb->static_kb[1][0];
 
     theta sub_list;
     sub_list = kb->unification(p1, p2, sub_list);
     
-    for(int i = 0; i < sub_list.size(); i++){
-        for(int j = 0; j < sub_list[i].size(); j++){
-            cout << sub_list[i][j] << endl;
-        }
+    cout << "num subs: " << sub_list.size() << endl;
+
+    for (uint i = 0; i < sub_list.size(); i++) {
+        kb->static_kb[0] = kb->apply_sub_to_clause(kb->static_kb[0], sub_list[i]);
+        kb->static_kb[1] = kb->apply_sub_to_clause(kb->static_kb[1], sub_list[i]);     
     }
-    
-    cout << "here";
+    kb->print_kb(kb->static_kb);
+
+
 
     //    cnf resolvents = kb->resolve(c1,c2);
 
-//    kb->print_kb(resolvents);
+    //    kb->print_kb(resolvents);
 
     //    return app.exec();
 

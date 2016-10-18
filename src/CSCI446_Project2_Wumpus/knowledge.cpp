@@ -1,6 +1,7 @@
 
 #include "knowledge.h"
 #include <typeinfo>
+
 Knowledge::Knowledge() {
 
     rule_parser = new RuleParser();
@@ -9,71 +10,148 @@ Knowledge::Knowledge() {
 }
 
 theta Knowledge::unification(pred x, pred y, theta sub_list) {
-    pred_args x_args;
-    pred_args y_args;
+    pred_args x_args = get<1>(x);
+    pred_args y_args = get<1>(y);
 
-    //Check that the same predicates are used and the same number of arguments are used.
-    if ((get<0>(x) != get<0>(y)) || (get<1>(x).size() != get<1>(y).size())) {
-        
+
+    /* Check that the same predicates are used and the same number of arguments are used. */
+    if ((get<0>(x) != get<0>(y)) || (x_args.size() != y_args.size())) {
         return sub_list;
     }
-    
-    //checks that the same functions are used
-    for (uint i = 0; i < get<1>(x).size(); i++) {
-        if (get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i])) {
-            return sub_list;
-        }
-        func x_func = get<1>(x)[i];
-        func y_func = get<1>(y)[i];
-        x_args.push_back(x_func);
-        y_args.push_back(y_func);
-    }
+
+    /*  */
+    //    for (uint i = 0; i < get<1>(x).size(); i++) {
+    //        //if (get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i])) {
+    //        //    return sub_list;
+    //        // }
+    //        func x_func = get<1>(x)[i];
+    //        func y_func = get<1>(y)[i];
+    //        x_args.push_back(x_func);
+    //        y_args.push_back(y_func);
+    //    }
 
     for (uint i = 0; i < x_args.size(); i++) {
-        func_args x_vars = get<1>(x_args[i]);
-        func_args y_vars = get<1>(y_args[i]);
-        
-        for (uint j = 0; j < x_vars.size(); j++){
-            sub_list = unify_var(x_vars[j], y_vars[j], sub_list);
-            if (sub_list.size() == 0){
-                return sub_list;
-            }
-        }
+        sub_list = unify_func(x_args[i], y_args[i], sub_list);
     }
     return sub_list;
 }
 
-theta Knowledge :: unify_var(uint x, uint y, theta sub_list){
+theta Knowledge::unify_func(func f, func g, theta sub_list) {
+
+    int f_name = get<0>(f);
+    int g_name = get<0>(g);
+
+    func_args f_args = get<1>(f);
+    func_args g_args = get<1>(g);
+
+    vector<vector < uint>> int_sub;
+
+    /* Logic for unifying a constant, function or variable */
+    if (f_name == F_CONST) { // f is a constant
+        if (g_name == F_CONST) { // f and g are constants
+
+            // Not sure what to do here, obviously only works if f == g
+            cout << "Undefined function!" << endl;
+
+        } else if (g_name == F_VAR) { // f is a constant, g is a variable
+
+            cout << "Undefined function!" << endl;
+
+        } else { // f is a constant, g is a function
+
+            cout << "Undefined function!" << endl;
+
+        }
+
+    } else if (f_name == F_VAR) { // f is a variable
+        if (g_name == F_CONST) { // f is a variable, g is a constant
+
+            cout << "Undefined function!" << endl;
+
+        } else if (g_name == F_VAR) { // f and g are variables
+
+            /* Unify variables and build a new function */
+            int_sub = unify_var(f_args[0], g_args[0], int_sub);
+            if (int_sub.empty()) {
+                return sub_list;
+            } else {
+                vector<func> sub;
+                sub.push_back(f);
+                vector<uint> fsub_args;
+                fsub_args.push_back(int_sub[0][1]);
+                get<1>(f) = fsub_args;
+                sub.push_back(f);
+                sub_list.push_back(sub);
+            }
+
+        } else { // f is a variable, g is a function
+            vector<func> sub;
+            sub.push_back(f);
+            sub.push_back(g);
+            sub_list.push_back(sub);
+        }
+    } else { // f is a function
+        if (g_name == F_CONST) { // f is a function, g is a constant
+            cout << "Undefined function!" << endl;
+
+        } else if (g_name == F_VAR) { // f is a function, g is a variable
+            vector<func> sub;
+            sub.push_back(g);
+            sub.push_back(f);
+            sub_list.push_back(sub);
+
+        } else { // f and g are functions
+            cout << "Undefined function!" << endl;
+
+        }
+    }
+
+    //    if ((f_name == F_VAR and g_name == F_VAR) or (f_name == F_CONST and g_name == F_CONST)) { // Both f and g are variables or constants
+    //        sub_list = unify_var
+    //    } else if (f_name == F_VAR) { // f is a variable, g is a function
+    //        //replace x with y func
+    //        ;
+    //    } else if (get<0>(g) == F_VAR) { // f is function, g is a variable
+    //        //replace y with func
+    //        ;
+    //    } else { // Both f and g are functions
+    //        //unify func args
+    //        ;
+    //    }
+    return sub_list;
+}
+
+vector<vector<uint>> Knowledge::unify_var(uint x, uint y, vector<vector<uint>> sub_list) {
     cout << x << ", " << y << endl;
     //check if x or y are already in the the sublist
-    for (uint i = 0; i < sub_list.size(); i++){
-        if (x = sub_list[i][0]){
+    for (uint i = 0; i < sub_list.size(); i++) {
+        if (x == sub_list[i][0]) {
             x = sub_list[i][1];
         }
-        if (y = sub_list[i][0]){
+        if (y == sub_list[i][0]) {
             y = sub_list[i][1];
         }
     }
-    if (x == y){
+    if (x == y) {
         vector<uint> s_sub_list;
         s_sub_list.push_back(x);
         s_sub_list.push_back(y);
         sub_list.push_back(s_sub_list);
-        
-    }else if((x & A_CONST) == 0){
+
+    } else if ((x & A_CONST) == 0) {
         vector<uint> s_sub_list;
         s_sub_list.push_back(x);
         s_sub_list.push_back(y);
         sub_list.push_back(s_sub_list);
-        
-    }else if((y & A_CONST) == 0){
+
+    } else if ((y & A_CONST) == 0) {
         vector<uint> s_sub_list;
         s_sub_list.push_back(y);
         s_sub_list.push_back(x);
         sub_list.push_back(s_sub_list);
-        
-    }else{
-        theta list;
+
+    } else {
+        vector<vector < uint>> list;
         return list;
     }
     return sub_list;
@@ -190,45 +268,52 @@ cnf Knowledge::negate_clause(clause c) {
  * @param 
  * @return the clause with substitutions applied.
  */
-clause Knowledge::apply_sub_to_clause(clause c, vector<uint> sub) {
+clause Knowledge::apply_sub_to_clause(clause c, vector<func> sub) {
     for (uint j = 0; j < c.size(); j++) {
         c[j] = apply_sub_to_pred(c[j], sub);
     }
     return c;
 }
 
-pred Knowledge::apply_sub_to_pred(pred p, vector<uint> sub) {
+pred Knowledge::apply_sub_to_pred(pred p, vector<func> sub) {
     get<1>(p) = apply_sub_to_pred_args(get<1>(p), sub);
     return p;
 }
 
-pred_args Knowledge::apply_sub_to_pred_args(pred_args pa, vector<uint> sub) {
+pred_args Knowledge::apply_sub_to_pred_args(pred_args pa, vector<func> sub) {
     for (uint k = 0; k < pa.size(); k++) {
         pa[k] = apply_sub_to_func(pa[k], sub);
     }
     return pa;
 }
 
-func Knowledge::apply_sub_to_func(func f, vector<uint> sub) {
+func Knowledge::apply_sub_to_func(func f, vector<func> sub) {
 
-    get<1>(f) = apply_sub_to_func_args(get<1>(f), sub);
+    /* Two functions are the same if the hash is the same  */
+    if (func_eq(f, sub[0])) {
+        f = sub[1];
+    }
     return f;
 
 }
 
-func_args Knowledge::apply_sub_to_func_args(func_args fa, vector<uint> sub) {
-
-    uint cur_arg;
-    uint test_arg = sub[0];
-
-    for (uint l = 0; l < fa.size(); l++) {
-        cur_arg = fa[l];
-        if (cur_arg == test_arg) {
-            fa[l] = sub[1];
+bool Knowledge::func_eq(func f, func g) {
+    if (get<0>(f) == get<0>(g)) {
+        func_args f_args = get<1>(f);
+        func_args g_args = get<1>(g);
+        if (f_args.size() == g_args.size()) {
+            for (uint i = 0; i < f_args.size(); i++) {
+                if (f_args[i] != g_args[i]) {
+                    return false;
+                }
+            }
+        } else {
+            return false;
         }
+    } else {
+        return false;
     }
-    return fa;
-
+    return true;
 }
 
 /**
@@ -254,7 +339,6 @@ clause Knowledge::concat_clause(clause c1, clause c2) {
 
     return c1;
 }
-
 
 /**
  * Series of function to print out a knowledge base for viewing
@@ -305,7 +389,7 @@ void Knowledge::print_pred_args(pred_args pa) {
 void Knowledge::print_func(func f) {
     int func_tok = get<0>(f);
 
-    if (func_tok == F_IDENTITY) {
+    if (func_tok == F_VAR or func_tok == F_CONST) {
         func_args fa = get<1>(f);
         cout << fa[0];
     } else {
