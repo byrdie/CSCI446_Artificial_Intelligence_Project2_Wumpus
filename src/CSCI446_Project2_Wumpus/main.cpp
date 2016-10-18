@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     
     
     clause c1 = kb->static_kb[0];
-    clause c2 = kb->static_kb[2];
+    clause c2 = kb->static_kb[1];
     
     cnf resolvents = kb->resolve(c1,c2);
 
