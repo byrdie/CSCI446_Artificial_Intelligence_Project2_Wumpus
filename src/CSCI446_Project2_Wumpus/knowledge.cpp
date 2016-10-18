@@ -44,8 +44,6 @@ theta Knowledge::unify_func(func f, func g, theta sub_list) {
     func_args f_args = get<1>(f);
     func_args g_args = get<1>(g);
 
-    vector<vector < uint>> int_sub;
-
     /* Logic for unifying a constant, function or variable */
     if (f_name == F_CONST) { // f is a constant
         if (g_name == F_CONST) { // f and g are constants
@@ -71,22 +69,11 @@ theta Knowledge::unify_func(func f, func g, theta sub_list) {
         } else if (g_name == F_VAR) { // f and g are variables
 
             /* Unify variables and build a new function */
-            int_sub = unify_var(f_args[0], g_args[0], int_sub);
-            if (int_sub.empty()) {
+            sub_list = unify_var2(f, g, sub_list);
+            if (sub_list.empty()) {
                 return sub_list;
-            } else {
-                vector<func> sub;
-                sub.push_back(f);
-                vector<uint> fsub_args;
-                fsub_args.push_back(int_sub[0][1]);
-                get<1>(f) = fsub_args;
-                sub.push_back(f);
-                sub_list.push_back(sub);
             }
-
         } else { // f is a variable, g is a function
-
-
             vector<func> sub;
             sub.push_back(f);
             sub.push_back(g);
@@ -95,50 +82,60 @@ theta Knowledge::unify_func(func f, func g, theta sub_list) {
     } else { // f is a function
         if (g_name == F_CONST) { // f is a function, g is a constant
             cout << "Undefined function!" << endl;
-
         } else if (g_name == F_VAR) { // f is a function, g is a variable
-            /* Check to see if any of f's members have been substituted */
-//            for (uint i = 0; i < sub_list.size(); i++) {
-//                func test_f = sub_list[i][0];
-//                func_args test_fa = get<1>(test_f);
-//                func_args fa = get<1>(f);
-//                for (uint j = 0; j < test_fa.size(); j++) {
-//                    for (uint k = 0; k < test_fa.size(); k++) {
-//                        if
-//                    }
-//                    
-//
-//
-//                }
-//                if (func_eq(f, sub_list[i][0])) {
-//
-//                }
-//            }
-
             vector<func> sub;
             sub.push_back(g);
             sub.push_back(f);
             sub_list.push_back(sub);
-
         } else { // f and g are functions
             cout << "Undefined function!" << endl;
 
         }
     }
-
-    //    if ((f_name == F_VAR and g_name == F_VAR) or (f_name == F_CONST and g_name == F_CONST)) { // Both f and g are variables or constants
-    //        sub_list = unify_var
-    //    } else if (f_name == F_VAR) { // f is a variable, g is a function
-    //        //replace x with y func
-    //        ;
-    //    } else if (get<0>(g) == F_VAR) { // f is function, g is a variable
-    //        //replace y with func
-    //        ;
-    //    } else { // Both f and g are functions
-    //        //unify func args
-    //        ;
-    //    }
     return sub_list;
+}
+
+theta Knowledge::unify_var2(func x, func y, theta sub_list) {
+
+    /* Check if x or y is already in the sublist */
+    for (uint i = 0; i < sub_list.size(); i++) {
+        func tfunc = sub_list[i][0];
+        func sfunc = sub_list[i][1];
+
+        if (func_eq(x, tfunc)) {
+            x = sfunc;
+        }
+        if (func_eq(y, tfunc)) {
+            y = sfunc;
+        }
+
+    }
+
+    int xname = get<0>(x);
+    int yname = get<0>(y);
+
+    /* Attempt unification if no substitution has been provided for x or y */
+    if (func_eq(x, y)) {
+        vector<func> subsub_list;
+        subsub_list.push_back(x);
+        subsub_list.push_back(y);
+        sub_list.push_back(subsub_list);
+    } else if (xname == F_VAR) {
+        vector<func> subsub_list;
+        subsub_list.push_back(x);
+        subsub_list.push_back(y);
+        sub_list.push_back(subsub_list);
+    } else if (yname == F_VAR) {
+        vector<func> subsub_list;
+        subsub_list.push_back(y);
+        subsub_list.push_back(x);
+        sub_list.push_back(subsub_list);
+    } else {
+        theta empty_list;
+        return empty_list;
+    }
+    return sub_list;
+
 }
 
 vector<vector<uint>> Knowledge::unify_var(uint x, uint y, vector<vector<uint>> sub_list) {
@@ -319,16 +316,20 @@ func Knowledge::apply_sub_to_func(func f, vector<func> sub) {
 
 bool Knowledge::func_eq(func f, func g) {
     if (get<0>(f) == get<0>(g)) {
-        func_args f_args = get<1>(f);
-        func_args g_args = get<1>(g);
-        if (f_args.size() == g_args.size()) {
-            for (uint i = 0; i < f_args.size(); i++) {
-                if (f_args[i] != g_args[i]) {
-                    return false;
-                }
+        return func_args_eq(f,g);
+    } else {
+        return false;
+    }
+}
+
+bool Knowledge::func_args_eq(func f, func g) {
+    func_args f_args = get<1>(f);
+    func_args g_args = get<1>(g);
+    if (f_args.size() == g_args.size()) {
+        for (uint i = 0; i < f_args.size(); i++) {
+            if (f_args[i] != g_args[i]) {
+                return false;
             }
-        } else {
-            return false;
         }
     } else {
         return false;

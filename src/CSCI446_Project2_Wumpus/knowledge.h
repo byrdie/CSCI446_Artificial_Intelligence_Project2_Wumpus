@@ -69,6 +69,7 @@ public:
 
     theta unification(pred x, pred y, theta sub_list);  
     theta unify_func(func x, func y, theta sub_list);
+    theta unify_var2(func x, func y, theta sub_list);
     vector<vector<uint>> unify_var(uint x, uint y, vector<vector<uint>> sub_list);
             
     bool resolution(cnf kb, clause query);
@@ -83,6 +84,7 @@ public:
     func apply_sub_to_func(func f, vector<func> sub);
     
     bool func_eq(func f, func g);
+    bool func_args_eq(func f, func g);
 
     cnf concat_cnf(cnf c1, cnf c2);
     clause concat_clause(clause c1, clause c2);
