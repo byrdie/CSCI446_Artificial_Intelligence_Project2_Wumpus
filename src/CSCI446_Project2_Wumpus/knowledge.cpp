@@ -35,6 +35,9 @@ theta Knowledge::unification(pred x, pred y, theta sub_list) {
         
         for (uint j = 0; j < x_vars.size(); j++){
             sub_list = unify_var(x_vars[j], y_vars[j], sub_list);
+            if (sub_list.size() == 0){
+                return sub_list;
+            }
         }
     }
     return sub_list;
@@ -51,17 +54,26 @@ theta Knowledge :: unify_var(uint x, uint y, theta sub_list){
         }
     }
     if (x == y){
-        ;
+        vector<uint> s_sub_list;
+        s_sub_list.push_back(x);
+        s_sub_list.push_back(y);
+        sub_list.push_back(s_sub_list);
+        
     }else if(x & A_CONST == 0){
         vector<uint> s_sub_list;
         s_sub_list.push_back(x);
         s_sub_list.push_back(y);
         sub_list.push_back(s_sub_list);
+        
     }else if(y & A_CONST == 0){
         vector<uint> s_sub_list;
         s_sub_list.push_back(y);
         s_sub_list.push_back(x);
         sub_list.push_back(s_sub_list);
+        
+    }else{
+        theta list;
+        return list;
     }
     return sub_list;
 }
