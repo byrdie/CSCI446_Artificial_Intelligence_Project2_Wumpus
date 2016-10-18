@@ -85,6 +85,8 @@ theta Knowledge::unify_func(func f, func g, theta sub_list) {
             }
 
         } else { // f is a variable, g is a function
+
+
             vector<func> sub;
             sub.push_back(f);
             sub.push_back(g);
@@ -95,6 +97,24 @@ theta Knowledge::unify_func(func f, func g, theta sub_list) {
             cout << "Undefined function!" << endl;
 
         } else if (g_name == F_VAR) { // f is a function, g is a variable
+            /* Check to see if any of f's members have been substituted */
+//            for (uint i = 0; i < sub_list.size(); i++) {
+//                func test_f = sub_list[i][0];
+//                func_args test_fa = get<1>(test_f);
+//                func_args fa = get<1>(f);
+//                for (uint j = 0; j < test_fa.size(); j++) {
+//                    for (uint k = 0; k < test_fa.size(); k++) {
+//                        if
+//                    }
+//                    
+//
+//
+//                }
+//                if (func_eq(f, sub_list[i][0])) {
+//
+//                }
+//            }
+
             vector<func> sub;
             sub.push_back(g);
             sub.push_back(f);

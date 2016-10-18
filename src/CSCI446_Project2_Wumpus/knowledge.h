@@ -22,7 +22,7 @@
 #define P_SAFE          0x00000004      // safe predicate
 
 // Define Functions
-
+// These must be large than variables!
 #define F_CONST         0x00200000      // Constant function
 #define F_VAR           0x00010000      // Variable function
 #define F_NORTH         0x00020000      // Returns the tile to the north
