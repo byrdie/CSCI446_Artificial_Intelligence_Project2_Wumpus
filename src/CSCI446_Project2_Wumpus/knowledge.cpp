@@ -11,34 +11,54 @@ Knowledge::Knowledge() {
 theta Knowledge::unification(pred x, pred y, theta sub_list) {
     pred_args x_args;
     pred_args y_args;
-
+    
+    
     //Check that the same predicates are used and the same number of arguments are used.
     if ((get<0>(x) != get<0>(y)) || (get<1>(x).size() != get<1>(y).size())) {
+        cout << get<0>(x) <<"\n";
+        cout << get<0>(y) <<"\n\n";
+        
         return sub_list;
     }
     
     //checks that the same functions are used
     for (uint i = 0; i < get<1>(x).size(); i++) {
-        if (get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i])) {
-            return sub_list;
-        }
-        cout << typeid(get<0>(get<1>(x)[i])).name() << '\n';
+        //if (get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i])) {
+        //    return sub_list;
+       // }
         func x_func = get<1>(x)[i];
         func y_func = get<1>(y)[i];
         x_args.push_back(x_func);
         y_args.push_back(y_func);
     }
-
+    
     for (uint i = 0; i < x_args.size(); i++) {
         func_args x_vars = get<1>(x_args[i]);
         func_args y_vars = get<1>(y_args[i]);
         
         for (uint j = 0; j < x_vars.size(); j++){
+            
             sub_list = unify_var(x_vars[j], y_vars[j], sub_list);
             if (sub_list.size() == 0){
                 return sub_list;
             }
         }
+    }
+    return sub_list;
+}
+theta Knowledge :: unify_func(func x, func y, theta sub_list){
+    //Do regular check like formula
+    if(get<0>(x) == F_IDENTITY && get<0>(y) == F_IDENTITY){
+        ;
+    }else if(get<0>(x) == F_IDENTITY){
+        //replace x with y func
+        ;
+    }else if(get<0>(y) == F_IDENTITY){
+        //replace y with func
+        ;
+    }else{
+        //unify func args
+        ;
     }
     return sub_list;
 }
