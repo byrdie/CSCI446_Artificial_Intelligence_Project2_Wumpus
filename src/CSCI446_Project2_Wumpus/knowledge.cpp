@@ -6,6 +6,11 @@ Knowledge::Knowledge() {
 
     rule_parser = new RuleParser();
     static_kb = rule_parser->parse_cnf();
+    
+    func_inv[F_NORTH] = F_SOUTH;
+    func_inv[F_SOUTH] = F_NORTH;
+    func_inv[F_EAST] = F_WEST;
+    func_inv[F_WEST] = F_EAST;
 
 }
 
@@ -97,16 +102,28 @@ theta Knowledge::unify_func(func f, func g, theta sub_list) {
 
 theta Knowledge::unify_var2(func x, func y, theta sub_list) {
 
+    
+    
     /* Check if x or y is already in the sublist */
     for (uint i = 0; i < sub_list.size(); i++) {
+        cout << "here" << endl;
         func tfunc = sub_list[i][0];
         func sfunc = sub_list[i][1];
 
-        if (func_eq(x, tfunc)) {
+        /* Check to see if we already have a substitution for this variable */
+        if (func_eq(x, tfunc)) {        // Full function substitution
             x = sfunc;
+        } else if(func_args_eq(x, tfunc)){      // argument substitution
+            cout << "here" << endl;
+            x = sfunc; 
+            get<0>(x) = func_inv[get<0>(x)];    // Invert the function if possible
         }
-        if (func_eq(y, tfunc)) {
+        if (func_eq(y, tfunc)) {    // Full function substitution
             y = sfunc;
+        }  else if(func_args_eq(y, tfunc)){      // argument substitution
+            cout << "here" << endl;
+            y = sfunc; 
+            get<0>(y) = func_inv[get<0>(y)];     // Invert the function if possible
         }
 
     }

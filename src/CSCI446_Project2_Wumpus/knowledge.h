@@ -64,6 +64,8 @@ public:
     cnf static_kb;
     cnf dynamic_kb;
     cnf total_kb;
+    
+    map<int, int> func_inv;
 
     Knowledge();
 
