@@ -48,6 +48,8 @@ typedef tuple<uint, pred_args> pred; // Integer represents predicate name
 typedef vector<pred> clause; // Clauses are ORs of predicates
 typedef vector<clause> cnf; // CNF representation of all clauses
 
+typedef vector<vector<uint>> theta;     // A list of substitutions
+
 class Knowledge;
 
 #include "rule_parser.h"
@@ -61,7 +63,7 @@ public:
 
     Knowledge();
 
-    vector<uint> unification(pred x, pred y, vector<vector<uint>. theta);
+    theta unification(pred x, pred y, theta sub_list);
     bool resolution(cnf kb, clause query);
     cnf resolve(clause c_i, clause c_j);
 
@@ -95,8 +97,6 @@ public:
     void print_pred_args(pred_args pa);
     void print_func(func f);
     void print_func_args(func_args fa);
-
-#include "inference.h"
 
 };
 
