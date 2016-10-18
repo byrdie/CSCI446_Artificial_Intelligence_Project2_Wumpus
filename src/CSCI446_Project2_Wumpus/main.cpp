@@ -41,11 +41,13 @@ int main(int argc, char *argv[]) {
     cout << "num subs: " << sub_list.size() << endl;
 
     for (uint i = 0; i < sub_list.size(); i++) {
+        kb->print_pred_args(sub_list[i]);
+        cout << endl;
         kb->static_kb[0] = kb->apply_sub_to_clause(kb->static_kb[0], sub_list[i]);
         kb->static_kb[1] = kb->apply_sub_to_clause(kb->static_kb[1], sub_list[i]);     
     }
+    cout << endl;
     kb->print_kb(kb->static_kb);
-
 
 
     //    cnf resolvents = kb->resolve(c1,c2);

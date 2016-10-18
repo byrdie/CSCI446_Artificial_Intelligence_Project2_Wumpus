@@ -6,7 +6,9 @@ Knowledge::Knowledge() {
 
     rule_parser = new RuleParser();
     static_kb = rule_parser->parse_cnf();
-    
+
+    func_inv[F_CONST] = F_CONST;
+    func_inv[F_VAR] = F_VAR;
     func_inv[F_NORTH] = F_SOUTH;
     func_inv[F_SOUTH] = F_NORTH;
     func_inv[F_EAST] = F_WEST;
@@ -102,28 +104,56 @@ theta Knowledge::unify_func(func f, func g, theta sub_list) {
 
 theta Knowledge::unify_var2(func x, func y, theta sub_list) {
 
-    
-    
+    theta sub_list_copy = sub_list;     // Copy the list so we can add to is as we iterate
+
     /* Check if x or y is already in the sublist */
-    for (uint i = 0; i < sub_list.size(); i++) {
-        cout << "here" << endl;
-        func tfunc = sub_list[i][0];
-        func sfunc = sub_list[i][1];
+    for (uint i = 0; i < sub_list_copy.size(); i++) {
+
+        func tfunc = sub_list_copy[i][0];
+        func sfunc = sub_list_copy[i][1];
 
         /* Check to see if we already have a substitution for this variable */
-        if (func_eq(x, tfunc)) {        // Full function substitution
+        if (func_eq(x, tfunc)) { // Full function substitution
             x = sfunc;
-        } else if(func_args_eq(x, tfunc)){      // argument substitution
-            cout << "here" << endl;
-            x = sfunc; 
-            get<0>(x) = func_inv[get<0>(x)];    // Invert the function if possible
+        } else if (func_args_eq(x, sfunc)) { // argument substitution
+
+
+            func sub = sfunc;
+            vector<func> subsub_list;
+
+            /* attempt to unify by inverting function */
+            int inverse = func_inv[get<0>(sub)];
+            if (inverse != 0) { // inverse exists
+                get<0>(sub) = inverse;
+                subsub_list.push_back(x);
+                subsub_list.push_back(sub);
+                sub_list.push_back(subsub_list);
+                x = sub;
+            } else {
+                theta empty_list;
+                return empty_list;
+            }
+
         }
-        if (func_eq(y, tfunc)) {    // Full function substitution
+        if (func_eq(y, tfunc)) { // Full function substitution
             y = sfunc;
-        }  else if(func_args_eq(y, tfunc)){      // argument substitution
-            cout << "here" << endl;
-            y = sfunc; 
-            get<0>(y) = func_inv[get<0>(y)];     // Invert the function if possible
+        } else if (func_args_eq(y, sfunc)) { // argument substitution
+
+            func sub = sfunc;
+            vector<func> subsub_list;
+
+            /* attempt to unify by inverting function */
+            int inverse = func_inv[get<0>(sub)];
+            if (inverse != 0) { // inverse exists
+                get<0>(sub) = inverse;
+                subsub_list.push_back(y);
+                subsub_list.push_back(sub);
+                sub_list.push_back(subsub_list);
+                y = sub;
+            } else {
+                theta empty_list;
+                return empty_list;
+            }
         }
 
     }
@@ -333,7 +363,7 @@ func Knowledge::apply_sub_to_func(func f, vector<func> sub) {
 
 bool Knowledge::func_eq(func f, func g) {
     if (get<0>(f) == get<0>(g)) {
-        return func_args_eq(f,g);
+        return func_args_eq(f, g);
     } else {
         return false;
     }
