@@ -14,6 +14,7 @@ theta Knowledge::unification(pred x, pred y, theta sub_list) {
 
     //Check that the same predicates are used and the same number of arguments are used.
     if ((get<0>(x) != get<0>(y)) || (get<1>(x).size() != get<1>(y).size())) {
+        
         return sub_list;
     }
     
@@ -22,7 +23,6 @@ theta Knowledge::unification(pred x, pred y, theta sub_list) {
         if (get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i])) {
             return sub_list;
         }
-        cout << typeid(get<0>(get<1>(x)[i])).name() << '\n';
         func x_func = get<1>(x)[i];
         func y_func = get<1>(y)[i];
         x_args.push_back(x_func);
@@ -44,6 +44,7 @@ theta Knowledge::unification(pred x, pred y, theta sub_list) {
 }
 
 theta Knowledge :: unify_var(uint x, uint y, theta sub_list){
+    cout << x << ", " << y << endl;
     //check if x or y are already in the the sublist
     for (uint i = 0; i < sub_list.size(); i++){
         if (x = sub_list[i][0]){
@@ -59,13 +60,13 @@ theta Knowledge :: unify_var(uint x, uint y, theta sub_list){
         s_sub_list.push_back(y);
         sub_list.push_back(s_sub_list);
         
-    }else if(x & A_CONST == 0){
+    }else if((x & A_CONST) == 0){
         vector<uint> s_sub_list;
         s_sub_list.push_back(x);
         s_sub_list.push_back(y);
         sub_list.push_back(s_sub_list);
         
-    }else if(y & A_CONST == 0){
+    }else if((y & A_CONST) == 0){
         vector<uint> s_sub_list;
         s_sub_list.push_back(y);
         s_sub_list.push_back(x);
@@ -254,94 +255,6 @@ clause Knowledge::concat_clause(clause c1, clause c2) {
     return c1;
 }
 
-/**
- * Series of functions to make a copy of a knowledge base
- * @param kb
- * @return 
- */
-cnf Knowledge::copy_kb(cnf kb) {
-    cnf kb_copy;
-    for (uint i = 0; i < kb.size(); i++) {
-        kb_copy.push_back(copy_clause(kb[i]));
-    }
-    return kb_copy;
-}
-
-clause Knowledge::copy_clause(clause c) {
-    clause c_copy;
-    for (uint j = 0; j < c.size(); j++) {
-        c_copy.push_back(copy_pred(c[j]));
-    }
-    return c_copy;
-}
-
-pred Knowledge::copy_pred(pred p) {
-    pred p_copy;
-    get<0>(p_copy) = get<0>(p);
-    get<1>(p_copy) = copy_pred_args(get<1>(p));
-    return p_copy;
-
-}
-
-pred_args Knowledge::copy_pred_args(pred_args pa) {
-    pred_args pa_copy;
-    for (uint k = 0; k < pa.size(); k++) {
-        pa_copy.push_back(copy_func(pa[k]));
-    }
-    return pa_copy;
-}
-
-func Knowledge::copy_func(func f) {
-    func f_copy;
-    get<0>(f_copy) = get<0>(f);
-    get<1>(f_copy) = copy_func_args(get<1>(f));
-    return f_copy;
-}
-
-func_args Knowledge::copy_func_args(func_args fa) {
-    func_args fa_copy;
-    for (uint l = 0; l < fa.size(); l++) {
-        fa_copy.push_back(fa[l]);
-    }
-    return fa_copy;
-}
-
-/**
- * Series of functions to delete knowledge bases after we are finished with them
- * @param kb
- */
-void Knowledge::del_kb(cnf kb) {
-    for (uint i = 0; i < kb.size(); i++) {
-        del_clause(kb[i]);
-    }
-    kb.clear();
-}
-
-void Knowledge::del_clause(clause c) {
-    for (uint j = 0; j < c.size(); j++) {
-        del_pred(c[j]);
-    }
-    c.clear();
-}
-
-void Knowledge::del_pred(pred p) {
-    del_pred_args(get<1>(p));
-}
-
-void Knowledge::del_pred_args(pred_args pa) {
-    for (uint k = 0; k < pa.size(); k++) {
-        del_func(pa[k]);
-    }
-    pa.clear();
-}
-
-void Knowledge::del_func(func f) {
-    del_func_args(get<1>(f));
-}
-
-void Knowledge::del_func_args(func_args fa) {
-    fa.clear();
-}
 
 /**
  * Series of function to print out a knowledge base for viewing

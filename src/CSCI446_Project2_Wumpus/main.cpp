@@ -15,35 +15,43 @@
 
 #include "main.h"
 
-
-
 int main(int argc, char *argv[]) {
 
-//    QApplication app(argc, argv);
-//    app.installEventFilter(new QApplicationFilter());
-    
-//    init_rand();
-//
-//    int N = 7;
-//    
-//    World * world = new World(N, 3, 3, 3);
-//    Engine * engine = new Engine(world);
-//    Human_agent * player = new Human_agent(engine, N);
+    //    QApplication app(argc, argv);
+    //    app.installEventFilter(new QApplicationFilter());
+
+    //    init_rand();
+    //
+    //    int N = 7;
+    //    
+    //    World * world = new World(N, 3, 3, 3);
+    //    Engine * engine = new Engine(world);
+    //    Human_agent * player = new Human_agent(engine, N);
     Knowledge * kb = new Knowledge();
     kb->print_kb(kb->static_kb);
-    
-    
-    clause c1 = kb->static_kb[0];
-    clause c2 = kb->static_kb[1];
-    
-    cnf resolvents = kb->resolve(c1,c2);
 
-    kb->print_kb(resolvents);
+
+    pred p1 = kb->static_kb[6][0];
+    pred p2 = kb->static_kb[0][1];
+
+    theta sub_list;
+    sub_list = kb->unification(p1, p2, sub_list);
     
-//    return app.exec();
+    for(int i = 0; i < sub_list.size(); i++){
+        for(int j = 0; j < sub_list[i].size(); j++){
+            cout << sub_list[i][j] << endl;
+        }
+    }
+    
+    cout << "here";
+
+    //    cnf resolvents = kb->resolve(c1,c2);
+
+//    kb->print_kb(resolvents);
+
+    //    return app.exec();
 
 }
-
 
 /* Prepare random number generation */
 void init_rand(unsigned long int seed) {
