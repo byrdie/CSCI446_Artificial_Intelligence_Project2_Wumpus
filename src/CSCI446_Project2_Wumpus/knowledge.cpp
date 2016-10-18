@@ -1,6 +1,6 @@
 
 #include "knowledge.h"
-
+#include <typeinfo>
 Knowledge::Knowledge() {
 
     rule_parser = new RuleParser();
@@ -9,23 +9,73 @@ Knowledge::Knowledge() {
 }
 
 theta Knowledge::unification(pred x, pred y, theta sub_list) {
+    pred_args x_args;
+    pred_args y_args;
 
-    vector<uint> sub;
-    sub.push_back(1);
-    sub.push_back(9);
-    sub_list.push_back(sub);
+    //Check that the same predicates are used and the same number of arguments are used.
+    if ((get<0>(x) != get<0>(y)) || (get<1>(x).size() != get<1>(y).size())) {
+        return sub_list;
+    }
+    
+    //checks that the same functions are used
+    for (uint i = 0; i < get<1>(x).size(); i++) {
+        if (get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i])) {
+            return sub_list;
+        }
+        cout << typeid(get<0>(get<1>(x)[i])).name() << '\n';
+        func x_func = get<1>(x)[i];
+        func y_func = get<1>(y)[i];
+        x_args.push_back(x_func);
+        y_args.push_back(y_func);
+    }
 
+    for (uint i = 0; i < x_args.size(); i++) {
+        func_args x_vars = get<1>(x_args[i]);
+        func_args y_vars = get<1>(y_args[i]);
+        
+        for (uint j = 0; j < x_vars.size(); j++){
+            sub_list = unify_var(x_vars[j], y_vars[j], sub_list);
+            if (sub_list.size() == 0){
+                return sub_list;
+            }
+        }
+    }
     return sub_list;
+}
 
-    //    //Check that the same predicates are used and the same number of arguments are used.
-    //    if ((get<0>(x) != get<0>(y)) || (get<1>(x).size() != get<1>(y).size())) {
-    //        return sub_list;
-    //    }
-    //    for (uint i = 0; i < get<1>(x).size(); i++) {
-    //        if ((get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i]))) {
-    //            return sub_list;
-    //        }
-    //    }
+theta Knowledge :: unify_var(uint x, uint y, theta sub_list){
+    //check if x or y are already in the the sublist
+    for (uint i = 0; i < sub_list.size(); i++){
+        if (x = sub_list[i][0]){
+            x = sub_list[i][1];
+        }
+        if (y = sub_list[i][0]){
+            y = sub_list[i][1];
+        }
+    }
+    if (x == y){
+        vector<uint> s_sub_list;
+        s_sub_list.push_back(x);
+        s_sub_list.push_back(y);
+        sub_list.push_back(s_sub_list);
+        
+    }else if(x & A_CONST == 0){
+        vector<uint> s_sub_list;
+        s_sub_list.push_back(x);
+        s_sub_list.push_back(y);
+        sub_list.push_back(s_sub_list);
+        
+    }else if(y & A_CONST == 0){
+        vector<uint> s_sub_list;
+        s_sub_list.push_back(y);
+        s_sub_list.push_back(x);
+        sub_list.push_back(s_sub_list);
+        
+    }else{
+        theta list;
+        return list;
+    }
+    return sub_list;
 }
 
 /**
