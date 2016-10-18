@@ -9,17 +9,32 @@ Knowledge::Knowledge() {
 }
 
 theta Knowledge::unification(pred x, pred y, theta sub_list) {
-    //Check that the same predicates are used and the same number of arguments are used.
-    if ((get<0>(x) != get<0>(y)) || (get<1>(x).size() != get<1>(y).size())) {
-        return sub_list;
-    }
-    for (uint i = 0; i < get<1>(x).size(); i++) {
-        if ((get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i]))) {
-            return sub_list;
-        }
-    }
+
+    vector<uint> sub;
+    sub.push_back(1);
+    sub.push_back(9);
+    sub_list.push_back(sub);
+
+    return sub_list;
+
+    //    //Check that the same predicates are used and the same number of arguments are used.
+    //    if ((get<0>(x) != get<0>(y)) || (get<1>(x).size() != get<1>(y).size())) {
+    //        return sub_list;
+    //    }
+    //    for (uint i = 0; i < get<1>(x).size(); i++) {
+    //        if ((get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i]))) {
+    //            return sub_list;
+    //        }
+    //    }
 }
 
+/**
+ * Resolve returns the set of all possible clauses obtained by resolving the
+ * two inputs ci and cy
+ * @param ci
+ * @param cj
+ * @return a set fo resolved clauses
+ */
 cnf Knowledge::resolve(clause ci, clause cj) {
 
     cnf resolvents; // Allocate space for the new formulae
@@ -41,27 +56,79 @@ cnf Knowledge::resolve(clause ci, clause cj) {
                 /* Check if the unification process succeeded before continuing */
                 if (!sub_list.empty()) { // Substitution is non-empty
 
-                    /* Loop through list of substitutions */
+                    /* Make a copy of the input clauses to modify */
+                    clause ci_copy = ci;
+                    clause cj_copy = cj;
+
+                    /* delete the predicates from their respective clauses */
+                    ci_copy.erase(ci_copy.begin() + i);
+                    cj_copy.erase(cj_copy.begin() + j);
+
+                    /* A resolvent is a union of the clauses after resolution */
+                    clause union_c = concat_clause(ci_copy, cj_copy);
+
+                    /* Apply the list of substitutions */
                     for (uint k = 0; k < sub_list.size(); k++) {
 
-                        /* Make a copy of the input clauses to modify */
-                        
-                        
+                        union_c = apply_sub_to_clause(union_c, sub_list[k]);
+
                     }
+
+                    /* Add the new resolvent to the list of resolvents */
+                    resolvents.push_back(union_c);
                 }
             }
 
         }
     }
-
+    return resolvents;
 }
 
-bool Knowledge::is_neg(pred p){
-    if((get<0>(p) & P_NEGATION) > 0){
+bool Knowledge::resolution(cnf kb, clause query) {
+
+    kb = concat_cnf(kb, negate_clause(query));
+
+    cnf new_k; // Empty space to store the proposed knowledge
+
+    /* For each pair of clauses in clauses */
+    for (uint i = 0; i < kb.size(); i++) {
+        for (uint j = 0; j < kb.size(); j++) {
+
+            if (i != j) { // Don't try and resolve a clause with itself
+                cnf resolvents = resolve(kb[i], kb[j]); // Find all possible resolvents of the pair of clauses
+
+                /* If resolvents contains the empty clause then return true */
+                for (uint k = 0; k < resolvents.size(); k++) {
+                    if (resolvents.empty()) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+}
+
+bool Knowledge::is_neg(pred p) {
+    if ((get<0>(p) & P_NEGATION) > 0) {
         return true;
     } else {
         return false;
     }
+}
+
+cnf Knowledge::negate_clause(clause c) {
+
+    cnf ret;
+    for (uint i = 0; i < c.size(); i++) {
+        clause ret_c;
+        pred p;
+        get<0>(p) = get<0>(p) | P_NEGATION;
+        ret_c.push_back(p);
+    }
+
+
+    return ret;
+
 }
 
 /**
@@ -74,7 +141,7 @@ bool Knowledge::is_neg(pred p){
  */
 clause Knowledge::apply_sub_to_clause(clause c, vector<uint> sub) {
     for (uint j = 0; j < c.size(); j++) {
-        c[j]=apply_sub_to_pred(c[j], sub);
+        c[j] = apply_sub_to_pred(c[j], sub);
     }
     return c;
 }
@@ -83,7 +150,6 @@ pred Knowledge::apply_sub_to_pred(pred p, vector<uint> sub) {
     get<1>(p) = apply_sub_to_pred_args(get<1>(p), sub);
     return p;
 }
-
 
 pred_args Knowledge::apply_sub_to_pred_args(pred_args pa, vector<uint> sub) {
     for (uint k = 0; k < pa.size(); k++) {
@@ -120,7 +186,16 @@ func_args Knowledge::apply_sub_to_func_args(func_args fa, vector<uint> sub) {
  * @param c2    The second list of clauses
  * @return      The combined list of clauses
  */
-cnf Knowledge::concat_kb(cnf c1, cnf c2) {
+cnf Knowledge::concat_cnf(cnf c1, cnf c2) {
+
+    for (uint i = 0; i < c2.size(); i++) {
+        c1.push_back(c2[i]);
+    }
+
+    return c1;
+}
+
+clause Knowledge::concat_clause(clause c1, clause c2) {
 
     for (uint i = 0; i < c2.size(); i++) {
         c1.push_back(c2[i]);

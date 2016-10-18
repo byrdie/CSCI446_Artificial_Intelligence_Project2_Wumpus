@@ -68,6 +68,7 @@ public:
     cnf resolve(clause c_i, clause c_j);
 
     bool is_neg(pred p);
+    cnf negate_clause(clause c);
 
     clause apply_sub_to_clause(clause c, vector<uint> sub);
     pred apply_sub_to_pred(pred p, vector<uint> sub);
@@ -75,7 +76,8 @@ public:
     func apply_sub_to_func(func f, vector<uint> sub);
     func_args apply_sub_to_func_args(func_args fa, vector<uint> sub);
 
-    cnf concat_kb(cnf c1, cnf c2);
+    cnf concat_cnf(cnf c1, cnf c2);
+    clause concat_clause(clause c1, clause c2);
 
     cnf copy_kb(cnf kb);
     clause copy_clause(clause c);

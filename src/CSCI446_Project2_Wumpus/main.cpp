@@ -30,16 +30,15 @@ int main(int argc, char *argv[]) {
 //    Engine * engine = new Engine(world);
 //    Human_agent * player = new Human_agent(engine, N);
     Knowledge * kb = new Knowledge();
-    
-    cnf new_kb = kb->static_kb;
-    kb->print_kb(new_kb);
-    vector<uint> sub;
-    sub.push_back(4);
-    sub.push_back(5);
-    new_kb[2] = kb->apply_sub_to_clause(new_kb[2], sub);
-    
     kb->print_kb(kb->static_kb);
-    kb->print_kb(new_kb);
+    
+    
+    clause c1 = kb->static_kb[0];
+    clause c2 = kb->static_kb[2];
+    
+    cnf resolvents = kb->resolve(c1,c2);
+
+    kb->print_kb(resolvents);
     
 //    return app.exec();
 
