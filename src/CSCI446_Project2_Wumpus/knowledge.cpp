@@ -307,8 +307,11 @@ bool Knowledge::resolution(cnf kb, clause query) {
 
         }
     }
-
-
+    if(subset(new_k, kb)){
+        return false;
+    }
+    kb = union_cnf(new_k, kb);
+    
 }
 
 bool Knowledge::is_neg(pred p) {
@@ -479,12 +482,31 @@ cnf Knowledge::union_cnf(cnf c1, cnf c2) {
                 flag = true;
             }
         }
-        if (!flag) {
-            c2.push_back(c1[i]);
+        if(!flag){
+            new_cnf.push_back(c1[i]);
         }
     }
     return new_cnf;
 }
+
+bool Knowledge :: subset(cnf c1, cnf c2){
+    
+    
+    for(uint i =0;  i < c1.size(); i++){
+        bool flag = false;
+        for(uint j = 0; j < c2.size(); j++){
+            if(clause_eq(c1[i], c2[j])){
+                flag = true;
+            }
+        }
+        if(!flag){
+            return false;
+        }
+    }
+    return true;
+    
+}
+
 
 /**
  * Series of function to print out a knowledge base for viewing

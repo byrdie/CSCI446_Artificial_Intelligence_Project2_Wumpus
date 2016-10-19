@@ -96,7 +96,7 @@ public:
     cnf concat_cnf(cnf c1, cnf c2);
     clause concat_clause(clause c1, clause c2);
     cnf union_cnf(cnf c1, cnf c2);
-
+    bool subset(cnf c1, cnf c2);
     void print_kb(cnf kb);
     void print_clause(clause c);
     void print_pred(pred p);
