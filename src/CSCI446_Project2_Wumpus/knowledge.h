@@ -22,8 +22,9 @@
 #define P_SAFE          0x00000004      // safe predicate
 
 // Define Functions
-// These must be large than variables!
-#define F_CONST         0x00200000      // Constant function
+// These must be larger than variables!
+// Should all functions be invertible?
+#define F_CONST         0x00008000      // Constant function
 #define F_VAR           0x00010000      // Variable function
 #define F_NORTH         0x00020000      // Returns the tile to the north
 #define F_SOUTH         0x00040000      // Returns the tile to the south
@@ -73,6 +74,7 @@ public:
     theta unify_func(func x, func y, theta sub_list);
     theta unify_var2(func x, func y, theta sub_list);
     vector<vector<uint>> unify_var(uint x, uint y, vector<vector<uint>> sub_list);
+    theta sub_var(func x, func y, theta sub_list);      // x is assumed to be a variable
             
     bool resolution(cnf kb, clause query);
     cnf resolve(clause c_i, clause c_j);
