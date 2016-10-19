@@ -17,49 +17,49 @@
 
 int main(int argc, char *argv[]) {
 
-    //    QApplication app(argc, argv);
-    //    app.installEventFilter(new QApplicationFilter());
+        QApplication app(argc, argv);
+        //app.installEventFilter(new QApplicationFilter());
 
-    //    init_rand();
-    //
-    //    int N = 7;
-    //    
-    //    World * world = new World(N, 3, 3, 3);
-    //    Engine * engine = new Engine(world);
-    //    Human_agent * player = new Human_agent(engine, N);
-    Knowledge * kb = new Knowledge();
-
-    for (uint i = 0; i < kb->static_kb.size() / 2; i++) {
-        pred p1 = kb->static_kb[2 * i][0];
-        pred p2 = kb->static_kb[2 * i + 1][0];
-
-
+        init_rand();
+    
+        int N = 7;
         
-        kb->print_pred(p1);
-        cout << endl;
-        kb->print_pred(p2);
-        cout << endl;
-        cout << endl;
-        theta sub_list;
-        sub_list = kb->unification(p1, p2, sub_list);
-
-        cout << "num subs: " << sub_list.size() << endl;
-
-        for (uint j = 0; j < sub_list.size(); j++) {
-            kb->print_pred_args(sub_list[j]);
-            cout << endl;
-
-            p1 = kb->apply_sub_to_pred(p1, sub_list[j]);
-            p2 = kb->apply_sub_to_pred(p2, sub_list[j]);
-
-        }
-        cout << endl;
-        kb->print_pred(p1);
-        cout << endl;
-        kb->print_pred(p2);
-        cout << endl;
-        cout << "----------------------" << endl;
-    }
+        World * world = new World(N, 3, 3, 3);
+        Engine * engine = new Engine(world);
+        Agent * player = new Agent(engine, N);
+//    Knowledge * kb = new Knowledge();
+//
+//    for (uint i = 0; i < kb->static_kb.size() / 2; i++) {
+//        pred p1 = kb->static_kb[2 * i][0];
+//        pred p2 = kb->static_kb[2 * i + 1][0];
+//
+//
+//        
+//        kb->print_pred(p1);
+//        cout << endl;
+//        kb->print_pred(p2);
+//        cout << endl;
+//        cout << endl;
+//        theta sub_list;
+//        sub_list = kb->unification(p1, p2, sub_list);
+//
+//        cout << "num subs: " << sub_list.size() << endl;
+//
+//        for (uint j = 0; j < sub_list.size(); j++) {
+//            kb->print_pred_args(sub_list[j]);
+//            cout << endl;
+//
+//            p1 = kb->apply_sub_to_pred(p1, sub_list[j]);
+//            p2 = kb->apply_sub_to_pred(p2, sub_list[j]);
+//
+//        }
+//        cout << endl;
+//        kb->print_pred(p1);
+//        cout << endl;
+//        kb->print_pred(p2);
+//        cout << endl;
+//        cout << "----------------------" << endl;
+//    }
 
 
 
@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 
     //    kb->print_kb(resolvents);
 
-    //    return app.exec();
+      return app.exec();
 
 }
 
