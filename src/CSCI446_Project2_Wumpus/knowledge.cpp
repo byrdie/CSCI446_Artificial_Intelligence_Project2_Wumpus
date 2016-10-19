@@ -94,11 +94,6 @@ theta Knowledge::unify_var2(func x, func y, theta sub_list) {
             theta empty_list;
             return empty_list;
         }
-
-
-
-        /* check to see if variables  */
-
     } else {
 
         cout << "unify-var couldn't find substitution" << endl;
