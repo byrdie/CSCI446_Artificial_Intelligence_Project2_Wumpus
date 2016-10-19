@@ -28,26 +28,33 @@ int main(int argc, char *argv[]) {
     //    Engine * engine = new Engine(world);
     //    Human_agent * player = new Human_agent(engine, N);
     Knowledge * kb = new Knowledge();
-    kb->print_kb(kb->static_kb);
-    cout << endl;
 
-
-    pred p1 = kb->static_kb[0][0];
-    pred p2 = kb->static_kb[1][0];
-
-    theta sub_list;
-    sub_list = kb->unification(p1, p2, sub_list);
-    
-    cout << "num subs: " << sub_list.size() << endl;
-
-    for (uint i = 0; i < sub_list.size(); i++) {
-        kb->print_pred_args(sub_list[i]);
+    for (uint i = 0; i < kb->static_kb.size() / 2; i++) {
+        pred p1 = kb->static_kb[2*i][0];
+        pred p2 = kb->static_kb[2*i + 1][0];
+        
+        kb->print_pred(p1);cout << endl;
+        kb->print_pred(p2);cout << endl;
         cout << endl;
-        kb->static_kb[0] = kb->apply_sub_to_clause(kb->static_kb[0], sub_list[i]);
-        kb->static_kb[1] = kb->apply_sub_to_clause(kb->static_kb[1], sub_list[i]);     
+        theta sub_list;
+        sub_list = kb->unification(p1, p2, sub_list);
+
+        cout << "num subs: " << sub_list.size() << endl;
+
+        for (uint j = 0; j < sub_list.size(); j++) {
+            kb->print_pred_args(sub_list[j]);cout << endl;
+            
+            p1 = kb->apply_sub_to_pred(p1, sub_list[j]);          
+            p2 = kb->apply_sub_to_pred(p2, sub_list[j]);
+            
+        }
+        cout << endl;
+        kb->print_pred(p1);cout << endl;
+        kb->print_pred(p2);cout << endl;
+        cout << "----------------------" << endl;
     }
-    cout << endl;
-    kb->print_kb(kb->static_kb);
+
+
 
 
     //    cnf resolvents = kb->resolve(c1,c2);
