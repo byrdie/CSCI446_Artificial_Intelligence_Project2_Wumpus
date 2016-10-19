@@ -81,19 +81,56 @@ theta Knowledge::unify_func(func f, func g, theta sub_list) {
                 return sub_list;
             }
         } else { // f is a variable, g is a function
+            
+            /* add the substitution */
             vector<func> sub;
             sub.push_back(f);
             sub.push_back(g);
             sub_list.push_back(sub);
+            
+            /* add the inverse of the substitution */
+            vector<func> back_sub;
+            int inverse = func_inv[get<0>(g)];
+            if (inverse != 0) { // inverse exists
+                get<0>(f) = inverse;
+                get<0>(g) = F_VAR;
+                back_sub.push_back(g);
+                back_sub.push_back(f);
+                sub_list.push_back(back_sub);
+            } else {              
+                cout << "Attempting to invert non-invertible function 0" << endl;
+                
+                theta empty_list;
+                return empty_list;
+            }
         }
     } else { // f is a function
         if (g_name == F_CONST) { // f is a function, g is a constant
             cout << "Undefined function!" << endl;
         } else if (g_name == F_VAR) { // f is a function, g is a variable
-            vector<func> sub;
-            sub.push_back(g);
-            sub.push_back(f);
-            sub_list.push_back(sub);
+            
+            /* add the substitution */
+            vector<func> for_sub;
+            for_sub.push_back(g);
+            for_sub.push_back(f);
+            sub_list.push_back(for_sub);
+            
+            /* add the inverse of the substitution */
+            vector<func> back_sub;
+            int inverse = func_inv[get<0>(f)];
+            if (inverse != 0) { // inverse exists
+                get<0>(g) = inverse;
+                get<0>(f) = F_VAR;
+                back_sub.push_back(f);
+                back_sub.push_back(g);
+                sub_list.push_back(back_sub);
+            } else {                
+                cout << "Attempting to invert non-invertible function 1" << endl;
+                
+                theta empty_list;
+                return empty_list;
+            }
+            
         } else { // f and g are functions
             cout << "Undefined function!" << endl;
 
@@ -104,65 +141,29 @@ theta Knowledge::unify_func(func f, func g, theta sub_list) {
 
 theta Knowledge::unify_var2(func x, func y, theta sub_list) {
 
-    theta sub_list_copy = sub_list;     // Copy the list so we can add to is as we iterate
 
     /* Check if x or y is already in the sublist */
-    for (uint i = 0; i < sub_list_copy.size(); i++) {
+    for (uint i = 0; i < sub_list.size(); i++) {
 
-        func tfunc = sub_list_copy[i][0];
-        func sfunc = sub_list_copy[i][1];
+        func tfunc = sub_list[i][0];
+        func sfunc = sub_list[i][1];
 
         /* Check to see if we already have a substitution for this variable */
         if (func_eq(x, tfunc)) { // Full function substitution
             x = sfunc;
-        } else if (func_args_eq(x, sfunc)) { // argument substitution
-
-
-            func sub = sfunc;
-            vector<func> subsub_list;
-
-            /* attempt to unify by inverting function */
-            int inverse = func_inv[get<0>(sub)];
-            if (inverse != 0) { // inverse exists
-                get<0>(sub) = inverse;
-                subsub_list.push_back(x);
-                subsub_list.push_back(sub);
-                sub_list.push_back(subsub_list);
-                x = sub;
-            } else {
-                theta empty_list;
-                return empty_list;
-            }
-
-        }
+        } 
         if (func_eq(y, tfunc)) { // Full function substitution
             y = sfunc;
-        } else if (func_args_eq(y, sfunc)) { // argument substitution
-
-            func sub = sfunc;
-            vector<func> subsub_list;
-
-            /* attempt to unify by inverting function */
-            int inverse = func_inv[get<0>(sub)];
-            if (inverse != 0) { // inverse exists
-                get<0>(sub) = inverse;
-                subsub_list.push_back(y);
-                subsub_list.push_back(sub);
-                sub_list.push_back(subsub_list);
-                y = sub;
-            } else {
-                theta empty_list;
-                return empty_list;
-            }
-        }
-
+        } 
     }
 
     int xname = get<0>(x);
     int yname = get<0>(y);
+    
+    
 
     /* Attempt unification if no substitution has been provided for x or y */
-    if (func_eq(x, y)) {
+    if (func_eq(x, y)) {                
         vector<func> subsub_list;
         subsub_list.push_back(x);
         subsub_list.push_back(y);
@@ -177,7 +178,18 @@ theta Knowledge::unify_var2(func x, func y, theta sub_list) {
         subsub_list.push_back(y);
         subsub_list.push_back(x);
         sub_list.push_back(subsub_list);
-    } else {
+    } else 
+//    else if(xname == func_inv[yname]){    // The functions are inverses of one another
+//        
+//        cout << "here10" << endl;
+//        
+//    } 
+    else {
+        
+    
+        
+        cout << "unify-var couldn't find substitution" << endl;
+        
         theta empty_list;
         return empty_list;
     }

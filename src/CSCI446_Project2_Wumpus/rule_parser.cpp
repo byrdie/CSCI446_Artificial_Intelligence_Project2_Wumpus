@@ -22,6 +22,9 @@ cnf RuleParser::parse_cnf() {
     ifstream file("../Rules/test.txt");
     string str;
     while (getline(file, str)) {
+        if(str.length() == 0){
+            continue;
+        }
         int index = 0;
         rules.push_back(parse_clause(str, &index));
     }
