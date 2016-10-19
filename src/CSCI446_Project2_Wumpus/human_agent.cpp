@@ -6,3 +6,7 @@
 //Human_agent ::Human_agent(Engine * this_engine, int N): Agent(this_engine, N) {
 //    
 //}
+#include "human_agent.h"
+ Human_agent::Human_agent(Engine * this_engine, int N) : Agent(this_engine, N){
+     
+ }

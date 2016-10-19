@@ -17,6 +17,7 @@
 #include "world_gen.h"
 #include "qt_world.h"
 #include "rule_parser.h"
+#include "human_agent.h"
 using namespace std;
 
 int main(int argc, char *argv[]);

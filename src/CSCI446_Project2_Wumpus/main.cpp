@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
         
         World * world = new World(N, 3, 3, 3);
         Engine * engine = new Engine(world);
-        Agent * player = new Agent(engine, N);
+        Human_agent * player = new Human_agent(engine, N);
 //    Knowledge * kb = new Knowledge();
 //
 //    for (uint i = 0; i < kb->static_kb.size() / 2; i++) {
