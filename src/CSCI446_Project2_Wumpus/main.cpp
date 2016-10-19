@@ -30,11 +30,15 @@ int main(int argc, char *argv[]) {
     Knowledge * kb = new Knowledge();
 
     for (uint i = 0; i < kb->static_kb.size() / 2; i++) {
-        pred p1 = kb->static_kb[2*i][0];
-        pred p2 = kb->static_kb[2*i + 1][0];
+        pred p1 = kb->static_kb[2 * i][0];
+        pred p2 = kb->static_kb[2 * i + 1][0];
+
+
         
-        kb->print_pred(p1);cout << endl;
-        kb->print_pred(p2);cout << endl;
+        kb->print_pred(p1);
+        cout << endl;
+        kb->print_pred(p2);
+        cout << endl;
         cout << endl;
         theta sub_list;
         sub_list = kb->unification(p1, p2, sub_list);
@@ -42,15 +46,18 @@ int main(int argc, char *argv[]) {
         cout << "num subs: " << sub_list.size() << endl;
 
         for (uint j = 0; j < sub_list.size(); j++) {
-            kb->print_pred_args(sub_list[j]);cout << endl;
-            
-            p1 = kb->apply_sub_to_pred(p1, sub_list[j]);          
+            kb->print_pred_args(sub_list[j]);
+            cout << endl;
+
+            p1 = kb->apply_sub_to_pred(p1, sub_list[j]);
             p2 = kb->apply_sub_to_pred(p2, sub_list[j]);
-            
+
         }
         cout << endl;
-        kb->print_pred(p1);cout << endl;
-        kb->print_pred(p2);cout << endl;
+        kb->print_pred(p1);
+        cout << endl;
+        kb->print_pred(p2);
+        cout << endl;
         cout << "----------------------" << endl;
     }
 

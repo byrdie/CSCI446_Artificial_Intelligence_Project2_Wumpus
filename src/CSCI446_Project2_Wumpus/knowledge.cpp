@@ -421,7 +421,7 @@ cnf Knowledge :: union_cnf(cnf c1, cnf c2){
             }
         }
         if(!flag){
-            c2.push_back(c1[i]);
+            new_cnf.push_back(c1[i]);
         }
     }
     return new_cnf;
