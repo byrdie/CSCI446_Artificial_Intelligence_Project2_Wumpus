@@ -14,24 +14,18 @@
 #ifndef HUMAN_AGENT_H
 #define HUMAN_AGENT_H
 
-
-class Human_agent;
-#include "typedef.h"
 #include "world_gen.h"
 #include "engine.h"
+#include "agent.h"
+class Agent;
 
 
-class Human_agent {
+
+
+class Human_agent: public Agent {
 public:
-    Point * position;
-    World * knowledge;
-    Engine * engine;
-    QGraphicsPixmapItem * my_tile;
-    
     Human_agent(Engine * this_engine, int N);
-    
-    void make_move(int direction);
-    
+   
 };
 
 #endif /* HUMAN_AGENT_H */

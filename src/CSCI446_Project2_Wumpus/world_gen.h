@@ -47,7 +47,7 @@ public:
     vector<Point*> barrier_list;
     vector<Point*> gold_list;
     
-    World(int side_length, Human_agent * agent);   // Create a new world covered in fog
+    World(int side_length, Agent * agent);   // Create a new world covered in fog
     World(int side_length, int n_wumpi, int n_pit, int n_barrier); // Create a new master world
     World(char * filename);     // Load a world from a file
     bool tile_is_empty(Point * p);
