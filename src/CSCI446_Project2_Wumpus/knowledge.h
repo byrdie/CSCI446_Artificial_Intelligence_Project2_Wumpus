@@ -72,8 +72,8 @@ public:
 
     theta unification(pred x, pred y, theta sub_list);  
     theta unify_func(func x, func y, theta sub_list);
-    theta unify_var2(func x, func y, theta sub_list);
-    vector<vector<uint>> unify_var(uint x, uint y, vector<vector<uint>> sub_list);
+    theta unify_var(func x, func y, theta sub_list);
+    vector<vector<uint>> unify_arg(uint x, uint y, vector<vector<uint>> sub_list);
     theta sub_var(func x, func y, theta sub_list);      // x is assumed to be a variable
             
     bool resolution(cnf kb, clause query);
@@ -103,7 +103,9 @@ public:
     void print_pred_args(pred_args pa);
     void print_func(func f);
     void print_func_args(func_args fa);
+    
     func build_func(uint function, func_args args);
+    func build_fvar(uint arg);
     pred build_pred(uint predicate, pred_args args);
 };
 

@@ -17,6 +17,7 @@ Knowledge::Knowledge() {
 }
 
 theta Knowledge::unification(pred x, pred y, theta sub_list) {
+
     pred_args x_args = get<1>(x);
     pred_args y_args = get<1>(y);
 
@@ -28,7 +29,7 @@ theta Knowledge::unification(pred x, pred y, theta sub_list) {
 
     /* loop through all the arguments of each predicate and unify */
     for (uint i = 0; i < x_args.size(); i++) {
-        sub_list = unify_var2(x_args[i], y_args[i], sub_list);
+        sub_list = unify_var(x_args[i], y_args[i], sub_list);
         if (sub_list.empty()) {
             return sub_list;
         }
@@ -36,8 +37,9 @@ theta Knowledge::unification(pred x, pred y, theta sub_list) {
     return sub_list;
 }
 
-theta Knowledge::unify_var2(func x, func y, theta sub_list) {
+theta Knowledge::unify_var(func x, func y, theta sub_list) {
 
+    theta empty_list;
 
     /* Check if x or y is already in the sublist */
     for (uint i = 0; i < sub_list.size(); i++) {
@@ -79,34 +81,82 @@ theta Knowledge::unify_var2(func x, func y, theta sub_list) {
             func_args xargs = get<1>(x);
             func_args yargs = get<1>(y);
 
+            vector<vector < uint>> arg_sub;
+
             /* Assume that x and y have the same number of arguments (since they're supposedly the same function) */
             for (uint i = 0; i < xargs.size(); i++) {
-                
+
+                /* Select a single argument of x and y */
                 uint u = xargs[i];
                 uint v = yargs[i];
-                
+
                 /* Convert the arguments u and v to functions for later */
-                
-                
+                func_args ua;
+                func_args va;
+                ua.push_back(u);
+                va.push_back(v);
+                func uf = build_func(F_VAR, ua);
+                func vf = build_func(F_VAR, va);
+
+                /* Check if u or v is already in the sublist */
+                for (uint i = 0; i < sub_list.size(); i++) {
+
+                    func tfunc = sub_list[i][0];
+                    func sfunc = sub_list[i][1];
+
+                    /* Check to see if we already have a substitution for these variables */
+                    if (func_eq(uf, tfunc)) { // Full function substitution
+                        u = get<1>(sfunc)[0]; // update u
+                        if (get<0>(sfunc) >= F_NORTH) { // unification fails, we cannot nest functions
+                            return empty_list;
+                        }
+                    }
+                    if (func_eq(vf, tfunc)) { // Full function substitution
+                        v = get<1>(sfunc)[0]; // update v
+                        if (get<0>(sfunc) >= F_NORTH) { // unification fails, we cannot nest functions
+                            return empty_list;
+                        }
+                    }
+
+                }
+                arg_sub = unify_arg(u, v, arg_sub); // Unify arguments
             }
 
-        } else {
-            theta empty_list;
+            /* translate integer array into function array and push onto sub list */
+            for (uint i = 0; i < arg_sub.size(); i++) { // Loop over substitution
+
+                /* Add substitution */
+                vector<func> fargsub;
+                func subvar = build_fvar(arg_sub[i][0]);
+                func subval = build_fvar(arg_sub[i][1]);
+                fargsub.push_back(subvar);
+                fargsub.push_back(subval);
+                sub_list.push_back(fargsub);
+
+//                /* Add back-substitution */
+//                vector<func> back_fargsub;
+//                back_fargsub.push_back(subval);
+//                back_fargsub.push_back(subvar);
+//                sub_list.push_back(back_fargsub);
+            }
+
+        } else { // Unification fails
+
             return empty_list;
         }
-    } else {
+    } else {// Unification fails
 
         cout << "unify-var couldn't find substitution" << endl;
 
-        theta empty_list;
+
         return empty_list;
     }
     return sub_list;
 
 }
 
-vector<vector<uint>> Knowledge::unify_var(uint x, uint y, vector<vector<uint>> sub_list) {
-    cout << x << ", " << y << endl;
+vector<vector<uint>> Knowledge::unify_arg(uint x, uint y, vector<vector<uint>> sub_list) {
+
     //check if x or y are already in the the sublist
     for (uint i = 0; i < sub_list.size(); i++) {
         if (x == sub_list[i][0]) {
@@ -155,22 +205,22 @@ theta Knowledge::sub_var(func x, func y, theta sub_list) {
     sub_list.push_back(subsub_list);
 
     /* if y is not a constant or variable, add the inverse of the substitution */
-    if (get<0>(y) > F_NORTH) {
-        vector<func> back_sub;
-        int inverse = func_inv[get<0>(y)];
-        if (inverse != 0) { // inverse exists
-            get<0>(x) = inverse;
-            get<0>(y) = F_VAR;
-            back_sub.push_back(y);
-            back_sub.push_back(x);
-            sub_list.push_back(back_sub);
-        } else {
-            cout << "Attempting to invert non-invertible function" << endl;
-
-            theta empty_list;
-            return empty_list;
-        }
-    }
+//    if (get<0>(y) >= F_NORTH) {
+//        vector<func> back_sub;
+//        int inverse = func_inv[get<0>(y)];
+//        if (inverse != 0) { // inverse exists
+//            get<0>(x) = inverse;
+//            get<0>(y) = F_VAR;
+//            back_sub.push_back(y);
+//            back_sub.push_back(x);
+//            sub_list.push_back(back_sub);
+//        } else {
+//            cout << "Attempting to invert non-invertible function" << endl;
+//
+//            theta empty_list;
+//            return empty_list;
+//        }
+//    }
     return sub_list;
 }
 
@@ -179,7 +229,7 @@ theta Knowledge::sub_var(func x, func y, theta sub_list) {
  * two inputs ci and cy
  * @param ci
  * @param cj
- * @return a set fo resolved clauses
+ * @return a set of resolved clauses
  */
 cnf Knowledge::resolve(clause ci, clause cj) {
 
@@ -249,16 +299,16 @@ bool Knowledge::resolution(cnf kb, clause query) {
                         return true;
                     }
                 }
-                
-                 new_k = union_cnf(new_k, resolvents);
-                
+
+                new_k = union_cnf(new_k, resolvents);
+
             }
-            
-            
+
+
         }
     }
-    
-    
+
+
 }
 
 bool Knowledge::is_neg(pred p) {
@@ -313,49 +363,63 @@ pred_args Knowledge::apply_sub_to_pred_args(pred_args pa, vector<func> sub) {
 
 func Knowledge::apply_sub_to_func(func f, vector<func> sub) {
 
-    /* Two functions are the same if the hash is the same  */
-    if (func_eq(f, sub[0])) {
+    /* Apply the substitution */
+    if (func_eq(f, sub[0])) { // if possible, sub the whole function
         f = sub[1];
+    } else if ((get<0>(sub[0]) == F_VAR) and (get<0>(sub[1]) < F_NORTH)) { // If we're subbing a variable for a variable or constant
+
+        uint svar = get<1>(sub[0])[0];
+        uint sval = get<1>(sub[1])[0];
+
+        func_args fargs = get<1>(f);
+        for (int i = 0; i < fargs.size(); i++) {
+            if (fargs[i] == svar) {
+                fargs[i] = sval;
+            }
+        }
+        get<1>(f) = fargs;
+
     }
     return f;
 
 }
 
-bool Knowledge:: clause_eq(clause f, clause g){
-    if(f.size() == g.size()){
-        for(uint i = 0; i < f.size(); i++){
-                if(!pred_eq(f[i], g[i])){
-                    return false;
-                }
+bool Knowledge::clause_eq(clause f, clause g) {
+    if (f.size() == g.size()) {
+        for (uint i = 0; i < f.size(); i++) {
+            if (!pred_eq(f[i], g[i])) {
+                return false;
+            }
         }
         return true;
-    } else{
+    } else {
         return false;
     }
-}
-bool Knowledge::pred_eq(pred f, pred g){
-    if(get<0>(f) == get<0>(g)){
-        if(pred_args_eq(get<1>(f), get<1>(g))){
-            return true;
-        }
-    } else{
-        return false;
-    }
-    
 }
 
-bool Knowledge::pred_args_eq(pred_args f, pred_args g){
-    if(f.size() == g.size()){
-        for(uint i = 0; i < f.size(); i++){
-                if(!func_eq(f[i], g[i])){
-                    return false;
-                }
+bool Knowledge::pred_eq(pred f, pred g) {
+    if (get<0>(f) == get<0>(g)) {
+        if (pred_args_eq(get<1>(f), get<1>(g))) {
+            return true;
         }
-        return true;
-    } else{
+    } else {
         return false;
     }
-    
+
+}
+
+bool Knowledge::pred_args_eq(pred_args f, pred_args g) {
+    if (f.size() == g.size()) {
+        for (uint i = 0; i < f.size(); i++) {
+            if (!func_eq(f[i], g[i])) {
+                return false;
+            }
+        }
+        return true;
+    } else {
+        return false;
+    }
+
 }
 
 bool Knowledge::func_eq(func f, func g) {
@@ -365,8 +429,6 @@ bool Knowledge::func_eq(func f, func g) {
         return false;
     }
 }
-
-
 
 bool Knowledge::func_args_eq(func f, func g) {
     func_args f_args = get<1>(f);
@@ -407,24 +469,22 @@ clause Knowledge::concat_clause(clause c1, clause c2) {
     return c1;
 }
 
-cnf Knowledge :: union_cnf(cnf c1, cnf c2){
+cnf Knowledge::union_cnf(cnf c1, cnf c2) {
     cnf new_cnf = c2;
-    
-    for(uint i =0;  i < c1.size(); i++){
+
+    for (uint i = 0; i < c1.size(); i++) {
         bool flag = false;
-        for(uint j = 0; j < c2.size(); j++){
-            if(clause_eq(c1[i], c2[j])){
+        for (uint j = 0; j < c2.size(); j++) {
+            if (clause_eq(c1[i], c2[j])) {
                 flag = true;
             }
         }
-        if(!flag){
+        if (!flag) {
             c2.push_back(c1[i]);
         }
     }
     return new_cnf;
 }
-
-
 
 /**
  * Series of function to print out a knowledge base for viewing
@@ -496,20 +556,34 @@ void Knowledge::print_func_args(func_args fa) {
         }
     }
 }
-func Knowledge::build_func(uint function, func_args args){
+
+func Knowledge::build_func(uint function, func_args args) {
     func return_func;
-    if(function == F_VAR || function == F_CONST){
-        if (args.size() > 1){
-            cout <<"WARNING: Invalid function arguments" << endl;
+    if (function == F_VAR || function == F_CONST) {
+        if (args.size() > 1) {
+            cout << "WARNING: Invalid function arguments" << endl;
         }
     }
     get<0>(return_func) = function;
     get<1>(return_func) = args;
     return return_func;
-    
-    
+
+
 }
-pred Knowledge::build_pred(uint predicate, pred_args args){
+
+func Knowledge::build_fvar(uint arg) {
+    func return_func;
+    func_args fargs;
+    fargs.push_back(arg);
+
+    get<0>(return_func) = F_VAR;
+    get<1>(return_func) = fargs;
+    return return_func;
+
+
+}
+
+pred Knowledge::build_pred(uint predicate, pred_args args) {
     pred return_pred;
     get<0>(return_pred) = predicate;
     get<1>(return_pred) = args;

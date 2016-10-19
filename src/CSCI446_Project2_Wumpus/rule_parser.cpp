@@ -19,7 +19,7 @@ cnf RuleParser::parse_cnf() {
 
 
     vector <vector<tuple<int, vector<tuple<int, vector<int> > > > > > conjuncts;
-    ifstream file("../Rules/test.txt");
+    ifstream file("../Rules/unificiation_test.txt");
     string str;
     while (getline(file, str)) {
         if(str.length() == 0){
