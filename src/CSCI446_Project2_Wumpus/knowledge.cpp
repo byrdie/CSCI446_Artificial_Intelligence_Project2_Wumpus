@@ -305,41 +305,37 @@ bool Knowledge::resolution(cnf kb, clause query) {
 
     uint i = 0;
     while (true) {
+        
+        
 
         /* For each pair of clauses in clauses */
-        for (i; i < kb.size(); i++) {
+        for (i;i < kb.size(); i++) {
             for (uint j = 0; j < i; j++) {
 
                 if (i != j) { // Don't try and resolve a clause with itself
 
-                    cout << "Input Clauses" << endl;
-                    print_clause(kb[i]);
-                    cout << endl;
-                    print_clause(kb[j]);
-                    cout << endl;
+//                    cout << "Input Clauses" << endl;
+//                    print_clause(kb[i]);
+//                    cout << endl;
+//                    print_clause(kb[j]);
+//                    cout << endl;
 
                     cnf resolvents = resolve(kb[i], kb[j]); // Find all possible resolvents of the pair of clauses
 
-                    cout << endl << "Resolved Clauses:" << endl;
-                    print_kb(resolvents);
-                    cout << endl;
-                    //
-                    //                    cout << "----------------------" << endl;
+//                    cout << endl << "Resolved Clauses:" << endl;
+//                    print_kb(resolvents);
+//                    cout << endl;
 
-                    /* If resolvents contains the empty clause then return true */
-                    //                    if (resolvents.empty()) {
-                    //                        return true;
-                    //                    }
                     for (uint k = 0; k < resolvents.size(); k++) {
                         if (resolvents[k].empty()) {
                             return true;
                         }
                     }
 
-                    new_k = union_cnf(new_k, resolvents);
-                    cout << "Contents of new:" << endl;
-                    print_kb(new_k);
-                    cout << "___________________________________" << endl;
+//                    new_k = union_cnf(new_k, resolvents);
+//                    cout << "Contents of new:" << endl;
+//                    print_kb(new_k);
+//                    cout << "___________________________________" << endl;
 
                 }
 
@@ -348,9 +344,9 @@ bool Knowledge::resolution(cnf kb, clause query) {
         }
         if (subset(new_k, kb)) {
 
-            cout << "Contents of kb:" << endl;
-            print_kb(kb);
-            cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
+//            cout << "Contents of kb:" << endl;
+//            print_kb(kb);
+//            cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
 
             return false;
 
@@ -359,9 +355,9 @@ bool Knowledge::resolution(cnf kb, clause query) {
         }
         kb = union_cnf(new_k, kb);
 
-        cout << "Contents of kb:" << endl;
-        print_kb(kb);
-        cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
+//        cout << "Contents of kb:" << endl;
+//        print_kb(kb);
+//        cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
 
     }
 }
