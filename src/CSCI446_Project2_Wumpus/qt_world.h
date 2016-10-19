@@ -11,8 +11,8 @@
  * Created on October 1, 2016, 9:53 PM
  */
 
-#ifndef QT_WORDL_H
-#define QT_WORDL_H
+#ifndef QT_WORLD_H
+#define QT_WORLD_H
 
 #include <iostream>
 #include <unistd.h>
@@ -37,7 +37,6 @@ class World_view;
 #include "human_agent.h"
 
 using namespace std;
-
 
 
 class Qt_world {

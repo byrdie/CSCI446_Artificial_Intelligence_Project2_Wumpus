@@ -17,11 +17,15 @@
 #include "world_gen.h"
 #include "qt_world.h"
 #include "rule_parser.h"
+#include "tests.h"
+
 using namespace std;
 
 int main(int argc, char *argv[]);
 void init_rand(unsigned long int seed);
 void init_rand();
+
+
 
 #endif /* MAIN_H */
 

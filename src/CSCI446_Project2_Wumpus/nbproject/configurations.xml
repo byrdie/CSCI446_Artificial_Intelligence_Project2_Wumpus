@@ -11,6 +11,7 @@
       <itemPath>predicate.h</itemPath>
       <itemPath>qt_world.h</itemPath>
       <itemPath>rule_parser.h</itemPath>
+      <itemPath>tests.h</itemPath>
       <itemPath>typedef.h</itemPath>
       <itemPath>world_gen.h</itemPath>
     </logicalFolder>
@@ -28,6 +29,7 @@
       <itemPath>qt_world.cpp</itemPath>
       <itemPath>rule_parser.cpp</itemPath>
       <itemPath>rules.txt</itemPath>
+      <itemPath>tests.cpp</itemPath>
       <itemPath>typedef.cpp</itemPath>
       <itemPath>world_gen.cpp</itemPath>
     </logicalFolder>
@@ -98,6 +100,10 @@
       </item>
       <item path="rules.txt" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="typedef.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="typedef.h" ex="false" tool="3" flavor2="0">
@@ -159,6 +165,10 @@
       <item path="rule_parser.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="rules.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="typedef.cpp" ex="false" tool="1" flavor2="0">
       </item>

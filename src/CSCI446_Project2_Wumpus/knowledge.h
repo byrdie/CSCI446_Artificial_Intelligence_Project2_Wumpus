@@ -68,7 +68,7 @@ public:
     
     map<int, int> func_inv;
 
-    Knowledge();
+    Knowledge(string filename);
 
     theta unification(pred x, pred y, theta sub_list);  
     theta unify_func(func x, func y, theta sub_list);
@@ -94,6 +94,7 @@ public:
     bool func_args_eq(func f, func g);
 
     cnf concat_cnf(cnf c1, cnf c2);
+    cnf add_clause(cnf kb, clause c);
     clause concat_clause(clause c1, clause c2);
     cnf union_cnf(cnf c1, cnf c2);
     bool subset(cnf c1, cnf c2);

@@ -32,7 +32,7 @@ using namespace std;
 class RuleParser {
 public:
     RuleParser();
-    cnf parse_cnf();
+    cnf parse_cnf(string filename);
     map<string, int> pred_tok_map;
     map<string, int> func_tok_map;
     map<int, string> pred_str_map;

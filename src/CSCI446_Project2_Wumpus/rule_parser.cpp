@@ -14,12 +14,12 @@ RuleParser::RuleParser() {
 
 }
 
-cnf RuleParser::parse_cnf() {
+cnf RuleParser::parse_cnf(string filename) {
     cnf rules;
 
 
     vector <vector<tuple<int, vector<tuple<int, vector<int> > > > > > conjuncts;
-    ifstream file("../Rules/unificiation_test.txt");
+    ifstream file(filename);
     string str;
     while (getline(file, str)) {
         if(str.length() == 0){

@@ -2,10 +2,10 @@
 #include "knowledge.h"
 #include <typeinfo>
 
-Knowledge::Knowledge() {
+Knowledge::Knowledge(string filename) {
 
     rule_parser = new RuleParser();
-    static_kb = rule_parser->parse_cnf();
+    static_kb = rule_parser->parse_cnf(filename);
 
     func_inv[F_CONST] = F_CONST;
     func_inv[F_VAR] = F_VAR;
@@ -133,11 +133,11 @@ theta Knowledge::unify_var(func x, func y, theta sub_list) {
                 fargsub.push_back(subval);
                 sub_list.push_back(fargsub);
 
-//                /* Add back-substitution */
-//                vector<func> back_fargsub;
-//                back_fargsub.push_back(subval);
-//                back_fargsub.push_back(subvar);
-//                sub_list.push_back(back_fargsub);
+                /* Add back-substitution */
+                //                vector<func> back_fargsub;
+                //                back_fargsub.push_back(subval);
+                //                back_fargsub.push_back(subvar);
+                //                sub_list.push_back(back_fargsub);
             }
 
         } else { // Unification fails
@@ -204,23 +204,29 @@ theta Knowledge::sub_var(func x, func y, theta sub_list) {
     subsub_list.push_back(y);
     sub_list.push_back(subsub_list);
 
+    /* add opposite rule */
+    //    vector<func> subsub_list2;
+    //    subsub_list2.push_back(y);
+    //    subsub_list2.push_back(x);
+    //    sub_list.push_back(subsub_list2);
+
     /* if y is not a constant or variable, add the inverse of the substitution */
-//    if (get<0>(y) >= F_NORTH) {
-//        vector<func> back_sub;
-//        int inverse = func_inv[get<0>(y)];
-//        if (inverse != 0) { // inverse exists
-//            get<0>(x) = inverse;
-//            get<0>(y) = F_VAR;
-//            back_sub.push_back(y);
-//            back_sub.push_back(x);
-//            sub_list.push_back(back_sub);
-//        } else {
-//            cout << "Attempting to invert non-invertible function" << endl;
-//
-//            theta empty_list;
-//            return empty_list;
-//        }
-//    }
+    //    if (get<0>(y) >= F_NORTH) {
+    //        vector<func> back_sub;
+    //        int inverse = func_inv[get<0>(y)];
+    //        if (inverse != 0) { // inverse exists
+    //            get<0>(x) = inverse;
+    //            get<0>(y) = F_VAR;
+    //            back_sub.push_back(y);
+    //            back_sub.push_back(x);
+    //            sub_list.push_back(back_sub);
+    //        } else {
+    //            cout << "Attempting to invert non-invertible function" << endl;
+    //
+    //            theta empty_list;
+    //            return empty_list;
+    //        }
+    //    }
     return sub_list;
 }
 
@@ -246,6 +252,10 @@ cnf Knowledge::resolve(clause ci, clause cj) {
             /* Check that one (not both) of the objects are negated */
             if (is_neg(pi) xor is_neg(pj)) {
 
+                /* Remove negation so that the predicates may be unified */
+                get<0>(pi) = get<0>(pi) & P_UNNEGATION;
+                get<0>(pj) = get<0>(pj) & P_UNNEGATION;
+
                 theta sub_list; // theta is a list of substitutions
                 sub_list = unification(pi, pj, sub_list); // Attempt to unify the two predicates
 
@@ -260,15 +270,18 @@ cnf Knowledge::resolve(clause ci, clause cj) {
                     ci_copy.erase(ci_copy.begin() + i);
                     cj_copy.erase(cj_copy.begin() + j);
 
-                    /* A resolvent is a union of the clauses after resolution */
-                    clause union_c = concat_clause(ci_copy, cj_copy);
-
                     /* Apply the list of substitutions */
                     for (uint k = 0; k < sub_list.size(); k++) {
 
-                        union_c = apply_sub_to_clause(union_c, sub_list[k]);
+                        ci_copy = apply_sub_to_clause(ci_copy, sub_list[k]);
+                        cj_copy = apply_sub_to_clause(cj_copy, sub_list[k]);
 
                     }
+
+                    /* A resolvent is a union of the clauses after resolution */
+                    clause union_c = concat_clause(ci_copy, cj_copy);
+
+
 
                     /* Add the new resolvent to the list of resolvents */
                     resolvents.push_back(union_c);
@@ -284,34 +297,73 @@ bool Knowledge::resolution(cnf kb, clause query) {
 
     kb = concat_cnf(kb, negate_clause(query));
 
+    cout << "Contents of kb:" << endl;
+    print_kb(kb);
+    cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
+
     cnf new_k; // Empty space to store the proposed knowledge
 
-    /* For each pair of clauses in clauses */
-    for (uint i = 0; i < kb.size(); i++) {
-        for (uint j = 0; j < kb.size(); j++) {
+    uint i = 0;
+    while (true) {
 
-            if (i != j) { // Don't try and resolve a clause with itself
-                cnf resolvents = resolve(kb[i], kb[j]); // Find all possible resolvents of the pair of clauses
+        /* For each pair of clauses in clauses */
+        for (i; i < kb.size(); i++) {
+            for (uint j = 0; j < i; j++) {
 
-                /* If resolvents contains the empty clause then return true */
-                for (uint k = 0; k < resolvents.size(); k++) {
-                    if (resolvents.empty()) {
-                        return true;
+                if (i != j) { // Don't try and resolve a clause with itself
+
+                    cout << "Input Clauses" << endl;
+                    print_clause(kb[i]);
+                    cout << endl;
+                    print_clause(kb[j]);
+                    cout << endl;
+
+                    cnf resolvents = resolve(kb[i], kb[j]); // Find all possible resolvents of the pair of clauses
+
+                    cout << endl << "Resolved Clauses:" << endl;
+                    print_kb(resolvents);
+                    cout << endl;
+                    //
+                    //                    cout << "----------------------" << endl;
+
+                    /* If resolvents contains the empty clause then return true */
+                    //                    if (resolvents.empty()) {
+                    //                        return true;
+                    //                    }
+                    for (uint k = 0; k < resolvents.size(); k++) {
+                        if (resolvents[k].empty()) {
+                            return true;
+                        }
                     }
+
+                    new_k = union_cnf(new_k, resolvents);
+                    cout << "Contents of new:" << endl;
+                    print_kb(new_k);
+                    cout << "___________________________________" << endl;
+
                 }
 
-                new_k = union_cnf(new_k, resolvents);
 
             }
+        }
+        if (subset(new_k, kb)) {
+
+            cout << "Contents of kb:" << endl;
+            print_kb(kb);
+            cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
+
+            return false;
+
 
 
         }
+        kb = union_cnf(new_k, kb);
+
+        cout << "Contents of kb:" << endl;
+        print_kb(kb);
+        cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
+
     }
-    if(subset(new_k, kb)){
-        return false;
-    }
-    kb = union_cnf(new_k, kb);
-    
 }
 
 bool Knowledge::is_neg(pred p) {
@@ -325,12 +377,14 @@ bool Knowledge::is_neg(pred p) {
 cnf Knowledge::negate_clause(clause c) {
 
     cnf ret;
+    clause ret_c;
     for (uint i = 0; i < c.size(); i++) {
-        clause ret_c;
-        pred p;
-        get<0>(p) = get<0>(p) | P_NEGATION;
+        
+        pred p = c[i];
+        get<0>(p) = get<0>(p) ^ P_NEGATION;
         ret_c.push_back(p);
     }
+    ret.push_back(ret_c);
 
 
     return ret;
@@ -375,7 +429,7 @@ func Knowledge::apply_sub_to_func(func f, vector<func> sub) {
         uint sval = get<1>(sub[1])[0];
 
         func_args fargs = get<1>(f);
-        for (int i = 0; i < fargs.size(); i++) {
+        for (uint i = 0; i < fargs.size(); i++) {
             if (fargs[i] == svar) {
                 fargs[i] = sval;
             }
@@ -405,10 +459,8 @@ bool Knowledge::pred_eq(pred f, pred g) {
         if (pred_args_eq(get<1>(f), get<1>(g))) {
             return true;
         }
-    } else {
-        return false;
     }
-
+    return false;
 }
 
 bool Knowledge::pred_args_eq(pred_args f, pred_args g) {
@@ -466,7 +518,16 @@ cnf Knowledge::concat_cnf(cnf c1, cnf c2) {
 clause Knowledge::concat_clause(clause c1, clause c2) {
 
     for (uint i = 0; i < c2.size(); i++) {
-        c1.push_back(c2[i]);
+        bool flag = false;
+        for (uint j = 0; j < c1.size(); j++) {
+            if (pred_eq(c1[j], c2[i])) {
+                flag = true;
+            }
+        }
+        if (!flag) {
+            c1.push_back(c2[i]);
+        }
+
     }
 
     return c1;
@@ -482,31 +543,30 @@ cnf Knowledge::union_cnf(cnf c1, cnf c2) {
                 flag = true;
             }
         }
-        if(!flag){
+        if (!flag) {
             new_cnf.push_back(c1[i]);
         }
     }
     return new_cnf;
 }
 
-bool Knowledge :: subset(cnf c1, cnf c2){
-    
-    
-    for(uint i =0;  i < c1.size(); i++){
+bool Knowledge::subset(cnf c1, cnf c2) {
+
+
+    for (uint i = 0; i < c1.size(); i++) {
         bool flag = false;
-        for(uint j = 0; j < c2.size(); j++){
-            if(clause_eq(c1[i], c2[j])){
+        for (uint j = 0; j < c2.size(); j++) {
+            if (clause_eq(c1[i], c2[j])) {
                 flag = true;
             }
         }
-        if(!flag){
+        if (!flag) {
             return false;
         }
     }
     return true;
-    
-}
 
+}
 
 /**
  * Series of function to print out a knowledge base for viewing
