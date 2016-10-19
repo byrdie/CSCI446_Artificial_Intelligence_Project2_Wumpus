@@ -296,9 +296,16 @@ bool Knowledge::resolution(cnf kb, clause query) {
                         return true;
                     }
                 }
+                
+                 new_k = union_cnf(new_k, resolvents);
+                
             }
+            
+            
         }
     }
+    
+    
 }
 
 bool Knowledge::is_neg(pred p) {
@@ -361,6 +368,43 @@ func Knowledge::apply_sub_to_func(func f, vector<func> sub) {
 
 }
 
+bool Knowledge:: clause_eq(clause f, clause g){
+    if(f.size() == g.size()){
+        for(uint i = 0; i < f.size(); i++){
+                if(!pred_eq(f[i], g[i])){
+                    return false;
+                }
+        }
+        return true;
+    } else{
+        return false;
+    }
+}
+bool Knowledge::pred_eq(pred f, pred g){
+    if(get<0>(f) == get<0>(g)){
+        if(pred_args_eq(get<1>(f), get<1>(g))){
+            return true;
+        }
+    } else{
+        return false;
+    }
+    
+}
+
+bool Knowledge::pred_args_eq(pred_args f, pred_args g){
+    if(f.size() == g.size()){
+        for(uint i = 0; i < f.size(); i++){
+                if(!func_eq(f[i], g[i])){
+                    return false;
+                }
+        }
+        return true;
+    } else{
+        return false;
+    }
+    
+}
+
 bool Knowledge::func_eq(func f, func g) {
     if (get<0>(f) == get<0>(g)) {
         return func_args_eq(f, g);
@@ -368,6 +412,8 @@ bool Knowledge::func_eq(func f, func g) {
         return false;
     }
 }
+
+
 
 bool Knowledge::func_args_eq(func f, func g) {
     func_args f_args = get<1>(f);
@@ -407,6 +453,25 @@ clause Knowledge::concat_clause(clause c1, clause c2) {
 
     return c1;
 }
+
+cnf Knowledge :: union_cnf(cnf c1, cnf c2){
+    cnf new_cnf = c2;
+    
+    for(uint i =0;  i < c1.size(); i++){
+        bool flag = false;
+        for(uint j = 0; j < c2.size(); j++){
+            if(clause_eq(c1[i], c2[j])){
+                flag = true;
+            }
+        }
+        if(!flag){
+            c2.push_back(c1[i]);
+        }
+    }
+    return new_cnf;
+}
+
+
 
 /**
  * Series of function to print out a knowledge base for viewing

@@ -85,11 +85,15 @@ public:
     pred_args apply_sub_to_pred_args(pred_args pa, vector<func> sub);
     func apply_sub_to_func(func f, vector<func> sub);
     
+    bool clause_eq(clause f, clause g);
+    bool pred_eq(pred f, pred g);
+    bool pred_args_eq(pred_args f, pred_args g);
     bool func_eq(func f, func g);
     bool func_args_eq(func f, func g);
 
     cnf concat_cnf(cnf c1, cnf c2);
     clause concat_clause(clause c1, clause c2);
+    cnf union_cnf(cnf c1, cnf c2);
 
     void print_kb(cnf kb);
     void print_clause(clause c);
