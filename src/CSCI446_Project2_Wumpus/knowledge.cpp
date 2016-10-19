@@ -478,3 +478,22 @@ void Knowledge::print_func_args(func_args fa) {
         }
     }
 }
+func Knowledge::build_func(uint function, func_args args){
+    func return_func;
+    if(function == F_VAR || function == F_CONST){
+        if (args.size() > 1){
+            cout <<"WARNING: Invalid function arguments" << endl;
+        }
+    }
+    get<0>(return_func) = function;
+    get<1>(return_func) = args;
+    return return_func;
+    
+    
+}
+pred Knowledge::build_pred(uint predicate, pred_args args){
+    pred return_pred;
+    get<0>(return_pred) = predicate;
+    get<1>(return_pred) = args;
+    return return_pred;
+}

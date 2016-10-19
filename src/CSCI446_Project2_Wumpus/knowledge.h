@@ -97,7 +97,8 @@ public:
     void print_pred_args(pred_args pa);
     void print_func(func f);
     void print_func_args(func_args fa);
-
+    func build_func(uint function, func_args args);
+    pred build_pred(uint predicate, pred_args args);
 };
 
 
