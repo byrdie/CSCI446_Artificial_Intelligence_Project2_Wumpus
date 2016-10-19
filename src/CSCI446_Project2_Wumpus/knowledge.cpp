@@ -304,7 +304,10 @@ bool Knowledge::resolution(cnf kb, clause query) {
             
         }
     }
-    
+    if(subset(new_k, kb)){
+        return false;
+    }
+    kb = union_cnf(new_k, kb);
     
 }
 
@@ -471,6 +474,23 @@ cnf Knowledge :: union_cnf(cnf c1, cnf c2){
     return new_cnf;
 }
 
+bool Knowledge :: subset(cnf c1, cnf c2){
+    
+    
+    for(uint i =0;  i < c1.size(); i++){
+        bool flag = false;
+        for(uint j = 0; j < c2.size(); j++){
+            if(clause_eq(c1[i], c2[j])){
+                flag = true;
+            }
+        }
+        if(!flag){
+            return false;
+        }
+    }
+    return true;
+    
+}
 
 
 /**
