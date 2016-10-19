@@ -26,117 +26,11 @@ theta Knowledge::unification(pred x, pred y, theta sub_list) {
         return sub_list;
     }
 
-    /*  */
-    //    for (uint i = 0; i < get<1>(x).size(); i++) {
-    //        //if (get<0>(get<1>(x)[i]) != get<0>(get<1>(y)[i])) {
-    //        //    return sub_list;
-    //        // }
-    //        func x_func = get<1>(x)[i];
-    //        func y_func = get<1>(y)[i];
-    //        x_args.push_back(x_func);
-    //        y_args.push_back(y_func);
-    //    }
-
+    /* loop through all the arguments of each predicate and unify */
     for (uint i = 0; i < x_args.size(); i++) {
         sub_list = unify_var2(x_args[i], y_args[i], sub_list);
         if (sub_list.empty()) {
             return sub_list;
-        }
-    }
-    return sub_list;
-}
-
-theta Knowledge::unify_func(func f, func g, theta sub_list) {
-
-    int f_name = get<0>(f);
-    int g_name = get<0>(g);
-
-    func_args f_args = get<1>(f);
-    func_args g_args = get<1>(g);
-
-    /* Logic for unifying a constant, function or variable */
-    if (f_name == F_CONST) { // f is a constant
-        if (g_name == F_CONST) { // f and g are constants
-
-            // Not sure what to do here, obviously only works if f == g
-            cout << "Undefined function!" << endl;
-
-        } else if (g_name == F_VAR) { // f is a constant, g is a variable
-
-            cout << "Undefined function!" << endl;
-
-        } else { // f is a constant, g is a function
-
-            cout << "Undefined function!" << endl;
-
-        }
-
-    } else if (f_name == F_VAR) { // f is a variable
-        if (g_name == F_CONST) { // f is a variable, g is a constant
-
-            cout << "Undefined function!" << endl;
-
-        } else if (g_name == F_VAR) { // f and g are variables
-
-            /* Unify variables and build a new function */
-            sub_list = unify_var2(f, g, sub_list);
-            if (sub_list.empty()) {
-                return sub_list;
-            }
-        } else { // f is a variable, g is a function
-
-            /* add the substitution */
-            vector<func> sub;
-            sub.push_back(f);
-            sub.push_back(g);
-            sub_list.push_back(sub);
-
-            /* add the inverse of the substitution */
-            vector<func> back_sub;
-            int inverse = func_inv[get<0>(g)];
-            if (inverse != 0) { // inverse exists
-                get<0>(f) = inverse;
-                get<0>(g) = F_VAR;
-                back_sub.push_back(g);
-                back_sub.push_back(f);
-                sub_list.push_back(back_sub);
-            } else {
-                cout << "Attempting to invert non-invertible function 0" << endl;
-
-                theta empty_list;
-                return empty_list;
-            }
-        }
-    } else { // f is a function
-        if (g_name == F_CONST) { // f is a function, g is a constant
-            cout << "Undefined function!" << endl;
-        } else if (g_name == F_VAR) { // f is a function, g is a variable
-
-            /* add the substitution */
-            vector<func> for_sub;
-            for_sub.push_back(g);
-            for_sub.push_back(f);
-            sub_list.push_back(for_sub);
-
-            /* add the inverse of the substitution */
-            vector<func> back_sub;
-            int inverse = func_inv[get<0>(f)];
-            if (inverse != 0) { // inverse exists
-                get<0>(g) = inverse;
-                get<0>(f) = F_VAR;
-                back_sub.push_back(f);
-                back_sub.push_back(g);
-                sub_list.push_back(back_sub);
-            } else {
-                cout << "Attempting to invert non-invertible function 1" << endl;
-
-                theta empty_list;
-                return empty_list;
-            }
-
-        } else { // f and g are functions
-            cout << "Undefined function!" << endl;
-
         }
     }
     return sub_list;
@@ -165,18 +59,46 @@ theta Knowledge::unify_var2(func x, func y, theta sub_list) {
 
 
     /* Attempt unification if no substitution has been provided for x or y */
-    if (func_eq(x, y)) {        // If x == y then we're done
-        
+    if (func_eq(x, y)) { // If x == y then we're done
+
         return sub_list;
-        
-    } else if (xname == F_VAR) {
 
-        sub_list = sub_var(x,y,sub_list);
+    } else if (xname == F_VAR) { // x is a variable; y is variable, constant or function
 
-    } else if (yname == F_VAR) {
+        sub_list = sub_var(x, y, sub_list);
 
-        sub_list = sub_var(y,x,sub_list);
-        
+    } else if (yname == F_VAR) { // y is a variable; x is a constant or function
+
+        sub_list = sub_var(y, x, sub_list);
+
+    } else if (xname >= F_NORTH and yname >= F_NORTH) { // x and y are both functions
+
+        /* x and y must be the same function to be unified */
+        if (xname == yname) {
+
+            func_args xargs = get<1>(x);
+            func_args yargs = get<1>(y);
+
+            /* Assume that x and y have the same number of arguments (since they're supposedly the same function) */
+            for (uint i = 0; i < xargs.size(); i++) {
+                
+                uint u = xargs[i];
+                uint v = yargs[i];
+                
+                /* Convert the arguments u and v to functions for later */
+                
+                
+            }
+
+        } else {
+            theta empty_list;
+            return empty_list;
+        }
+
+
+
+        /* check to see if variables  */
+
     } else {
 
         cout << "unify-var couldn't find substitution" << endl;
@@ -237,8 +159,8 @@ theta Knowledge::sub_var(func x, func y, theta sub_list) {
     subsub_list.push_back(y);
     sub_list.push_back(subsub_list);
 
-    /* if y is not a constant, add the inverse of the substitution */
-    if (get<0>(y) != F_CONST) {
+    /* if y is not a constant or variable, add the inverse of the substitution */
+    if (get<0>(y) > F_NORTH) {
         vector<func> back_sub;
         int inverse = func_inv[get<0>(y)];
         if (inverse != 0) { // inverse exists
