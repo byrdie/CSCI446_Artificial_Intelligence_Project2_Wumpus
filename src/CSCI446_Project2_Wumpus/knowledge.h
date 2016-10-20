@@ -20,7 +20,8 @@
 #define P_BREEZY        0x00000001      // breezy predicate
 #define P_PIT           0x00000002      // pit predicate
 #define P_SAFE          0x00000004      // safe predicate
-
+#define P_WALL          0x00000008
+#define P_STENCH        0x00000010
 // Define Functions
 // These must be larger than variables!
 // Should all functions be invertible?

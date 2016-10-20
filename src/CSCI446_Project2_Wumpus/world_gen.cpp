@@ -6,7 +6,7 @@
 
 // Create a black world (world covered in fog of war)
 
-World::World(int side_length, Agent * agent) {
+World::World(int side_length, Human_agent * agent) {
 
     N = side_length;
     qt_world = new Qt_world(N, agent);

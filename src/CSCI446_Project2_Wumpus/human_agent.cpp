@@ -1,12 +1,109 @@
-//
-//
-//#include "human_agent.h"
-//#include "engine.h"
-//
-//Human_agent ::Human_agent(Engine * this_engine, int N): Agent(this_engine, N) {
-//    
-//}
 #include "human_agent.h"
- Human_agent::Human_agent(Engine * this_engine, int N) : Agent(this_engine, N){
-     
- }
+#include "engine.h"
+
+Human_agent::Human_agent(Engine * this_engine, int N) {
+
+    // Initialize class variables
+    kb = new Knowledge("../Rules/test.txt");
+    knowledge = new World(N, this);
+    position = new Point(START_X, START_Y - 1);
+    engine = this_engine;
+
+    my_tile = knowledge->qt_world->set_tile(position->x, position->y, AGENT);
+    // ask the engine to be placed at the start position
+    make_move(NORTH);
+
+
+}
+
+void Human_agent::make_move(int direction) {
+
+
+    int next_tile = engine->move(direction, position);
+    int x;
+    int y;
+    if ((next_tile & WALL) > 0) {
+        
+        vector<Point *> neighbors = knowledge->find_neighbors(position);
+        x = neighbors[direction]->x;
+        y = neighbors[direction]->y;
+        //add wall clause to kb
+        add_const_clause(P_WALL, position_to_bits(neighbors[direction]));
+        
+    } else {
+        
+        x = position->x;
+        y = position->y;
+        
+    }
+
+
+    if (knowledge->world_vec[x][y] == FOG) {
+        knowledge->world_vec[x][y] = next_tile;
+        knowledge->qt_world->set_tile(x, y, next_tile);
+    }
+
+
+    knowledge->qt_world->move_tile(my_tile, position->x, position->y);
+
+    qApp->processEvents();
+    qApp->processEvents();
+    
+    if((next_tile & WUMPUS) > 0){
+        cout << "Killed by a Wumpus" << endl;
+        sleep(1);
+        knowledge->qt_world->view->close();
+    } else if ((next_tile & PIT) > 0) {
+        cout << "Fell into a pit" << endl;
+        sleep(1);
+        knowledge->qt_world->view->close();
+    } else if ((next_tile & GOLD) > 0 ) {
+        cout << "Retrived the gold" << endl;
+        sleep(1);
+        knowledge->qt_world->view->close();
+    }
+    //add perceps to kb
+    if((next_tile & BREEZE) > 0){
+        add_const_clause(P_BREEZY, position_to_bits(position));
+    } 
+    
+    if((next_tile & STENCH) > 0){
+        add_const_clause(P_STENCH, position_to_bits(position));
+    } 
+
+}
+
+void Human_agent :: add_const_clause(uint predicate, uint arg){
+    
+    func_args fargs;
+    fargs.push_back(arg);
+    func fcon = kb->build_func(F_CONST, fargs);
+    pred_args pargs;
+    pargs.push_back(fcon);
+    pred pcon = kb->build_pred(predicate, pargs);
+    clause rule;    
+    rule.push_back(pcon);
+    for (uint i =0; i < kb->static_kb.size(); i++){
+        if(kb->clause_eq(rule, kb->static_kb[i])){
+            return;
+        }
+    }
+    kb->static_kb.push_back(rule);
+}
+
+uint position_to_bits(Point * position){
+    uint int_pos = position->y;
+    uint x = position->x;
+    int_pos = (int_pos | (x << 16)) | A_CONST;
+  
+    return int_pos;
+}
+
+vector<int> bits_to_position (uint bits){
+    vector<int> position;
+    int x = ((bits & A_UNCONST) >> 16);
+    int y = (bits & 0x0000FFFF);
+    position.push_back(x);
+    position.push_back(y);
+    return position;
+}

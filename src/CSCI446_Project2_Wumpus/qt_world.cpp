@@ -27,7 +27,7 @@ Qt_world::Qt_world(int num_tiles) {
 
 }
 
-Qt_world::Qt_world(int num_tiles, Agent * h_agent) {
+Qt_world::Qt_world(int num_tiles, Human_agent * h_agent) {
     // Initialize variables
     N = num_tiles;
     win_sz = 1000;
@@ -116,7 +116,7 @@ void Qt_world::move_tile(QGraphicsPixmapItem * tile, int x, int y) {
  * is to overwrite the keyPressEvents to provide input for human players
  * @param scene
  */
-World_view::World_view(QGraphicsScene * scene, Agent * h_agent) : QGraphicsView(scene) {
+World_view::World_view(QGraphicsScene * scene, Human_agent * h_agent) : QGraphicsView(scene) {
     agent = h_agent;
 }
 

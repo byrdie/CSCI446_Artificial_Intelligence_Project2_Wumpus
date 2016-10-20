@@ -119,10 +119,6 @@
           <standard>8</standard>
         </ccTool>
       </compileType>
-      <item path="agent.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="agent.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="engine.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="engine.h" ex="false" tool="3" flavor2="0">
@@ -195,10 +191,6 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="agent.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="agent.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="engine.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="engine.h" ex="false" tool="3" flavor2="0">

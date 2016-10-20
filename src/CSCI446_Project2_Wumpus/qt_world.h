@@ -34,7 +34,7 @@ class Qt_world;
 class World_view;
 
 #include "typedef.h"
-#include "agent.h"
+#include "human_agent.h"
 
 using namespace std;
 
@@ -69,7 +69,7 @@ public:
 
     // Constructor
     Qt_world(int num_tiles);
-    Qt_world(int num_tiles, Agent * h_agent);
+    Qt_world(int num_tiles, Human_agent * h_agent);
     void init_map();
     
     QGraphicsPixmapItem *  set_tile(int x, int y, int elem_bits);
@@ -81,9 +81,9 @@ public:
 class World_view : public QGraphicsView {
 public:
     
-    Agent * agent;
+    Human_agent * agent;
     
-    World_view(QGraphicsScene * scene, Agent * h_agent);
+    World_view(QGraphicsScene * scene, Human_agent * h_agent);
     World_view(QGraphicsScene * scene);
     
 

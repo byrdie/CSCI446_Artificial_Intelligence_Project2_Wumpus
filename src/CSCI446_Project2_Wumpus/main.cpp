@@ -10,15 +10,15 @@
 
 int main(int argc, char *argv[]) {
 
-    //        QApplication app(argc, argv);
-    //
-    //        init_rand();
-    //    
-    //        int N = 7;
-    //        
-    //        World * world = new World(N, 3, 3, 3);
-    //        Engine * engine = new Engine(world);
-    //        Human_agent * player = new Human_agent(engine, N);
+            QApplication app(argc, argv);
+    
+            init_rand();
+        
+            int N = 7;
+            
+            World * world = new World(N, 3, 3, 3);
+            Engine * engine = new Engine(world);
+            Human_agent * player = new Human_agent(engine, N);
 
 
     //    test_unification();
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 
 
 
-    //        return app.exec();
+           return app.exec();
 
 }
 
