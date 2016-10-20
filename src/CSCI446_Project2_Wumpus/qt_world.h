@@ -51,11 +51,13 @@ public:
     
     // Qt pixelmaps of sprites
     QPixmap * base_bg_sprite;
+    QPixmap * base_p_cobble_sprite;
     QPixmap * base_wall_sprite;
     QPixmap * base_hero_sprite;
     QPixmap * base_wumpus_sprite;
     QPixmap * base_stench_sprite;
     QPixmap * base_pit_sprite;
+    QPixmap * base_p_pit_sprite;
     QPixmap * base_breeze_sprite;
     QPixmap * base_gold_sprite;
     QPixmap * base_fog_sprite;

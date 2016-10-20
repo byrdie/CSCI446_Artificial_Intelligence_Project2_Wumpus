@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
         
             int N = 7;
             
-            World * world = new World(N, 3, 3, 3);
+            World * world = new World(N, 0, 3, 0);
             Engine * engine = new Engine(world);
             Human_agent * player = new Human_agent(engine, N);
 
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     //    test_unification();
 
 //    test_resolve();
-    test_linear_resolution();
+//    test_linear_resolution();
 
 
 

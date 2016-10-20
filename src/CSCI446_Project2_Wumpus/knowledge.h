@@ -32,7 +32,7 @@
 #define F_EAST          0x00080000
 #define F_WEST          0x00100000
 
-#define DX              0x00000100
+#define DX              0x00010000
 #define DY              0x00000001
 
 
