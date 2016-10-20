@@ -114,7 +114,7 @@ bool Human_agent::infer(uint direction) {
     func fquery = kb->build_func(direction, fargs);
     pred_args pquery_arg;
     pquery_arg.push_back(fquery);
-    pred p_query = kb->build_pred(P_PIT, pquery_arg);
+    pred p_query = kb->build_pred(P_NEGATION | P_PIT, pquery_arg);
     clause query;
     query.push_back(p_query);
 
