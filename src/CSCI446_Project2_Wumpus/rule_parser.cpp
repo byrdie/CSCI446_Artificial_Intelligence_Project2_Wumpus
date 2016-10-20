@@ -216,7 +216,7 @@ void RuleParser::initialize_token_map() {
     pred_tok_map["Breezy"] = P_BREEZY;
     pred_tok_map["Pit"] = P_PIT;
     pred_tok_map["Safe"] = P_SAFE;
-
+    pred_tok_map["Wall"] = P_WALL;
 
     func_tok_map["North"] = F_NORTH;
     func_tok_map["South"] = F_SOUTH;
@@ -226,6 +226,7 @@ void RuleParser::initialize_token_map() {
     pred_str_map[P_BREEZY] = "Breezy";
     pred_str_map[P_PIT] = "Pit";
     pred_str_map[P_SAFE] = "Safe";
+    pred_str_map[P_WALL] = "Wall";
     
     func_str_map[F_NORTH] = "North";
     func_str_map[F_SOUTH] = "South";

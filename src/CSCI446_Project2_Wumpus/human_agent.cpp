@@ -4,6 +4,7 @@
 Human_agent::Human_agent(Engine * this_engine, int N) {
 
     // Initialize class variables
+    kb = new Knowledge("../Rules/test.txt");
     knowledge = new World(N, this);
     position = new Point(START_X, START_Y - 1);
     engine = this_engine;
@@ -22,12 +23,16 @@ void Human_agent::make_move(int direction) {
     int x;
     int y;
     if ((next_tile & WALL) > 0) {
+        add_const_clause(P_WALL, position_to_bits(position));
         vector<Point *> neighbors = knowledge->find_neighbors(position);
         x = neighbors[direction]->x;
         y = neighbors[direction]->y;
+        
     } else {
+        
         x = position->x;
         y = position->y;
+        
     }
 
 
@@ -56,4 +61,24 @@ void Human_agent::make_move(int direction) {
         knowledge->qt_world->view->close();
     }
 
+}
+
+void Human_agent :: add_const_clause(uint predicate, uint arg){
+    func_args fargs;
+    fargs.push_back(arg);
+    func fcon = kb->build_func(F_CONST, fargs);
+    pred_args pargs;
+    pargs.push_back(fcon);
+    pred pcon = kb->build_pred(predicate, pargs);
+    clause rule;    
+    rule.push_back(pcon);
+    kb->static_kb.push_back(rule);
+}
+
+uint position_to_bits(Point * position){
+    uint int_pos = position->y;
+    uint x = position->x;
+    int_pos = (int_pos | (x << 16)) | A_CONST;
+    
+    return int_pos;
 }
