@@ -4,7 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>agent.h</itemPath>
       <itemPath>engine.h</itemPath>
       <itemPath>human_agent.h</itemPath>
       <itemPath>knowledge.h</itemPath>
@@ -23,7 +22,6 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>agent.cpp</itemPath>
       <itemPath>engine.cpp</itemPath>
       <itemPath>human_agent.cpp</itemPath>
       <itemPath>knowledge.cpp</itemPath>
@@ -74,10 +72,6 @@
           <standard>8</standard>
         </ccTool>
       </compileType>
-      <item path="agent.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="agent.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="engine.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="engine.h" ex="false" tool="3" flavor2="0">
@@ -144,10 +138,6 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="agent.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="agent.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="engine.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="engine.h" ex="false" tool="3" flavor2="0">

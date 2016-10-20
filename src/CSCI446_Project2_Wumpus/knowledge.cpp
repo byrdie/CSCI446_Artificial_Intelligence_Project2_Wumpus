@@ -314,17 +314,17 @@ bool Knowledge::resolution(cnf kb, clause query) {
 
                 if (i != j) { // Don't try and resolve a clause with itself
 
-//                    cout << "Input Clauses" << endl;
-//                    print_clause(kb[i]);
-//                    cout << endl;
-//                    print_clause(kb[j]);
-//                    cout << endl;
+                    cout << "Input Clauses" << endl;
+                    print_clause(kb[i]);
+                    cout << endl;
+                    print_clause(kb[j]);
+                    cout << endl;
 
                     cnf resolvents = resolve(kb[i], kb[j]); // Find all possible resolvents of the pair of clauses
 
-//                    cout << endl << "Resolved Clauses:" << endl;
-//                    print_kb(resolvents);
-//                    cout << endl;
+                    cout << endl << "Resolved Clauses:" << endl;
+                    print_kb(resolvents);
+                    cout << endl;
 
                     for (uint k = 0; k < resolvents.size(); k++) {
                         if (resolvents[k].empty()) {
@@ -332,7 +332,7 @@ bool Knowledge::resolution(cnf kb, clause query) {
                         }
                     }
 
-//                    new_k = union_cnf(new_k, resolvents);
+                    new_k = union_cnf(new_k, resolvents);
 //                    cout << "Contents of new:" << endl;
 //                    print_kb(new_k);
 //                    cout << "___________________________________" << endl;
@@ -342,22 +342,21 @@ bool Knowledge::resolution(cnf kb, clause query) {
 
             }
         }
+        
         if (subset(new_k, kb)) {
 
-//            cout << "Contents of kb:" << endl;
-//            print_kb(kb);
-//            cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
+       
 
             return false;
 
-
+            
 
         }
         kb = union_cnf(new_k, kb);
 
-//        cout << "Contents of kb:" << endl;
-//        print_kb(kb);
-//        cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
+        cout << "Contents of kb:" << endl;
+        print_kb(kb);
+        cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
 
     }
 }
