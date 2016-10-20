@@ -25,9 +25,10 @@ class Engine {
 public: 
     
     Engine(World * this_world);
-    
+    int orientation;
+    uint score;
     int move(int direction, Point * cur_pos);
-    
+    void orient_to_direction(int direction);
 private:
     World * world;
     

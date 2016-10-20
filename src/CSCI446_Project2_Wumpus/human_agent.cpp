@@ -10,6 +10,7 @@ Human_agent::Human_agent(Engine * this_engine, int N) {
     engine = this_engine;
     time = 0;
 
+    orientation = SOUTH;
     my_tile = knowledge->qt_world->set_tile(position->x, position->y, AGENT);
     // ask the engine to be placed at the start position
     make_move(NORTH);
