@@ -5,24 +5,22 @@
  */
 
 /* 
- * File:   tests.h
+ * File:   resolve.h
  * Author: byrdie
  *
- * Created on October 19, 2016, 10:17 AM
+ * Created on October 19, 2016, 10:43 PM
  */
 
-#ifndef TESTS_H
-#define TESTS_H
+#ifndef RESOLVE_H
+#define RESOLVE_H
 
+#include <iomanip>
 #include "knowledge.h"
 
-void test_unification();
 
-void test_resolve();
+#define FALSE 0
+#define TRUE 1
+#define NOT_FOUND 2
 
-void test_resolution();
-
-void test_linear_resolution() ;
-
-#endif /* TESTS_H */
+#endif /* RESOLVE_H */
 

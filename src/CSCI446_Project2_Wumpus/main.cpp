@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     //    test_unification();
 
 //    test_resolve();
-    test_resolution();
+    test_linear_resolution();
 
 
 
