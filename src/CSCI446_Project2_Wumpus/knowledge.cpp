@@ -266,7 +266,8 @@ void Knowledge::print_func(func f) {
 
     if (func_tok == F_VAR) {
 
-        cout << fa[0];
+        cout << (char) ('a' + fa[0]);
+        
     } else if (func_tok == F_CONST) {
         vector<int> pos = bits_to_position(fa[0]);
         cout << "{";
@@ -288,16 +289,21 @@ void Knowledge::print_func_args(func_args fa) {
     for (uint l = 0; l < fa.size(); l++) {
 
         if ((fa[l] & A_CONST) > 0) {
-            vector<int> pos = bits_to_position(fa[0]);
-            cout << "{";
-            cout << pos[0];
-            cout << ",";
-            cout << pos[1];
-            cout << "}";
+            if ((fa[l] & A_POINT) > 0) {
+                vector<int> pos = bits_to_position(fa[0]);
+                cout << "{";
+                cout << pos[0];
+                cout << ",";
+                cout << pos[1];
+                cout << "}";
+            } else {
+               cout << fa[l]; 
+            }
+
         } else {
-            cout << fa[l];
+            cout << (char) ('a' + fa[l]);
         }
-        
+
         if (l != fa.size() - 1) {
             cout << ",";
         }
@@ -382,14 +388,14 @@ func Knowledge::eval_func(func f) {
 uint position_to_bits(Point * position) {
     uint int_pos = position->y;
     uint x = position->x;
-    int_pos = (int_pos | (x << 16)) | A_CONST;
+    int_pos = (int_pos | (x << 16)) | A_CONST | A_POINT;
 
     return int_pos;
 }
 
 vector<int> bits_to_position(uint bits) {
     vector<int> position;
-    int x = ((bits & A_UNCONST) >> 16);
+    int x = ((bits & A_UNCONST & ~A_POINT) >> 16);
     int y = (bits & 0x0000FFFF);
     position.push_back(x);
     position.push_back(y);

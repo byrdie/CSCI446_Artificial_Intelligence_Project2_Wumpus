@@ -4,10 +4,12 @@
 Human_agent::Human_agent(Engine * this_engine, int N) {
 
     // Initialize class variables
-    kb = new Knowledge("../Rules/test.txt");
+    kb = new Knowledge("../Rules/pit_rules.txt");
     knowledge = new World(N, this);
     position = new Point(START_X, START_Y - 1);
     engine = this_engine;
+    time = 0;
+
     orientation = SOUTH;
     my_tile = knowledge->qt_world->set_tile(position->x, position->y, AGENT);
     // ask the engine to be placed at the start position
@@ -64,14 +66,14 @@ void Human_agent::make_move(int direction) {
     }
     //add perceps to kb
     if ((next_tile & BREEZE) > 0) {
-        add_const_clause(P_BREEZY, position_to_bits(position));
+        add_const_clause(P_BREEZE, position_to_bits(position));
     } else {
-        add_const_clause(P_NEGATION | P_BREEZY, position_to_bits(position));
+        add_const_clause(P_NEGATION | P_BREEZE, position_to_bits(position));
     }
 
-    if ((next_tile & STENCH) > 0) {
-        add_const_clause(P_STENCH, position_to_bits(position));
-    }
+//    if ((next_tile & STENCH) > 0) {
+//        add_const_clause(P_STENCH, position_to_bits(position));
+//    }
     
     x = position->x;
     y = position->y;
@@ -100,6 +102,8 @@ void Human_agent::make_move(int direction) {
         knowledge->qt_world->set_tile(x - 1, y, POS_PIT);
     }
 
+    time++;     // make sure to increment the time
+    
 }
 
 bool Human_agent::infer(uint direction) {
@@ -139,6 +143,34 @@ void Human_agent::add_const_clause(uint predicate, uint arg) {
     func fcon = kb->build_func(F_CONST, fargs);
     pred_args pargs;
     pargs.push_back(fcon);
+    pred pcon = kb->build_pred(predicate, pargs);
+    clause rule;
+    rule.push_back(pcon);
+    for (uint i = 0; i < kb->static_kb.size(); i++) {
+        if (kb->clause_eq(rule, kb->static_kb[i])) {
+            return;
+        }
+    }
+    kb->static_kb.insert(kb->static_kb.begin(), rule);
+}
+
+/**
+ * 
+ * @param predicate
+ * @param arg1 
+ * @param arg2
+ */
+void Human_agent::add_const_clause(uint predicate, uint arg1, uint arg2) {
+
+    func_args fargs1;
+    func_args fargs2;
+    fargs1.push_back(arg1);
+    fargs2.push_back(arg2);
+    func fcon1 = kb->build_func(F_CONST, fargs1);
+    func fcon2 = kb->build_func(F_CONST, fargs2);
+    pred_args pargs;
+    pargs.push_back(fcon1);
+    pargs.push_back(fcon2);
     pred pcon = kb->build_pred(predicate, pargs);
     clause rule;
     rule.push_back(pcon);

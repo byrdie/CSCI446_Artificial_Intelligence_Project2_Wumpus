@@ -21,7 +21,11 @@
 #define P_PIT           0x00000002      // pit predicate
 #define P_SAFE          0x00000004      // safe predicate
 #define P_WALL          0x00000008
-#define P_STENCH        0x00000010
+#define P_STINKY        0x00000010
+#define P_WUMPUS        0x00000020
+#define P_STENCH        0x00000040
+#define P_BREEZE        0x00000080
+
 // Define Functions
 // These must be larger than variables!
 // Should all functions be invertible?
@@ -40,6 +44,8 @@
 // Define Argument types
 #define A_CONST     0x80000000      // predicate inversion
 #define A_UNCONST   0x7FFFFFFF                   
+#define A_POINT     0x40000000
+
 
 #include <iostream>
 #include <vector>

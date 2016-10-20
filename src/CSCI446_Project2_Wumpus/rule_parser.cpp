@@ -22,13 +22,13 @@ cnf RuleParser::parse_cnf(string filename) {
     ifstream file(filename);
     string str;
     while (getline(file, str)) {
-        if(str.length() == 0){
+        if (str.length() == 0) {
             continue;
         }
         int index = 0;
         rules.push_back(parse_clause(str, &index));
     }
-    
+
     return rules;
 }
 
@@ -178,6 +178,11 @@ int RuleParser::parse_arg(string str, int* index) {
     char next_var = str[*index]; // Get the next symbol
     *index = *index + 1; // Increment cursor
 
+    while (next_var == ' ') {
+        next_var = str[*index]; // Get the next symbol
+        *index = *index + 1; // Increment cursor
+    }
+
     if (next_var == '[' or next_var == ']' or next_var == ',') {
         cout << "SYNTAX ERROR: 'parse_arg', assigning delimiter as variable" << endl;
     }
@@ -218,6 +223,9 @@ void RuleParser::initialize_token_map() {
     pred_tok_map["Safe"] = P_SAFE;
     pred_tok_map["Wall"] = P_WALL;
     pred_tok_map["Stench"] = P_STENCH;
+    pred_tok_map["Breeze"] = P_BREEZE;
+    pred_tok_map["Stinky"] = P_STINKY;
+    pred_tok_map["Wumpus"] = P_WUMPUS;
 
     func_tok_map["North"] = F_NORTH;
     func_tok_map["South"] = F_SOUTH;
@@ -229,7 +237,10 @@ void RuleParser::initialize_token_map() {
     pred_str_map[P_SAFE] = "Safe";
     pred_str_map[P_WALL] = "Wall";
     pred_str_map[P_STENCH] = "Stench";
-    
+    pred_str_map[P_BREEZE] = "Breeze";
+    pred_str_map[P_STINKY] = "Stinky";
+    pred_str_map[P_WUMPUS] = "Wumpus";
+
     func_str_map[F_NORTH] = "North";
     func_str_map[F_SOUTH] = "South";
     func_str_map[F_EAST] = "East";
