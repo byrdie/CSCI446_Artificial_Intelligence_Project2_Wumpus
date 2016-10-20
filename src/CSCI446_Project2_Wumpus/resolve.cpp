@@ -9,6 +9,11 @@
  * @return 0 for false, 1 for true, 2 for not found 
  */
 uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
+    
+    if(indent > 20){
+        cout << "RECURSION LIMIT REACHED!" << endl;
+        return FALSE;
+    }
 
     /* Check for tautology */
     cnf query_cnf;
@@ -19,6 +24,11 @@ uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
 
     /* Loop through the knowledge base to find a resolution */
     for (uint i = 0; i < kb.size(); i++) {
+        
+        /* After we use a rule, move to the back of the rule priority */
+        cnf kbc = kb;
+        auto it = kbc.begin() + i;
+        rotate(it, it +1, kbc.end());
 
         /* Attempt to resolve each clause */
         cnf resolvents = resolve(kb[i], query);
@@ -39,7 +49,7 @@ uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
             }
 
             /* Apply linear resolution to the resolvents */
-            uint result = linear_resolution(kb, resolvents[j], indent + 5);
+            uint result = linear_resolution(kbc, resolvents[j], indent + 5);
 
             /* return if linear_resolution found a result, otherwise continue looping */
             if (result != NOT_FOUND) {

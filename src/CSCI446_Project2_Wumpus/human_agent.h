@@ -29,10 +29,13 @@ public:
     Engine * engine;
     QGraphicsPixmapItem * my_tile;
     
+    uint time;
+    
     Human_agent(Engine * this_engine, int N);
     
     void make_move(int direction);
     void add_const_clause(uint predicate, uint arg);
+    void add_const_clause(uint predicate, uint arg1, uint arg2);
     bool infer(uint direction);
     
 };
