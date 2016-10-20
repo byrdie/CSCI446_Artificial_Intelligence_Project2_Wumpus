@@ -35,6 +35,6 @@ public:
     void add_const_clause(uint predicate, uint arg);
 };
 uint position_to_bits(Point * position);
-    
+vector<int> bits_to_position (uint bits);
 
 #endif /* HUMAN_AGENT_H */

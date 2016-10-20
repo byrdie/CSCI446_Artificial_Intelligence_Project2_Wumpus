@@ -23,10 +23,12 @@ void Human_agent::make_move(int direction) {
     int x;
     int y;
     if ((next_tile & WALL) > 0) {
-        add_const_clause(P_WALL, position_to_bits(position));
+        
         vector<Point *> neighbors = knowledge->find_neighbors(position);
         x = neighbors[direction]->x;
         y = neighbors[direction]->y;
+        //add wall clause to kb
+        add_const_clause(P_WALL, position_to_bits(neighbors[direction]));
         
     } else {
         
@@ -60,10 +62,19 @@ void Human_agent::make_move(int direction) {
         sleep(1);
         knowledge->qt_world->view->close();
     }
+    //add perceps to kb
+    if((next_tile & BREEZE) > 0){
+        add_const_clause(P_BREEZY, position_to_bits(position));
+    } 
+    
+    if((next_tile & STENCH) > 0){
+        add_const_clause(P_STENCH, position_to_bits(position));
+    } 
 
 }
 
 void Human_agent :: add_const_clause(uint predicate, uint arg){
+    
     func_args fargs;
     fargs.push_back(arg);
     func fcon = kb->build_func(F_CONST, fargs);
@@ -72,6 +83,11 @@ void Human_agent :: add_const_clause(uint predicate, uint arg){
     pred pcon = kb->build_pred(predicate, pargs);
     clause rule;    
     rule.push_back(pcon);
+    for (uint i =0; i < kb->static_kb.size(); i++){
+        if(kb->clause_eq(rule, kb->static_kb[i])){
+            return;
+        }
+    }
     kb->static_kb.push_back(rule);
 }
 
@@ -79,6 +95,15 @@ uint position_to_bits(Point * position){
     uint int_pos = position->y;
     uint x = position->x;
     int_pos = (int_pos | (x << 16)) | A_CONST;
-    
+  
     return int_pos;
+}
+
+vector<int> bits_to_position (uint bits){
+    vector<int> position;
+    int x = ((bits & A_UNCONST) >> 16);
+    int y = (bits & 0x0000FFFF);
+    position.push_back(x);
+    position.push_back(y);
+    return position;
 }
