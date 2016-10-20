@@ -6,9 +6,11 @@
 
 
 #include "engine.h"
-
+#include <cmath>
 Engine::Engine(World * this_world) {
     world = this_world;
+    orientation = SOUTH;
+    score = 0;
 }
 
 int Engine::move(int direction, Point * cur_pos) {
@@ -27,4 +29,36 @@ int Engine::move(int direction, Point * cur_pos) {
     }
     return test_tile;
 
+}
+
+void Engine:: orient_to_direction( int direction){
+    if(orientation == direction){
+        score = score;
+    }else if(abs(orientation - direction) % 2 == 0){
+        orientation = (orientation + 2) % 4;
+        score += 2;
+    }else if((orientation == NORTH) || (orientation == WEST)){
+        if ((orientation - direction) < 1){
+            orientation++;
+            score++;
+        }else{
+            orientation--;
+            score++;
+        }
+    }else{
+        switch(orientation){
+            case EAST:
+                if(direction == NORTH){
+                    orientation = NORTH;
+                    score++;
+                }else{
+                    orientation == SOUTH;
+                    score++;
+                }
+        }
+    }
+    
+    
+    
+    
 }

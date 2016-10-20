@@ -37,7 +37,7 @@ class Point {
 public:
     int x;
     int y;
-
+    int orientation;
     Point(float xpos, float ypos) {
         x = xpos;
         y = ypos;

@@ -28,13 +28,13 @@ public:
     Knowledge * kb;
     Engine * engine;
     QGraphicsPixmapItem * my_tile;
-    
+    uint orientation;
     Human_agent(Engine * this_engine, int N);
     
     void make_move(int direction);
     void add_const_clause(uint predicate, uint arg);
     bool infer(uint direction);
-    
+
 };
 
 
