@@ -69,16 +69,16 @@ void Qt_world::init_map() {
     
     // Fill height map to know what elements to draw over
     height_map[FOG] = 1;
-    height_map[GOLD] = 3;
-    height_map[WUMPUS] = 3;
+    height_map[GOLD] = 5;
+    height_map[WUMPUS] = 5;
     height_map[STENCH] = 10;
-    height_map[PIT] = 3;
+    height_map[PIT] = 5;
     height_map[POS_PIT] = 2;
     height_map[BREEZE] = 9;
     height_map[WALL] = 4;
     height_map[EMPTY] = 4;
     height_map[POS_EMPTY] = 3;
-    height_map[AGENT] = 5;
+    height_map[AGENT] = 6;
 
     // Construct map between indices and screen position
     for (int i = 0; i < N + 2; i++) {

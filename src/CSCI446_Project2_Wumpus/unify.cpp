@@ -146,8 +146,6 @@ theta Knowledge::unify_var(func x, func y, theta sub_list) {
         }
     } else {// Unification fails
 
-        cout << "unify-var couldn't find substitution" << endl;
-
 
         return empty_list;
     }

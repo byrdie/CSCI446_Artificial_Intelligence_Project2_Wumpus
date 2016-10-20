@@ -24,8 +24,8 @@
 #define WALL    0x00000010
 #define EMPTY   0x00000020
 #define AGENT   0x00000040
-#define POS_PIT   0x00000080
-#define POS_EMPTY 0x00000100
+#define POS_PIT   0x00000100
+#define POS_EMPTY 0x00000200
 
 // Definite move types
 #define EAST    0

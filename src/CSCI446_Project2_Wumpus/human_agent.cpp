@@ -147,19 +147,3 @@ void Human_agent::add_const_clause(uint predicate, uint arg) {
     kb->static_kb.insert(kb->static_kb.begin(), rule);
 }
 
-uint position_to_bits(Point * position) {
-    uint int_pos = position->y;
-    uint x = position->x;
-    int_pos = (int_pos | (x << 16)) | A_CONST;
-
-    return int_pos;
-}
-
-vector<int> bits_to_position(uint bits) {
-    vector<int> position;
-    int x = ((bits & A_UNCONST) >> 16);
-    int y = (bits & 0x0000FFFF);
-    position.push_back(x);
-    position.push_back(y);
-    return position;
-}

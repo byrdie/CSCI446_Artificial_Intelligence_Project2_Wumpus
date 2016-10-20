@@ -262,15 +262,23 @@ void Knowledge::print_pred_args(pred_args pa) {
 
 void Knowledge::print_func(func f) {
     int func_tok = get<0>(f);
+    func_args fa = get<1>(f);
 
-    if (func_tok == F_VAR or func_tok == F_CONST) {
-        func_args fa = get<1>(f);
+    if (func_tok == F_VAR) {
+
         cout << fa[0];
+    } else if (func_tok == F_CONST) {
+        vector<int> pos = bits_to_position(fa[0]);
+        cout << "{";
+        cout << pos[0];
+        cout << ",";
+        cout << pos[1];
+        cout << "}";
     } else {
         string func_name = rule_parser->func_str_map[func_tok];
         cout << func_name;
         cout << "(";
-        print_func_args(get<1>(f));
+        print_func_args(fa);
         cout << ")";
     }
 }
@@ -278,7 +286,18 @@ void Knowledge::print_func(func f) {
 void Knowledge::print_func_args(func_args fa) {
 
     for (uint l = 0; l < fa.size(); l++) {
-        cout << fa[l];
+
+        if ((fa[l] & A_CONST) > 0) {
+            vector<int> pos = bits_to_position(fa[0]);
+            cout << "{";
+            cout << pos[0];
+            cout << ",";
+            cout << pos[1];
+            cout << "}";
+        } else {
+            cout << fa[l];
+        }
+        
         if (l != fa.size() - 1) {
             cout << ",";
         }
@@ -338,24 +357,41 @@ func Knowledge::eval_func(func f) {
 
         uint fname = get<0>(f);
 
-        if (fname == F_NORTH) {           
+        if (fname == F_NORTH) {
             fargs[0] = fargs[0] + DY;
-        } else if (fname == F_SOUTH){
+        } else if (fname == F_SOUTH) {
             fargs[0] = fargs[0] - DY;
-            
-        } else if (fname == F_EAST){
+
+        } else if (fname == F_EAST) {
             fargs[0] = fargs[0] + DX;
-            
-        } else if (fname == F_WEST){
+
+        } else if (fname == F_WEST) {
             fargs[0] = fargs[0] + DX;
-            
+
         }
         fname = F_CONST;
-        
+
         return build_func(fname, fargs);
 
     } else {
         return f;
     }
 
+}
+
+uint position_to_bits(Point * position) {
+    uint int_pos = position->y;
+    uint x = position->x;
+    int_pos = (int_pos | (x << 16)) | A_CONST;
+
+    return int_pos;
+}
+
+vector<int> bits_to_position(uint bits) {
+    vector<int> position;
+    int x = ((bits & A_UNCONST) >> 16);
+    int y = (bits & 0x0000FFFF);
+    position.push_back(x);
+    position.push_back(y);
+    return position;
 }

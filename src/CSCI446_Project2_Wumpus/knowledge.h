@@ -62,6 +62,7 @@ typedef vector<vector<func>> theta;     // A list of substitutions
 
 class Knowledge;
 
+#include "typedef.h"
 #include "rule_parser.h"
 
 class Knowledge {
@@ -119,6 +120,9 @@ public:
     
     func eval_func(func f);
 };
+
+uint position_to_bits(Point * position);
+vector<int> bits_to_position (uint bits);
 
 
 #endif /* KNOWLEDGE_H */
