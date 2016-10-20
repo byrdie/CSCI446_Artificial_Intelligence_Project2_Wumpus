@@ -32,6 +32,11 @@
 #define F_EAST          0x00080000
 #define F_WEST          0x00100000
 
+#define DX              0x00010000
+#define DY              0x00000001
+
+
+
 // Define Argument types
 #define A_CONST     0x80000000      // predicate inversion
 #define A_UNCONST   0x7FFFFFFF                   
@@ -57,6 +62,7 @@ typedef vector<vector<func>> theta;     // A list of substitutions
 
 class Knowledge;
 
+#include "typedef.h"
 #include "rule_parser.h"
 
 class Knowledge {
@@ -77,6 +83,7 @@ public:
     vector<vector<uint>> unify_arg(uint x, uint y, vector<vector<uint>> sub_list);
     theta sub_var(func x, func y, theta sub_list);      // x is assumed to be a variable
             
+    uint linear_resolution(cnf kb, clause query, uint indent);
     bool resolution(cnf kb, clause query);
     cnf resolve(clause c_i, clause c_j);
 
@@ -108,8 +115,14 @@ public:
     
     func build_func(uint function, func_args args);
     func build_fvar(uint arg);
+    func build_fconst(uint arg);
     pred build_pred(uint predicate, pred_args args);
+    
+    func eval_func(func f);
 };
+
+uint position_to_bits(Point * position);
+vector<int> bits_to_position (uint bits);
 
 
 #endif /* KNOWLEDGE_H */

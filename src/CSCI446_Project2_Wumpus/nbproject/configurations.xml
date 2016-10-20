@@ -10,6 +10,7 @@
       <itemPath>main.h</itemPath>
       <itemPath>predicate.h</itemPath>
       <itemPath>qt_world.h</itemPath>
+      <itemPath>resolve.h</itemPath>
       <itemPath>rule_parser.h</itemPath>
       <itemPath>tests.h</itemPath>
       <itemPath>typedef.h</itemPath>
@@ -27,11 +28,57 @@
       <itemPath>knowledge.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>qt_world.cpp</itemPath>
+      <itemPath>resolve.cpp</itemPath>
       <itemPath>rule_parser.cpp</itemPath>
       <itemPath>rules.txt</itemPath>
       <itemPath>tests.cpp</itemPath>
       <itemPath>typedef.cpp</itemPath>
+      <itemPath>unify.cpp</itemPath>
       <itemPath>world_gen.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -94,6 +141,10 @@
       </item>
       <item path="qt_world.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="resolve.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="resolve.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="rule_parser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="rule_parser.h" ex="false" tool="3" flavor2="0">
@@ -107,6 +158,8 @@
       <item path="typedef.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="typedef.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="unify.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="world_gen.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -160,6 +213,10 @@
       </item>
       <item path="qt_world.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="resolve.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="resolve.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="rule_parser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="rule_parser.h" ex="false" tool="3" flavor2="0">
@@ -173,6 +230,8 @@
       <item path="typedef.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="typedef.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="unify.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="world_gen.cpp" ex="false" tool="1" flavor2="0">
       </item>

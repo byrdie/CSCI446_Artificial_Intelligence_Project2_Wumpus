@@ -67,7 +67,8 @@ void test_resolve() {
     }
 }
 
-void test_resolution() {
+
+void test_linear_resolution() {
     Knowledge * kb = new Knowledge("../Rules/test.txt");
 
     /* Add Breezy(A) to the knowledge base */
@@ -77,16 +78,16 @@ void test_resolution() {
     func fcon = kb->build_func(F_CONST, fargs);
     pred_args pargs;
     pargs.push_back(fcon);
-    pred pcon = kb->build_pred(P_BREEZY, pargs);
+    pred pcon = kb->build_pred(P_NEGATION | P_BREEZY, pargs);
     clause rule;    
     rule.push_back(pcon);
-    kb->static_kb.push_back(rule);
+    kb->static_kb.insert(kb->static_kb.begin(), rule);
 
     /* Build query */
     func fquery = kb->build_func(F_NORTH, fargs);
     pred_args pquery_arg;
     pquery_arg.push_back(fquery);
-    pred p_query = kb->build_pred( P_PIT, pquery_arg);
+    pred p_query = kb->build_pred(P_NEGATION | P_PIT, pquery_arg);
     clause query;
     query.push_back(p_query);
 
@@ -98,7 +99,8 @@ void test_resolution() {
     kb->print_clause(query);
     cout << endl << "*************************************" << endl;
 
-    bool result = kb->resolution(kb->static_kb, query);
+    cnf neg_query = kb->negate_clause(query);
+    uint result = kb->linear_resolution(kb->static_kb, neg_query[0],0);
 
     cout << "The result is: " << result << endl;
 

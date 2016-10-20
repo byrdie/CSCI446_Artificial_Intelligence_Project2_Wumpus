@@ -43,11 +43,13 @@ Qt_world::Qt_world(int num_tiles, Human_agent * h_agent) {
 
 void Qt_world::init_map() {
     base_bg_sprite = new QPixmap("sprites/cobble.png");
+    base_p_cobble_sprite = new QPixmap("sprites/p_cobble.png");
     base_wall_sprite = new QPixmap("sprites/wall.png");
     base_hero_sprite = new QPixmap("sprites/hero.png");
     base_wumpus_sprite = new QPixmap("sprites/wumpus2.png");
     base_stench_sprite = new QPixmap("sprites/stench3.png");
     base_pit_sprite = new QPixmap("sprites/pit.png");
+    base_p_pit_sprite = new QPixmap("sprites/p_pit.png");
     base_breeze_sprite = new QPixmap("sprites/breeze.png");
     base_gold_sprite = new QPixmap("sprites/gold.png");
     base_fog_sprite = new QPixmap("sprites/fog.png");
@@ -58,21 +60,25 @@ void Qt_world::init_map() {
     sprite_map[WUMPUS] = base_wumpus_sprite;
     sprite_map[STENCH] = base_stench_sprite;
     sprite_map[PIT] = base_pit_sprite;
+    sprite_map[POS_PIT] = base_p_pit_sprite;
     sprite_map[BREEZE] = base_breeze_sprite;
     sprite_map[WALL] = base_wall_sprite;
     sprite_map[EMPTY] = base_bg_sprite;
+    sprite_map[POS_EMPTY] = base_p_cobble_sprite;
     sprite_map[AGENT] = base_hero_sprite;
     
-    // Fill hight map to know what elements to draw over
+    // Fill height map to know what elements to draw over
     height_map[FOG] = 1;
-    height_map[GOLD] = 3;
-    height_map[WUMPUS] = 3;
+    height_map[GOLD] = 5;
+    height_map[WUMPUS] = 5;
     height_map[STENCH] = 10;
-    height_map[PIT] = 3;
+    height_map[PIT] = 5;
+    height_map[POS_PIT] = 2;
     height_map[BREEZE] = 9;
-    height_map[WALL] = 3;
-    height_map[EMPTY] = 2;
-    height_map[AGENT] = 5;
+    height_map[WALL] = 4;
+    height_map[EMPTY] = 4;
+    height_map[POS_EMPTY] = 3;
+    height_map[AGENT] = 6;
 
     // Construct map between indices and screen position
     for (int i = 0; i < N + 2; i++) {
