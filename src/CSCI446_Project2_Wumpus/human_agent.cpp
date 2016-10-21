@@ -212,3 +212,46 @@ apoint Human_agent::find_forward(Point * pos, uint dir){
     
 }
 
+apoint Human_agent::find_backward(Point * pos, uint dir){
+    uint x = pos->x;
+    uint y = pos->y;
+    switch (dir){
+        case EAST:
+            x = x - 1;
+            break;
+            
+        case NORTH:
+            y = y-1;
+            break;
+            
+        case WEST:
+            x = x+1;
+            break;
+            
+        case SOUTH:
+            y = y + -1;
+    }
+    Point * p = new Point(x,y);
+    return kb->position_to_bits(p);
+    
+}
+clause Human_agent::create_clause(uint predicate, vector<uint> function,  vector<uint> constant){
+    pred_args pargs;
+    for(uint i =0; i < function.size(); i++){
+        func_args fargs;
+        fargs.push_back(constant[i]);
+        func fcon = kb->build_func(function[i], fargs);
+        pargs.push_back(fcon);
+    }
+    
+    pred pcon = kb->build_pred(predicate, pargs);
+    clause rule;    
+    rule.push_back(pcon);
+    return rule;
+}
+
+void Human_agent::execute_rhr(){
+    clause is_left;
+    vector<uint> funcs = {F_CONST, F_CONST};
+    vector<uint> func_args = {kb->position_to_bits(position), (orientation | A_CONST)};
+}

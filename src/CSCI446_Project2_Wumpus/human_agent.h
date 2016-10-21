@@ -40,6 +40,8 @@ public:
     apoint find_left(Point * pos, uint dir);
     apoint find_forward(Point * pos, uint dir);
     apoint find_backward(Point * pos, uint dir);
+    clause create_clause(uint predicate, vector<uint> function,  vector<uint> constant);
+    void execute_rhr();
 };
 
 
