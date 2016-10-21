@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
         
             int N = 7;
             
-            World * world = new World(N, 0, 2, 0);
+            World * world = new World(N, 2, 2, 2);
             Engine * engine = new Engine(world);
             Human_agent * player = new Human_agent(engine, N);
 

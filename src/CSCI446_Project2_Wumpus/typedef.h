@@ -25,10 +25,14 @@
 #define P_WUMPUS        0x00000020
 #define P_STENCH        0x00000040
 #define P_BREEZE        0x00000080
+
 #define P_EXPLORED      0x00000100
 #define P_ISCLEAR       0x00000200
-#define P_BESTMOVE      0x00000400
+#define P_STEPFORWARD   0x00000400
 #define P_ADJEXPLORED   0x00000800
+#define P_TURNLEFT      0x00001000
+#define P_TURNRIGHT     0x00002000
+#define P_AGENT         0x00004000
 
 // Define Functions
 // These must be larger than variables!

@@ -23,6 +23,7 @@ class Human_agent;
 
 class Human_agent {
 public:
+    uint N;
     Point * position;
     World * knowledge;
     Knowledge * kb;
@@ -40,6 +41,12 @@ public:
     apoint find_left(Point * pos, uint dir);
     apoint find_forward(Point * pos, uint dir);
     apoint find_backward(Point * pos, uint dir);
+    clause create_clause(uint predicate, vector<uint> function,  vector<uint> constant);
+    void execute_rhr();
+    
+    bool infer_move(uint direction);
+    
+    void init_kb();
 };
 
 
