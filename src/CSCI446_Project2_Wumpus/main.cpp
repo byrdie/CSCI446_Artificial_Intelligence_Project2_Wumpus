@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     
             init_rand( 1477040524);
         
-            int N = 15;
+            int N = 7;
             
             World * world = new World(N, 0, 4, 0);
             Engine * engine = new Engine(world);
