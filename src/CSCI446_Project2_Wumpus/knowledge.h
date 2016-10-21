@@ -14,7 +14,7 @@
 #ifndef KNOWLEDGE_H
 #define KNOWLEDGE_H
 
-#define debug_mode false
+#define debug_mode true
 
 #include <iostream>
 #include <vector>
@@ -32,18 +32,22 @@ class Knowledge;
 class Knowledge {
 public:
 
+    uint N;     // The size of the cave
     RuleParser * rule_parser;
     
     /* Static rules, loaded from file */
-    cnf static_kb;
+    cnf kb_rules;   // Rules containing variables
     
     /* Dynamic rules, filled by the agent */
-    cnf2D square_kb;
-    cnf list_kb;
+    cnf2D * kb_world_heap;  // Rules are stored by position
+    cnf kb_time_stack;   // Rules are added on the back. these rules contain time
 
     map<int, int> func_inv;
 
-    Knowledge(string filename);
+    Knowledge(uint sz, vector<string> rule_files);
+    
+    void add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint y);
+    void add_percept_to_stack(pred_name pname, func_arg parg);
 
     /* Set of functions used for unification */
     /* These functions are defined in unify.cpp */
@@ -56,7 +60,7 @@ public:
     /* Set of functions used for resolution */
     /* These functions are defined in resolve.cpp */
     uint linear_resolution(cnf kb, clause query, uint indent);
-    bool binary_input_resolution_2D(cnf skb, cnf2D dkb, clause query);
+    bool heap_input_resolution(clause query, uint x, uint y);
     cnf resolve(clause c_i, clause c_j);
 
     /* Set of functions dealing with negated predicates */
