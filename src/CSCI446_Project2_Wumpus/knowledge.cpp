@@ -6,7 +6,6 @@ Knowledge::Knowledge(string filename) {
 
     rule_parser = new RuleParser();
     static_kb = rule_parser->parse_cnf(filename);
-    square_kb = new cnf2D;
 
     func_inv[F_CONST] = F_CONST;
     func_inv[F_VAR] = F_VAR;
@@ -217,8 +216,71 @@ bool Knowledge::subset(cnf c1, cnf c2) {
 }
 
 /**
+ *  This function set will return a list of all the constants found within
+ * @param c     a clause in cnf
+ * @return a    vector of constants in logic form
+ */
+vector<uint> Knowledge::get_points_clause(clause c) {
+
+    vector<uint> constants;
+
+    for (uint j = 0; j < c.size(); j++) {
+
+        vector<uint> lower_constants = get_points_pred_args(get<1>(c[j]));
+
+        for (uint k = 0; k < lower_constants.size(); k++) {
+            constants.push_back(lower_constants[k]);
+        }
+    }
+
+    return constants;
+
+}
+
+vector<aconst> Knowledge::get_points_pred(pred p) {
+
+    return get_points_pred_args(get<1>(p));
+
+}
+
+vector<aconst> Knowledge::get_points_pred_args(pred_args pa) {
+
+    vector<aconst> constants;
+
+    for (uint k = 0; k < pa.size(); k++) {
+        vector<aconst> lower_constants = get_points_func(pa[k]);
+
+        for (uint k = 0; k < lower_constants.size(); k++) {
+            constants.push_back(lower_constants[k]);
+        }
+    }
+
+}
+
+vector<aconst> Knowledge::get_points_func(func f) {
+
+    return get_points_func_args(f_args(f));
+
+}
+
+vector<aconst> Knowledge::get_points_func_args(func_args fa) {
+
+    vector<uint> constants;
+    
+    for(uint l = 0; l < fa.size(); l++){
+        
+        if((fa[l] & A_POINT ) > 0){
+            constants.push_back(fa[l]);
+        }
+    }
+    
+    return constants;
+
+}
+
+/**
  * Series of function to print out a knowledge base for viewing
- * @param kb
+ * @param kb the knowledge base in CNF form
  */
 void Knowledge::print_kb(cnf kb) {
     for (uint i = 0; i < kb.size(); i++) {
@@ -397,9 +459,37 @@ uint position_to_bits(Point * position) {
 
 vector<int> bits_to_position(uint bits) {
     vector<int> position;
-    int x = ((bits & A_UNCONST & ~A_POINT) >> 16);
+    int x = ((bits & ~A_CONST & ~A_POINT) >> 16);
     int y = (bits & 0x0000FFFF);
     position.push_back(x);
     position.push_back(y);
     return position;
 }
+
+pred_name Knowledge::p_name(pred p) {
+    return get<0>(p);
+}
+
+pred_args Knowledge::p_args(pred p) {
+    
+    return get<1>(p);
+}
+
+pred_arg Knowledge::p_argi(pred p, uint index){
+    
+    return (p_args(p))[index];
+    
+}
+
+func_name Knowledge::f_name(func f) {
+    return get<0>(f);
+}
+
+func_args Knowledge::f_args(func f) {
+    return get<1>(f);
+}
+
+func_arg Knowledge::f_argi(func f, uint index){
+    return (f_args(f))[index];
+}
+

@@ -1,0 +1,2 @@
+BestMove[s],explored[s],!Open[s],,
+Open[s],Pit[s],Wall[s],Wumpus[s],,
