@@ -36,12 +36,14 @@ public:
     
     void make_move(int direction);
     bool infer(uint direction);
-    apoint find_right(Point * pos, uint dir);
-    apoint find_left(Point * pos, uint dir);
-    apoint find_forward(Point * pos, uint dir);
-    apoint find_backward(Point * pos, uint dir);
+    Point find_right(Point * pos, uint dir);
+    Point find_left(Point * pos, uint dir);
+    Point find_forward(Point * pos, uint dir);
+    Point find_backward(Point * pos, uint dir);
     clause create_clause(uint predicate, vector<uint> function,  vector<uint> constant);
     void execute_rhr();
+    bool AdjExplored(Point * pos);
+    bool is_clear(Point* pos);
 };
 
 

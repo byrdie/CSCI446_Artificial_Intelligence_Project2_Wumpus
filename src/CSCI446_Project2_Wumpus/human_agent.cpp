@@ -64,6 +64,7 @@ void Human_agent::make_move(int direction) {
         sleep(1);
         knowledge->qt_world->view->close();
     } else if ((next_tile & GOLD) > 0) {
+        engine->score = engine->score + 1000;
         cout << "Retrived the gold" << endl;
         sleep(1);
         knowledge->qt_world->view->close();
@@ -140,7 +141,11 @@ bool Human_agent::infer(uint direction) {
 
 }
 
-apoint Human_agent::find_right(Point * pos, uint dir){
+bool Human_agent::AdjExplored(Point * pos){
+    
+}
+Point Human_agent::find_right(Point * pos, uint dir){
+    //find position right of player
     uint x = pos->x;
     uint y = pos->y;
     switch (dir){
@@ -160,11 +165,15 @@ apoint Human_agent::find_right(Point * pos, uint dir){
             x = x -1;
     }
     Point * p = new Point(x,y);
-    return kb->position_to_bits(p);
+    return Point(x,y);
+    
     
 }
 
-apoint Human_agent::find_left(Point * pos, uint dir){
+
+
+Point Human_agent::find_left(Point * pos, uint dir){
+    //find position left of player
     uint x = pos->x;
     uint y = pos->y;
     switch (dir){
@@ -184,11 +193,12 @@ apoint Human_agent::find_left(Point * pos, uint dir){
             x =x + 1;
     }
     Point * p = new Point(x,y);
-    return kb->position_to_bits(p);
+    return Point(x,y);
     
 }
 
-apoint Human_agent::find_forward(Point * pos, uint dir){
+Point Human_agent::find_forward(Point * pos, uint dir){
+    //find position of tile ahead of player
     uint x = pos->x;
     uint y = pos->y;
     switch (dir){
@@ -207,12 +217,13 @@ apoint Human_agent::find_forward(Point * pos, uint dir){
         case SOUTH:
             y = y -1;
     }
-    Point * p = new Point(x,y);
-    return kb->position_to_bits(p);
+    
+    return Point(x,y);
     
 }
 
-apoint Human_agent::find_backward(Point * pos, uint dir){
+Point Human_agent::find_backward(Point * pos, uint dir){
+    //find position of tile behind player
     uint x = pos->x;
     uint y = pos->y;
     switch (dir){
@@ -231,11 +242,12 @@ apoint Human_agent::find_backward(Point * pos, uint dir){
         case SOUTH:
             y = y + -1;
     }
-    Point * p = new Point(x,y);
-    return kb->position_to_bits(p);
+    
+    return Point(x,y);
     
 }
 clause Human_agent::create_clause(uint predicate, vector<uint> function,  vector<uint> constant){
+    //creates clauses for queries of our knowledge base.
     pred_args pargs;
     for(uint i =0; i < function.size(); i++){
         func_args fargs;
@@ -251,18 +263,33 @@ clause Human_agent::create_clause(uint predicate, vector<uint> function,  vector
 }
 
 void Human_agent::execute_rhr(){
+    //queries the kb to determine if those actions are wanted. Applies first action.
     vector<uint> funcs ;
     funcs.push_back(F_CONST);
     funcs.push_back(F_CONST);
     
-    //vector<uint> func_args = {kb->position_to_bits(position), (orientation | A_CONST)};
+    vector<uint> func_args;
+    func_args.push_back(kb->position_to_bits(position));
+    func_args.push_back((orientation|A_CONST));
     
-    clause t_left;
-    //t_left = create_clause(P_TURNLEFT, funcs, func_args);
+    clause t_left =create_clause(P_TURNLEFT, funcs, func_args);
     
-    clause t_right;
+    clause t_right = create_clause(P_TURNRIGHT, funcs, func_args);
     
-    //t_right = create_clause(P_TURNRIGHT, funcs, func_args);
+    clause t_forward = create_clause(P_STEPFORWARD, funcs, func_args);
     
-    //clause t_forward(P_STEPFORWARD, funcs, func_args);
+    
+    
+    
+    
+    
+}
+
+bool Human_agent::is_clear(Point* pos){   
+    uint p = knowledge->world_vec[pos->x][pos->y];
+    if(((WUMPUS || p) > 0) || ((PIT || p) > 0) ||((WALL || p) > 0) ||((POS_PIT || p) > 0) ||((POS_EMPTY || p) > 0) || ){
+        return false;
+    }
+    return true;
+    
 }
