@@ -43,8 +43,7 @@ void Engine:: orient_to_direction( int direction){
         orientation = direction;
         score++;
     }
-//    cout << "Score: " << score << endl;
-//    cout << orientation << ", " << direction << endl;
+
     
     
     

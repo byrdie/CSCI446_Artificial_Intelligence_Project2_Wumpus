@@ -6,7 +6,7 @@ Knowledge::Knowledge(string filename) {
 
     rule_parser = new RuleParser();
     static_kb = rule_parser->parse_cnf(filename);
-    square_kb = new cnf2D;
+   
 
     func_inv[F_CONST] = F_CONST;
     func_inv[F_VAR] = F_VAR;

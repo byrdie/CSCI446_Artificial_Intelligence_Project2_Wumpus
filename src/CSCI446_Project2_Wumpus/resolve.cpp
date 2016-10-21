@@ -8,7 +8,7 @@
  * @param query MUST BE ALREADY NEGATED!
  * @return 0 for false, 1 for true, 2 for not found 
  */
-uint Knowledge::linear_resolution(cnf list_kb, cnf square_kb, clause query, uint indent) {
+uint Knowledge::linear_resolution(cnf kb,  clause query, uint indent) {
     
     if(indent > 30){
         cout << "RECURSION LIMIT REACHED!" << endl;
@@ -33,14 +33,14 @@ uint Knowledge::linear_resolution(cnf list_kb, cnf square_kb, clause query, uint
         /* Attempt to resolve each clause */
         cnf resolvents = resolve(kb[i], query);
 
-
+#if debug_mode
         cout << setw(indent) << ' ';
         cout << "Resolve ";
         print_clause(query);
         cout << " and ";
         print_clause(kb[i]);
         cout << endl;
-
+#endif
         
         /* Loop through the possible resolvents and recursively apply linear resolution to each*/
         for (uint j = 0; j < resolvents.size(); j++) {
