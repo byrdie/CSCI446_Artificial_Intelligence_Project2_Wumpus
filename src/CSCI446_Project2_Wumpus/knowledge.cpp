@@ -44,6 +44,7 @@ void Knowledge::add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint
         }
     }
     pt_kb.push_back(rule);
+    (*kb_world_heap)[x][y] = pt_kb;
 
 }
 
