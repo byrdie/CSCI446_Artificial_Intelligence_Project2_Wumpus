@@ -118,7 +118,7 @@ bool Human_agent::infer(uint direction) {
     pred p_query = kb->build_pred(P_NEGATION | P_PIT, pquery_arg);
     clause query;
     query.push_back(p_query);
-
+#if debug_mode
     cout << "The current knowledge base is:" << endl;
     kb->print_kb(kb->static_kb);
     cout << endl;
@@ -126,12 +126,12 @@ bool Human_agent::infer(uint direction) {
     cout << "We are trying to prove:" << endl;
     kb->print_clause(query);
     cout << endl << "*************************************" << endl;
-
+#endif
     cnf neg_query = kb->negate_clause(query);
     bool result = kb->linear_resolution(kb->static_kb, neg_query[0], 0);
-
+#if debug_mode
     cout << "The result is: " << result << endl;
-
+#endif
     return result;
 
 }

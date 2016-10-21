@@ -79,14 +79,15 @@ uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
         /* Attempt to resolve each clause */
         cnf resolvents = resolve(kb[i], query);
 
+#if debug_mode
         cout << setw(indent) << ' ';
         cout << "Resolve ";
         print_clause(query);
         cout << " and ";
         print_clause(kb[i]);
         cout << endl;
-
-
+#endif
+        
         /* Loop through the possible resolvents and recursively apply linear resolution to each*/
         for (uint j = 0; j < resolvents.size(); j++) {
 
