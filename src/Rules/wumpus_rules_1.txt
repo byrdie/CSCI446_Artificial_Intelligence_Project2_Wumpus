@@ -7,9 +7,10 @@ w5 = ¬ Safe[s] = Wumpus[s]
 
 Stench[s, t] -> Wumpus[North[s], t] || Wumpus[South[s], t] || Wumpus[East[s], t] || Wumpus[West[s], t]
 ! Stench[s, t] -> ! Wumpus[North[s], t] && ! Wumpus[South[s], t] && ! Wumpus[East[s], t] && ! Wumpus[West[s], t]
+Scream[s, t] -> (! Wumpus[s, t2] && GreaterThan[t2, t1])
 (Wumpus[s, t] && AgentAt[r, t] && (SameX[r, s] || SameY[r, s]) -> Shoot[Direction[r, s]]
-Safe[s] -> ! Stench[s]
-! Safe[s] -> Stench[s]
+Safe[s] -> ! Wumpus[s]
+! Safe[s] -> Wumpus[s]
 
 
 g0 = Glitter[s] -> Gold[s]
