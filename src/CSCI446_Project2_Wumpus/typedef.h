@@ -14,6 +14,8 @@
 #ifndef TYPEDEF_H
 #define TYPEDEF_H
 
+
+
 // Tile types
 #define FOG     0x00000000
 #define GOLD    0x00000001

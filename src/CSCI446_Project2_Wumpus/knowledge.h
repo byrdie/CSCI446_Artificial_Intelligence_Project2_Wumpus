@@ -14,6 +14,7 @@
 #ifndef KNOWLEDGE_H
 #define KNOWLEDGE_H
 
+
 // Define Predicates
 #define P_NEGATION      0x80000000      // predicate inversion
 #define P_UNNEGATION    0x7FFFFFFF

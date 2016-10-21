@@ -8,6 +8,8 @@
  * @param query MUST BE ALREADY NEGATED!
  * @return 0 for false, 1 for true, 2 for not found 
  */
+
+
 uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
     
     if(indent > 20){
@@ -33,6 +35,7 @@ uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
         /* Attempt to resolve each clause */
         cnf resolvents = resolve(kb[i], query);
 
+
         cout << setw(indent) << ' ';
         cout << "Resolve ";
         print_clause(query);
@@ -40,6 +43,7 @@ uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
         print_clause(kb[i]);
         cout << endl;
 
+        
         /* Loop through the possible resolvents and recursively apply linear resolution to each*/
         for (uint j = 0; j < resolvents.size(); j++) {
 
