@@ -2,10 +2,18 @@
 #include "knowledge.h"
 #include <typeinfo>
 
-Knowledge::Knowledge(string filename) {
+Knowledge::Knowledge(uint sz, vector<string> rule_files) {
+
+    N = sz;
 
     rule_parser = new RuleParser();
-    static_kb = rule_parser->parse_cnf(filename);
+
+    kb_rules = rule_parser->parse_cnf(rule_files[0]);
+    for (uint i = 1; i < rule_files.size(); i++) {
+        kb_rules = rule_parser->parse_cnf(rule_files[i]);
+    }
+
+    kb_world_heap = new cnf2D(N + 2, vector<cnf>(N + 2));
 
     func_inv[F_CONST] = F_CONST;
     func_inv[F_VAR] = F_VAR;
@@ -14,6 +22,49 @@ Knowledge::Knowledge(string filename) {
     func_inv[F_EAST] = F_WEST;
     func_inv[F_WEST] = F_EAST;
 
+
+}
+
+void Knowledge::add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint y) {
+
+    func_args fargs;
+    fargs.push_back(parg);
+    func fcon = build_func(F_CONST, fargs);
+    pred_args pargs;
+    pargs.push_back(fcon);
+    pred pcon = build_pred(pname, pargs);
+    clause rule;
+    rule.push_back(pcon);
+
+    cnf pt_kb = (*kb_world_heap)[x][y];
+    
+    for (uint i = 0; i < pt_kb.size(); i++) {
+        if (clause_eq(rule, pt_kb[i])) {
+            return;
+        }
+    }
+    pt_kb.push_back(rule);
+
+}
+
+void Knowledge::add_percept_to_stack(pred_name pname, func_arg parg) {
+
+    func_args fargs;
+    fargs.push_back(parg);
+    func fcon = build_func(F_CONST, fargs);
+    pred_args pargs;
+    pargs.push_back(fcon);
+    pred pcon = build_pred(pname, pargs);
+    clause rule;
+    rule.push_back(pcon);
+
+
+    for (uint i = 0; i < kb_time_stack.size(); i++) {
+        if (clause_eq(rule, kb_time_stack[i])) {
+            return;
+        }
+    }
+    kb_time_stack.push_back(rule);
 
 }
 
@@ -231,6 +282,7 @@ vector<uint> Knowledge::get_points_clause(clause c) {
         for (uint k = 0; k < lower_constants.size(); k++) {
             constants.push_back(lower_constants[k]);
         }
+
     }
 
     return constants;
@@ -239,7 +291,7 @@ vector<uint> Knowledge::get_points_clause(clause c) {
 
 vector<aconst> Knowledge::get_points_pred(pred p) {
 
-    return get_points_pred_args(get<1>(p));
+    return get_points_pred_args(p_args(p));
 
 }
 
@@ -250,9 +302,10 @@ vector<aconst> Knowledge::get_points_pred_args(pred_args pa) {
     for (uint k = 0; k < pa.size(); k++) {
         vector<aconst> lower_constants = get_points_func(pa[k]);
 
-        for (uint k = 0; k < lower_constants.size(); k++) {
-            constants.push_back(lower_constants[k]);
+        for (uint l = 0; l < lower_constants.size(); l++) {
+            constants.push_back(lower_constants[l]);
         }
+
     }
 
 }
@@ -266,14 +319,14 @@ vector<aconst> Knowledge::get_points_func(func f) {
 vector<aconst> Knowledge::get_points_func_args(func_args fa) {
 
     vector<uint> constants;
-    
-    for(uint l = 0; l < fa.size(); l++){
-        
-        if((fa[l] & A_POINT ) > 0){
+
+    for (uint l = 0; l < fa.size(); l++) {
+
+        if ((fa[l] & A_POINT) > 0) {
             constants.push_back(fa[l]);
         }
     }
-    
+
     return constants;
 
 }
@@ -460,7 +513,7 @@ apoint Knowledge::position_to_bits(Point * position) {
 Point Knowledge::bits_to_position(apoint bits) {
     int x = ((bits & ~A_CONST & ~A_POINT) >> 16);
     int y = (bits & 0x0000FFFF);
-    Point position(x,y);
+    Point position(x, y);
     return position;
 }
 
@@ -469,14 +522,14 @@ pred_name Knowledge::p_name(pred p) {
 }
 
 pred_args Knowledge::p_args(pred p) {
-    
+
     return get<1>(p);
 }
 
-pred_arg Knowledge::p_argi(pred p, uint index){
-    
+pred_arg Knowledge::p_argi(pred p, uint index) {
+
     return (p_args(p))[index];
-    
+
 }
 
 func_name Knowledge::f_name(func f) {
@@ -487,7 +540,7 @@ func_args Knowledge::f_args(func f) {
     return get<1>(f);
 }
 
-func_arg Knowledge::f_argi(func f, uint index){
+func_arg Knowledge::f_argi(func f, uint index) {
     return (f_args(f))[index];
 }
 

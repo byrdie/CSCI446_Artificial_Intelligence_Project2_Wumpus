@@ -4,7 +4,9 @@
 Human_agent::Human_agent(Engine * this_engine, int N) {
 
     // Initialize class variables
-    kb = new Knowledge("Rules/pit_rules.txt");
+    vector<string> rule_files;
+    rule_files.push_back("Rules/pit_rules.txt");
+    kb = new Knowledge(N, rule_files);
     knowledge = new World(N, this);
     position = new Point(START_X, START_Y - 1);
     engine = this_engine;
@@ -30,7 +32,7 @@ void Human_agent::make_move(int direction) {
         x = neighbors[direction]->x;
         y = neighbors[direction]->y;
         //add wall clause to kb
-        add_const_clause(P_WALL, kb->position_to_bits(neighbors[direction]));
+        kb->add_percept_to_heap(P_WALL, kb->position_to_bits(neighbors[direction]), x, y);
 
     } else {
 
@@ -66,9 +68,9 @@ void Human_agent::make_move(int direction) {
     }
     //add perceps to kb
     if ((next_tile & BREEZE) > 0) {
-        add_const_clause(P_BREEZE, kb->position_to_bits(position));
+        kb->add_percept_to_heap(P_BREEZY, kb->position_to_bits(position), x, y);
     } else {
-        add_const_clause(P_NEGATION | P_BREEZE, kb->position_to_bits(position));
+        kb->add_percept_to_heap(P_NEGATION | P_BREEZY, kb->position_to_bits(position), x, y);
     }
 
 //    if ((next_tile & STENCH) > 0) {
@@ -120,65 +122,19 @@ bool Human_agent::infer(uint direction) {
     query.push_back(p_query);
 #if debug_mode
     cout << "The current knowledge base is:" << endl;
-    kb->print_kb(kb->static_kb);
+    kb->print_kb(kb->kb_rules);
     cout << endl;
 
     cout << "We are trying to prove:" << endl;
     kb->print_clause(query);
     cout << endl << "*************************************" << endl;
 #endif
-    cnf neg_query = kb->negate_clause(query);
-    bool result = kb->linear_resolution(kb->static_kb, neg_query[0], 0);
+//    cnf neg_query = kb->negate_clause(query);
+    bool result = kb->heap_input_resolution(query, position->x, position->y);
 #if debug_mode
     cout << "The result is: " << result << endl;
 #endif
     return result;
 
-}
-
-void Human_agent::add_const_clause(uint predicate, uint arg) {
-
-    func_args fargs;
-    fargs.push_back(arg);
-    func fcon = kb->build_func(F_CONST, fargs);
-    pred_args pargs;
-    pargs.push_back(fcon);
-    pred pcon = kb->build_pred(predicate, pargs);
-    clause rule;
-    rule.push_back(pcon);
-    for (uint i = 0; i < kb->static_kb.size(); i++) {
-        if (kb->clause_eq(rule, kb->static_kb[i])) {
-            return;
-        }
-    }
-    kb->static_kb.insert(kb->static_kb.begin(), rule);
-}
-
-/**
- * 
- * @param predicate
- * @param arg1 
- * @param arg2
- */
-void Human_agent::add_const_clause(uint predicate, uint arg1, uint arg2) {
-
-    func_args fargs1;
-    func_args fargs2;
-    fargs1.push_back(arg1);
-    fargs2.push_back(arg2);
-    func fcon1 = kb->build_func(F_CONST, fargs1);
-    func fcon2 = kb->build_func(F_CONST, fargs2);
-    pred_args pargs;
-    pargs.push_back(fcon1);
-    pargs.push_back(fcon2);
-    pred pcon = kb->build_pred(predicate, pargs);
-    clause rule;
-    rule.push_back(pcon);
-    for (uint i = 0; i < kb->static_kb.size(); i++) {
-        if (kb->clause_eq(rule, kb->static_kb[i])) {
-            return;
-        }
-    }
-    kb->static_kb.insert(kb->static_kb.begin(), rule);
 }
 

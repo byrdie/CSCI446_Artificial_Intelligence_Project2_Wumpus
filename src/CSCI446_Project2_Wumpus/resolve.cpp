@@ -10,13 +10,14 @@
  * in the wumpus world. This algorithm tries only the first available 
  * resolution at each level. As such the rules have to be ordered accordingly.  
  * 
- * @param skb   static knowledge base (rules defining the wumpus world)
- * @param dkb   2D dynamic knowledge base (rules specific to this wumpus world)
  * @param query  a question to be asked
  * @return true if the query is a tautology, false if the clause is
  * inconsistent with the knowledge base.
  */
-bool Knowledge::binary_input_resolution_2D(cnf skb, cnf2D dkb, clause query) {
+bool Knowledge::heap_input_resolution(clause query, uint x, uint y) {
+
+    cnf rkb = kb_rules; // Make a copy of the rules
+    cnf2D hkb = *kb_world_heap; // Make a copy of the heap
 
     clause input_query = query; // Make a copy of the input query for later
 
@@ -25,41 +26,42 @@ bool Knowledge::binary_input_resolution_2D(cnf skb, cnf2D dkb, clause query) {
     /* Resolve clauses until we hit the max depth */
     for (uint i = 0; i < max_depth; i++) {
 
-        /* Determine if there is a 2D constant (a point in the wumpus world) in our query */
-        vector<apoint> coordinates = get_points_clause(query);
+        //        /* Determine if there is a 2D constant (a point in the wumpus world) in our query */
+        //        vector<apoint> coordinates = get_points_clause(query);
 
-        /* Use the coordinates contained within the query check for a tautology */
-        /* in the corresponding location in the 2D knowledge base */
-        for (uint j = 0; j < coordinates.size(); j++) {
+        //        /* Use the coordinates contained within the query check for a tautology */
+        //        /* in the corresponding location in the 2D knowledge base */
+        //        for (uint j = 0; j < coordinates.size(); j++) {
 
-            apoint bit_pt = coordinates[j]; // Select the next point in the list of coordinates
-            Point pt = bits_to_position(bit_pt); // Convert to a point object
+        //            apoint bit_pt = coordinates[j]; // Select the next point in the list of coordinates
+        //            Point pt = bits_to_position(bit_pt); // Convert to a point object
 
-            /* Check if the query is a tautology of the knowledge at this
-             * spatial point */
-            cnf query_cnf;
-            query_cnf.push_back(query);
-            if (subset(query_cnf, dkb[pt.x][pt.y])) { // A tautology exists if the rule is already in the KB
-                return FALSE;
-            }
+        /* Check if the query is a tautology of the knowledge at this
+         * spatial point */
+        cnf query_cnf;
+        query_cnf.push_back(query);
+        if (subset(query_cnf, hkb[x][y])) { // A tautology exists if the rule is already in th
+            //            if (subset(query_cnf, hkb[ptx][pt.y])) { // A tautology exists if the rule is already in the KB
+            return FALSE;
         }
+        //        }
 
 
         /* Loop over the knowledge base contained at each coordinate */
-        for (uint j = 0; j < coordinates.size(); j++) { // loop over points
+//        for (uint j = 0; j < coordinates.size(); j++) { // loop over points
 
-            apoint bit_pt = coordinates[j]; // Select the next point in the list of coordinates
-            Point pt = bits_to_position(bit_pt); // Convert to a point object
-            cnf pt_kb = dkb[pt.x][pt.y]; // Select the knowledge base at this point
+//            apoint bit_pt = coordinates[j]; // Select the next point in the list of coordinates
+//            Point pt = bits_to_position(bit_pt); // Convert to a point object
+            cnf pt_kb = hkb[x][y]; // Select the knowledge base at this point
 
-            for (uint k = 0; k < pt_kb.size(); j++) { // loop over clauses
+            for (uint k = 0; k < pt_kb.size(); k++) { // loop over clauses
 
 #if debug_mode
-                cout << setw(indent) << ' ';
+                cout << setw(i * 5) << ' ';
                 cout << "Resolve ";
                 print_clause(query);
                 cout << " and ";
-                print_clause(kb[i]);
+                print_clause(pt_kb[k]);
                 cout << endl;
 #endif
 
@@ -75,13 +77,13 @@ bool Knowledge::binary_input_resolution_2D(cnf skb, cnf2D dkb, clause query) {
 
                     /* Inconsistency check. If two clauses resolve to an empty
                      * clause the two clauses are inconsistent */
-                    if (resolvents[j].empty()) {
+                    if (resolvents[l].empty()) {
                         return TRUE;
                     }
 
                     /* If the resolvent is consistent, restart the main loop
                      * with the query as the resolvent*/
-                    query = resolvents[i];
+                    query = resolvents[l];
                     goto MAIN_LOOP_EXIT;
 
                 }
@@ -90,13 +92,13 @@ bool Knowledge::binary_input_resolution_2D(cnf skb, cnf2D dkb, clause query) {
 
 
             }
-        }
-        
-        
-MAIN_LOOP_EXIT:     // Goto statement used to break out of triple loop
+//        }
+
+
+MAIN_LOOP_EXIT: // Goto statement used to break out of triple loop
         continue;
     }
-
+    return NOT_FOUND;
 }
 
 /**
