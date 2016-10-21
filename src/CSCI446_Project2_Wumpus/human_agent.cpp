@@ -20,6 +20,8 @@ Human_agent::Human_agent(Engine * this_engine, int N) {
 
 }
 
+
+
 void Human_agent::make_move(int direction) {
 
 
@@ -136,5 +138,77 @@ bool Human_agent::infer(uint direction) {
 //#endif
     return result;
 
+}
+
+apoint Human_agent::find_right(Point * pos, uint dir){
+    uint x = pos->x;
+    uint y = pos->y;
+    switch (dir){
+        case EAST:
+            y = y -1;
+            break;
+            
+        case NORTH:
+            x = x +1;
+            break;
+            
+        case WEST:
+            y = y + 1;
+            break;
+            
+        case SOUTH:
+            x = x -1;
+    }
+    Point * p = new Point(x,y);
+    return kb->position_to_bits(p);
+    
+}
+
+apoint Human_agent::find_left(Point * pos, uint dir){
+    uint x = pos->x;
+    uint y = pos->y;
+    switch (dir){
+        case EAST:
+            y = y + 1;
+            break;
+            
+        case NORTH:
+            x = x - 1;
+            break;
+            
+        case WEST:
+            y = y-1;
+            break;
+            
+        case SOUTH:
+            x =x + 1;
+    }
+    Point * p = new Point(x,y);
+    return kb->position_to_bits(p);
+    
+}
+
+apoint Human_agent::find_forward(Point * pos, uint dir){
+    uint x = pos->x;
+    uint y = pos->y;
+    switch (dir){
+        case EAST:
+            x = x + 1;
+            break;
+            
+        case NORTH:
+            y = y+1;
+            break;
+            
+        case WEST:
+            x = x-1;
+            break;
+            
+        case SOUTH:
+            y = y -1;
+    }
+    Point * p = new Point(x,y);
+    return kb->position_to_bits(p);
+    
 }
 

@@ -36,7 +36,10 @@ public:
     
     void make_move(int direction);
     bool infer(uint direction);
-
+    apoint find_right(Point * pos, uint dir);
+    apoint find_left(Point * pos, uint dir);
+    apoint find_forward(Point * pos, uint dir);
+    apoint find_backward(Point * pos, uint dir);
 };
 
 

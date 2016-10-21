@@ -226,11 +226,23 @@ void RuleParser::initialize_token_map() {
     pred_tok_map["Breeze"] = P_BREEZE;
     pred_tok_map["Stinky"] = P_STINKY;
     pred_tok_map["Wumpus"] = P_WUMPUS;
-
+    
+    pred_tok_map["Explored"] = P_EXPLORED;
+    pred_tok_map["BestMove"] = P_BESTMOVE;
+    pred_tok_map["IsClear"]  = P_ISCLEAR;
+    pred_tok_map["AdjExplored"] = P_ADJEXPLORED;
+        
     func_tok_map["North"] = F_NORTH;
     func_tok_map["South"] = F_SOUTH;
     func_tok_map["East"] = F_EAST;
     func_tok_map["West"] = F_WEST;
+    
+    func_tok_map["right"] = F_RIGHT;
+    func_tok_map["left"] = F_LEFT;
+    func_tok_map["forward"] = F_FORWARD;
+    func_tok_map["backward"] = F_BACKWARD;
+    
+    
 
     pred_str_map[P_BREEZY] = "Breezy";
     pred_str_map[P_PIT] = "Pit";
@@ -240,10 +252,19 @@ void RuleParser::initialize_token_map() {
     pred_str_map[P_BREEZE] = "Breeze";
     pred_str_map[P_STINKY] = "Stinky";
     pred_str_map[P_WUMPUS] = "Wumpus";
+    
+    pred_str_map[P_EXPLORED] = "Explored";
+    pred_str_map[P_BESTMOVE] = "BestMove";
+    pred_str_map[P_ISCLEAR]  = "IsClear";
+    pred_str_map[P_ADJEXPLORED] = "AdjExplored";
 
     func_str_map[F_NORTH] = "North";
     func_str_map[F_SOUTH] = "South";
     func_str_map[F_EAST] = "East";
     func_str_map[F_WEST] = "West";
 
+    func_str_map[F_RIGHT] ="right";
+    func_str_map[F_LEFT] = "left";
+    func_str_map[F_FORWARD] ="forward";
+    func_str_map[F_BACKWARD] = "backward";
 }

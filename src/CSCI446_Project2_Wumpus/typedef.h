@@ -25,6 +25,10 @@
 #define P_WUMPUS        0x00000020
 #define P_STENCH        0x00000040
 #define P_BREEZE        0x00000080
+#define P_EXPLORED      0x00000100
+#define P_ISCLEAR       0x00000200
+#define P_BESTMOVE      0x00000400
+#define P_ADJEXPLORED   0x00000800
 
 // Define Functions
 // These must be larger than variables!
@@ -35,7 +39,10 @@
 #define F_SOUTH         0x00040000      // Returns the tile to the south
 #define F_EAST          0x00080000
 #define F_WEST          0x00100000
-
+#define F_RIGHT         0x00200000
+#define F_LEFT          0x00400000
+#define F_FORWARD       0x00400000
+#define F_BACKWARD      0x00600000
 /* How far to move for each cardinal function  */
 #define DX              0x00010000
 #define DY              0x00000001
