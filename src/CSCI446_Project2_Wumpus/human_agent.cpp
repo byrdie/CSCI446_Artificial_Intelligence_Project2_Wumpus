@@ -105,7 +105,7 @@ void Human_agent::make_move(int direction) {
     x = position->x;
     y = position->y;
 
-    infer_move(orientation);
+    //infer_move(orientation);
 
     //    if (infer(F_NORTH)) {
     //        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
@@ -135,15 +135,7 @@ void Human_agent::make_move(int direction) {
 
 }
 
-bool Human_agent::infer_explored(){
-    
-    for(uint i = 0; i < search_tiles.size(); i++){
-        
-        
-        
-    }
-    
-}
+
 
 bool Human_agent::infer_move(uint direction) {
     /* Build query */
@@ -170,7 +162,7 @@ bool Human_agent::infer_move(uint direction) {
     kb->print_clause(query);
     cout << endl << "*************************************" << endl;
 #endif
-    bool result = kb->heap_input_resolution(query, position->x, position->y);
+    bool result = kb->heap_input_resolution(query);
 #if debug_mode
     cout << "The result is: " << result << endl;
 #endif
@@ -199,7 +191,7 @@ bool Human_agent::infer(uint direction) {
     cout << endl << "*************************************" << endl;
 #endif
     cnf neg_query = kb->negate_clause(query);
-    bool result = kb->heap_input_resolution(query, position->x, position->y);
+    bool result = kb->heap_input_resolution(query);
 #if debug_mode
     cout << "The result is: " << result << endl;
 #endif
@@ -312,8 +304,7 @@ Point Human_agent::find_backward(Point * pos, uint dir){
     return Point(x,y);
     
 }
-clause Human_agent::create_clause(uint predicate, vector<uint> function,  vector<uint> constant){
-    //creates clauses for queries of our knowledge base.
+
 
 clause Human_agent::create_clause(uint predicate, vector<uint> function, vector<uint> constant) {
     pred_args pargs;
@@ -361,5 +352,5 @@ void Human_agent::execute_rhr(){
 }
 
 bool Human_agent::is_clear(Point pos){   
-    
+    return true;
 }
