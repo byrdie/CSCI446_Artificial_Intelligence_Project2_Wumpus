@@ -43,7 +43,7 @@ public:
     clause create_clause(uint predicate, vector<uint> function,  vector<uint> constant);
     void execute_rhr();
     bool AdjExplored(Point * pos);
-    bool is_clear(Point* pos);
+    bool is_clear(Point pos);
 };
 
 

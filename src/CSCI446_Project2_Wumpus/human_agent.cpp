@@ -164,7 +164,7 @@ Point Human_agent::find_right(Point * pos, uint dir){
         case SOUTH:
             x = x -1;
     }
-    Point * p = new Point(x,y);
+    
     return Point(x,y);
     
     
@@ -192,7 +192,7 @@ Point Human_agent::find_left(Point * pos, uint dir){
         case SOUTH:
             x =x + 1;
     }
-    Point * p = new Point(x,y);
+   
     return Point(x,y);
     
 }
@@ -263,21 +263,28 @@ clause Human_agent::create_clause(uint predicate, vector<uint> function,  vector
 }
 
 void Human_agent::execute_rhr(){
-    //queries the kb to determine if those actions are wanted. Applies first action.
-    vector<uint> funcs ;
-    funcs.push_back(F_CONST);
-    funcs.push_back(F_CONST);
-    
-    vector<uint> func_args;
-    func_args.push_back(kb->position_to_bits(position));
-    func_args.push_back((orientation|A_CONST));
-    
-    clause t_left =create_clause(P_TURNLEFT, funcs, func_args);
-    
-    clause t_right = create_clause(P_TURNRIGHT, funcs, func_args);
-    
-    clause t_forward = create_clause(P_STEPFORWARD, funcs, func_args);
-    
+    if (is_clear(find_right(position, orientation))){
+        //move backwards
+        int x;
+    }else if(!is_clear(find_right(position, orientation)) && is_clear(find_forward(position, orientation))){
+        //move forward
+        int x;
+        
+    }else if(!is_clear(find_right(position, orientation)) &&  !is_clear(find_forward(position, orientation))
+            &&  is_clear(find_left(position, orientation))){
+        //rotate and move left
+         int x;
+        
+    }else if(!is_clear(find_right(position, orientation)) &&  !is_clear(find_forward(position, orientation))){
+        //rotate left
+         int x;
+    }else if(!is_clear(find_forward(position, orientation))){
+        //rotate left
+        int x;
+    } else{
+        int x;
+    }
+ 
     
     
     
@@ -285,11 +292,6 @@ void Human_agent::execute_rhr(){
     
 }
 
-bool Human_agent::is_clear(Point* pos){   
-    uint p = knowledge->world_vec[pos->x][pos->y];
-    if(((WUMPUS || p) > 0) || ((PIT || p) > 0) ||((WALL || p) > 0) ||((POS_PIT || p) > 0) ||((POS_EMPTY || p) > 0) || ){
-        return false;
-    }
-    return true;
+bool Human_agent::is_clear(Point pos){   
     
 }
