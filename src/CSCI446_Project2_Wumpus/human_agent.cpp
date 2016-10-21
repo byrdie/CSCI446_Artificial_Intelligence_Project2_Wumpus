@@ -251,7 +251,18 @@ clause Human_agent::create_clause(uint predicate, vector<uint> function,  vector
 }
 
 void Human_agent::execute_rhr(){
-    clause is_left;
-    vector<uint> funcs = {F_CONST, F_CONST};
-    vector<uint> func_args = {kb->position_to_bits(position), (orientation | A_CONST)};
+    vector<uint> funcs ;
+    funcs.push_back(F_CONST);
+    funcs.push_back(F_CONST);
+    
+    //vector<uint> func_args = {kb->position_to_bits(position), (orientation | A_CONST)};
+    
+    clause t_left;
+    //t_left = create_clause(P_TURNLEFT, funcs, func_args);
+    
+    clause t_right;
+    
+    //t_right = create_clause(P_TURNRIGHT, funcs, func_args);
+    
+    //clause t_forward(P_STEPFORWARD, funcs, func_args);
 }

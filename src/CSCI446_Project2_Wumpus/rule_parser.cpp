@@ -228,9 +228,18 @@ void RuleParser::initialize_token_map() {
     pred_tok_map["Wumpus"] = P_WUMPUS;
     
     pred_tok_map["Explored"] = P_EXPLORED;
-    pred_tok_map["BestMove"] = P_BESTMOVE;
+
     pred_tok_map["IsClear"]  = P_ISCLEAR;
     pred_tok_map["AdjExplored"] = P_ADJEXPLORED;
+    
+    pred_tok_map["StepForward"] = P_STEPFORWARD;
+    pred_tok_map["TurnRight"] =P_TURNRIGHT;
+    pred_tok_map["TurnLeft"] = P_TURNLEFT;
+    
+    pred_str_map[P_STEPFORWARD] = "StepForward";
+    pred_str_map[P_TURNRIGHT] = "TurnRight";
+    pred_str_map[P_TURNLEFT] = "TurnLeft";
+    
         
     func_tok_map["North"] = F_NORTH;
     func_tok_map["South"] = F_SOUTH;
@@ -254,7 +263,7 @@ void RuleParser::initialize_token_map() {
     pred_str_map[P_WUMPUS] = "Wumpus";
     
     pred_str_map[P_EXPLORED] = "Explored";
-    pred_str_map[P_BESTMOVE] = "BestMove";
+  
     pred_str_map[P_ISCLEAR]  = "IsClear";
     pred_str_map[P_ADJEXPLORED] = "AdjExplored";
 
