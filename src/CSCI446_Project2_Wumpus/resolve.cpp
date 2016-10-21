@@ -2,23 +2,15 @@
 
 #include "resolve.h"
 
-/**
- * Binary Input Resolution 2D uses two knowledge bases: static and dynamic.
- * We attempt to unify with the clauses in the dynamic knowledge base first
- * and then try the clauses in the static knowledge base. In the dynamic 
- * knowledge base clauses are stored in a 2D array corresponding to position
- * in the wumpus world. This algorithm tries only the first available 
- * resolution at each level. As such the rules have to be ordered accordingly.  
- * 
- * @param query  a question to be asked
- * @return true if the query is a tautology, false if the clause is
- * inconsistent with the knowledge base.
- */
+
 bool Knowledge::heap_input_resolution(clause query, uint x, uint y) {
 
     cnf rkb = kb_rules; // Make a copy of the rules
-    cnf2D hkb = *kb_world_heap; // Make a copy of the heap
+    cnf pt_kb = (*kb_world_heap)[x][y]; // Make a copy of the heap
 
+    /* negate theorem to be proven */
+    query = negate_clause(query)[0];
+    
     clause input_query = query; // Make a copy of the input query for later
 
     uint max_depth = 10; // Don't keep trying after this depth
@@ -26,73 +18,81 @@ bool Knowledge::heap_input_resolution(clause query, uint x, uint y) {
     /* Resolve clauses until we hit the max depth */
     for (uint i = 0; i < max_depth; i++) {
 
-        //        /* Determine if there is a 2D constant (a point in the wumpus world) in our query */
-        //        vector<apoint> coordinates = get_points_clause(query);
-
-        //        /* Use the coordinates contained within the query check for a tautology */
-        //        /* in the corresponding location in the 2D knowledge base */
-        //        for (uint j = 0; j < coordinates.size(); j++) {
-
-        //            apoint bit_pt = coordinates[j]; // Select the next point in the list of coordinates
-        //            Point pt = bits_to_position(bit_pt); // Convert to a point object
-
         /* Check if the query is a tautology of the knowledge at this
          * spatial point */
         cnf query_cnf;
         query_cnf.push_back(query);
-        if (subset(query_cnf, hkb[x][y])) { // A tautology exists if the rule is already in th
-            //            if (subset(query_cnf, hkb[ptx][pt.y])) { // A tautology exists if the rule is already in the KB
+        if (subset(query_cnf, pt_kb)) { // A tautology exists if the rule is already in th
             return FALSE;
         }
-        //        }
 
-
-        /* Loop over the knowledge base contained at each coordinate */
-//        for (uint j = 0; j < coordinates.size(); j++) { // loop over points
-
-//            apoint bit_pt = coordinates[j]; // Select the next point in the list of coordinates
-//            Point pt = bits_to_position(bit_pt); // Convert to a point object
-            cnf pt_kb = hkb[x][y]; // Select the knowledge base at this point
-
-            for (uint k = 0; k < pt_kb.size(); k++) { // loop over clauses
+        for (uint k = 0; k < pt_kb.size(); k++) { // loop over clauses
 
 #if debug_mode
-                cout << setw(i * 5) << ' ';
-                cout << "Resolve ";
-                print_clause(query);
-                cout << " and ";
-                print_clause(pt_kb[k]);
-                cout << endl;
+            cout << setw(i * 5) << ' ';
+            cout << "Resolve ";
+            print_clause(query);
+            cout << " and ";
+            print_clause(pt_kb[k]);
+            cout << endl;
 #endif
 
-                /* Possibly delete rules as they're used here */
+            /* Possibly delete rules as they're used here */
 
-                /* Attempt to resolve each clause */
-                cnf resolvents = resolve(pt_kb[k], query);
+            /* Attempt to resolve each clause */
+            cnf resolvents = resolve(pt_kb[k], query);
 
-                /* Loop over the resolvents and check for an inconsistency
-                 * If there is no inconsistency, set the clause variable
-                 * equal to the resolvent and restart the main loop */
-                for (uint l = 0; l < resolvents.size(); l++) {
+            /* Loop over the resolvents and check for an inconsistency
+             * If there is no inconsistency, set the clause variable
+             * equal to the resolvent and restart the main loop */
+            for (uint l = 0; l < resolvents.size(); l++) {
 
-                    /* Inconsistency check. If two clauses resolve to an empty
-                     * clause the two clauses are inconsistent */
-                    if (resolvents[l].empty()) {
-                        return TRUE;
-                    }
-
-                    /* If the resolvent is consistent, restart the main loop
-                     * with the query as the resolvent*/
-                    query = resolvents[l];
-                    goto MAIN_LOOP_EXIT;
-
+                /* Inconsistency check. If two clauses resolve to an empty
+                 * clause the two clauses are inconsistent */
+                if (resolvents[l].empty()) {
+                    return TRUE;
                 }
 
-
-
+                /* If the resolvent is consistent, restart the main loop
+                 * with the query as the resolvent*/
+                query = resolvents[l];
+                goto MAIN_LOOP_EXIT;
 
             }
-//        }
+        }
+
+        /* Loop over the clauses in the static rules */
+        for (uint k = 0; k < kb_rules.size(); k++) { // loop over clauses
+#if debug_mode
+            cout << setw(i * 5) << ' ';
+            cout << "Resolve ";
+            print_clause(query);
+            cout << " and ";
+            print_clause(kb_rules[k]);
+            cout << endl;
+#endif
+            
+            /* Attempt to resolve each clause */
+            cnf resolvents = resolve(kb_rules[k], query);
+
+            /* Loop over the resolvents and check for an inconsistency
+             * If there is no inconsistency, set the clause variable
+             * equal to the resolvent and restart the main loop */
+            for (uint l = 0; l < resolvents.size(); l++) {
+
+                /* Inconsistency check. If two clauses resolve to an empty
+                 * clause the two clauses are inconsistent */
+                if (resolvents[l].empty()) {
+                    return TRUE;
+                }
+
+                /* If the resolvent is consistent, restart the main loop
+                 * with the query as the resolvent*/
+                query = resolvents[l];
+                goto MAIN_LOOP_EXIT;
+
+            }
+        }
 
 
 MAIN_LOOP_EXIT: // Goto statement used to break out of triple loop
