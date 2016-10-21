@@ -4,7 +4,7 @@
 Human_agent::Human_agent(Engine * this_engine, int N) {
 
     // Initialize class variables
-    kb = new Knowledge("../Rules/pit_rules.txt");
+    kb = new Knowledge("Rules/pit_rules.txt");
     knowledge = new World(N, this);
     position = new Point(START_X, START_Y - 1);
     engine = this_engine;

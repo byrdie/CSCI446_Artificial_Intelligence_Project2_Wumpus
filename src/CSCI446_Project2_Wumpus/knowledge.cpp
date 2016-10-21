@@ -6,6 +6,7 @@ Knowledge::Knowledge(string filename) {
 
     rule_parser = new RuleParser();
     static_kb = rule_parser->parse_cnf(filename);
+    square_kb = new cnf2D;
 
     func_inv[F_CONST] = F_CONST;
     func_inv[F_VAR] = F_VAR;
@@ -13,6 +14,7 @@ Knowledge::Knowledge(string filename) {
     func_inv[F_SOUTH] = F_NORTH;
     func_inv[F_EAST] = F_WEST;
     func_inv[F_WEST] = F_EAST;
+    
 
 }
 

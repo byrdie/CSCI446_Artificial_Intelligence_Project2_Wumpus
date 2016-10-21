@@ -8,9 +8,9 @@
  * @param query MUST BE ALREADY NEGATED!
  * @return 0 for false, 1 for true, 2 for not found 
  */
-uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
+uint Knowledge::linear_resolution(cnf list_kb, cnf square_kb, clause query, uint indent) {
     
-    if(indent > 20){
+    if(indent > 30){
         cout << "RECURSION LIMIT REACHED!" << endl;
         return FALSE;
     }

@@ -63,6 +63,7 @@ typedef vector<func> pred_args; // Arguments to predicates
 typedef tuple<uint, pred_args> pred; // Integer represents predicate name
 typedef vector<pred> clause; // Clauses are ORs of predicates
 typedef vector<clause> cnf; // CNF representation of all clauses
+typedef vector<cnf> cnf2D;  // 2D knowledge bases for 
 
 typedef vector<vector<func>> theta;     // A list of substitutions
 
@@ -76,8 +77,7 @@ public:
     
     RuleParser * rule_parser;
     cnf static_kb;
-    cnf dynamic_kb;
-    cnf total_kb;
+    cnf square_kb;
     
     map<int, int> func_inv;
 
@@ -125,6 +125,17 @@ public:
     pred build_pred(uint predicate, pred_args args);
     
     func eval_func(func f);
+    
+    /**
+     *  This function set will return a list of all the constants found within
+     * @param c
+     * @return a vector of constants in logic form
+     */
+    vector<uint> get_const_clause(clause c);
+    vector<uint> get_const_pred(pred p);
+    vector<uint> get_const_pred_args(pred_args pa);
+    vector<uint> get_const_func(func f);
+    vector<uint> get_const_func_args(func_args fa);
 };
 
 uint position_to_bits(Point * position);
