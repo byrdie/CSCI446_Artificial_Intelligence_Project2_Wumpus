@@ -3,10 +3,10 @@
 #include "resolve.h"
 
 
-bool Knowledge::heap_input_resolution(clause query, uint x, uint y) {
+bool Knowledge::heap_input_resolution(clause query) {
 
     cnf rkb = kb_rules; // Make a copy of the rules
-    cnf pt_kb = (*kb_world_heap)[x][y]; // Make a copy of the heap
+    cnf pt_kb = kb_time_stack; // Make a copy of the heap
 
     /* negate theorem to be proven */
     query = negate_clause(query)[0];

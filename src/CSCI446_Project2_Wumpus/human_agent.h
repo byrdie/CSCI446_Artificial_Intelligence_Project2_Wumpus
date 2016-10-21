@@ -29,6 +29,7 @@ public:
     Knowledge * kb;
     Engine * engine;
     QGraphicsPixmapItem * my_tile;
+    vector<Point *> search_tiles;
     
     uint time;
     
@@ -44,6 +45,7 @@ public:
     clause create_clause(uint predicate, vector<uint> function,  vector<uint> constant);
     void execute_rhr();
     
+    infer_explored();
     bool infer_move(uint direction);
     
     void init_kb();

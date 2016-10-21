@@ -19,6 +19,8 @@ Human_agent::Human_agent(Engine * this_engine, int sz) {
     // ask the engine to be placed at the start position
     make_move(NORTH);
 
+    
+    
 
 }
 
@@ -84,7 +86,15 @@ void Human_agent::make_move(int direction) {
     } else {
         kb->add_percept_to_heap(P_NEGATION | P_STINKY, kb->position_to_bits(position), x, y);
     }
-
+    
+    /*  */
+    search_tiles.clear();
+    search_tiles.push_back(new Point(x,y));
+    search_tiles.push_back(new Point(x+1,y));
+    search_tiles.push_back(new Point(x-1,y));
+    search_tiles.push_back(new Point(x,y+1));
+    search_tiles.push_back(new Point(x+1,y));
+    kb->heap_to_stack(search_tiles);
 
 
     //    if ((next_tile & STENCH) > 0) {
@@ -122,6 +132,16 @@ void Human_agent::make_move(int direction) {
 
     time++; // make sure to increment the time
 
+}
+
+bool Human_agent::infer_explored(){
+    
+    for(uint i = 0; i < search_tiles.size(); i++){
+        
+        
+        
+    }
+    
 }
 
 bool Human_agent::infer_move(uint direction) {
