@@ -30,7 +30,7 @@ void Human_agent::make_move(int direction) {
         x = neighbors[direction]->x;
         y = neighbors[direction]->y;
         //add wall clause to kb
-        add_const_clause(P_WALL, position_to_bits(neighbors[direction]));
+        add_const_clause(P_WALL, kb->position_to_bits(neighbors[direction]));
 
     } else {
 
@@ -66,9 +66,9 @@ void Human_agent::make_move(int direction) {
     }
     //add perceps to kb
     if ((next_tile & BREEZE) > 0) {
-        add_const_clause(P_BREEZE, position_to_bits(position));
+        add_const_clause(P_BREEZE, kb->position_to_bits(position));
     } else {
-        add_const_clause(P_NEGATION | P_BREEZE, position_to_bits(position));
+        add_const_clause(P_NEGATION | P_BREEZE, kb->position_to_bits(position));
     }
 
 //    if ((next_tile & STENCH) > 0) {
@@ -110,7 +110,7 @@ bool Human_agent::infer(uint direction) {
 
     /* Build query */
     func_args fargs;
-    uint position_bits = position_to_bits(position);
+    uint position_bits = kb->position_to_bits(position);
     fargs.push_back(position_bits);
     func fquery = kb->build_func(direction, fargs);
     pred_args pquery_arg;

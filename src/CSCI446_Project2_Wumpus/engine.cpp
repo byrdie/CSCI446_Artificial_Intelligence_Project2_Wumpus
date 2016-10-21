@@ -1,12 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * @param this_world
  */
 
 
 #include "engine.h"
 #include <cmath>
+
 Engine::Engine(World * this_world) {
     world = this_world;
     orientation = SOUTH;

@@ -333,11 +333,11 @@ void Knowledge::print_func(func f) {
         cout << (char) ('a' + fa[0]);
 
     } else if (func_tok == F_CONST) {
-        vector<int> pos = bits_to_position(fa[0]);
+        Point pos = bits_to_position(fa[0]);
         cout << "{";
-        cout << pos[0];
+        cout << pos.x;
         cout << ",";
-        cout << pos[1];
+        cout << pos.y;
         cout << "}";
     } else {
         string func_name = rule_parser->func_str_map[func_tok];
@@ -354,11 +354,11 @@ void Knowledge::print_func_args(func_args fa) {
 
         if ((fa[l] & A_CONST) > 0) {
             if ((fa[l] & A_POINT) > 0) {
-                vector<int> pos = bits_to_position(fa[0]);
+                Point pos = bits_to_position(fa[0]);
                 cout << "{";
-                cout << pos[0];
+                cout << pos.x;
                 cout << ",";
-                cout << pos[1];
+                cout << pos.y;
                 cout << "}";
             } else {
                 cout << fa[l];
@@ -449,7 +449,7 @@ func Knowledge::eval_func(func f) {
 
 }
 
-uint position_to_bits(Point * position) {
+apoint Knowledge::position_to_bits(Point * position) {
     uint int_pos = position->y;
     uint x = position->x;
     int_pos = (int_pos | (x << 16)) | A_CONST | A_POINT;
@@ -457,12 +457,10 @@ uint position_to_bits(Point * position) {
     return int_pos;
 }
 
-vector<int> bits_to_position(uint bits) {
-    vector<int> position;
+Point Knowledge::bits_to_position(apoint bits) {
     int x = ((bits & ~A_CONST & ~A_POINT) >> 16);
     int y = (bits & 0x0000FFFF);
-    position.push_back(x);
-    position.push_back(y);
+    Point position(x,y);
     return position;
 }
 

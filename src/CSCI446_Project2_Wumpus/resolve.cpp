@@ -10,40 +10,91 @@
  * in the wumpus world. This algorithm tries only the first available 
  * resolution at each level. As such the rules have to be ordered accordingly.  
  * 
- * @param skb   static knowledge base
- * @param dkb   2D dynamic knowledge base
+ * @param skb   static knowledge base (rules defining the wumpus world)
+ * @param dkb   2D dynamic knowledge base (rules specific to this wumpus world)
  * @param query  a question to be asked
  * @return true if the query is a tautology, false if the clause is
  * inconsistent with the knowledge base.
  */
 bool Knowledge::binary_input_resolution_2D(cnf skb, cnf2D dkb, clause query) {
 
+    clause input_query = query; // Make a copy of the input query for later
+
     uint max_depth = 10; // Don't keep trying after this depth
 
     /* Resolve clauses until we hit the max depth */
     for (uint i = 0; i < max_depth; i++) {
-        
+
         /* Determine if there is a 2D constant (a point in the wumpus world) in our query */
         vector<apoint> coordinates = get_points_clause(query);
-        
+
         /* Use the coordinates contained within the query check for a tautology */
         /* in the corresponding location in the 2D knowledge base */
-        for(uint j = 0; j < coordinates.size(); j++){
-            
-            apoint bit_pt = coordinates[j];
-            
+        for (uint j = 0; j < coordinates.size(); j++) {
+
+            apoint bit_pt = coordinates[j]; // Select the next point in the list of coordinates
+            Point pt = bits_to_position(bit_pt); // Convert to a point object
+
+            /* Check if the query is a tautology of the knowledge at this
+             * spatial point */
+            cnf query_cnf;
+            query_cnf.push_back(query);
+            if (subset(query_cnf, dkb[pt.x][pt.y])) { // A tautology exists if the rule is already in the KB
+                return FALSE;
+            }
+        }
+
+
+        /* Loop over the knowledge base contained at each coordinate */
+        for (uint j = 0; j < coordinates.size(); j++) { // loop over points
+
+            apoint bit_pt = coordinates[j]; // Select the next point in the list of coordinates
+            Point pt = bits_to_position(bit_pt); // Convert to a point object
+            cnf pt_kb = dkb[pt.x][pt.y]; // Select the knowledge base at this point
+
+            for (uint k = 0; k < pt_kb.size(); j++) { // loop over clauses
+
+#if debug_mode
+                cout << setw(indent) << ' ';
+                cout << "Resolve ";
+                print_clause(query);
+                cout << " and ";
+                print_clause(kb[i]);
+                cout << endl;
+#endif
+
+                /* Possibly delete rules as they're used here */
+
+                /* Attempt to resolve each clause */
+                cnf resolvents = resolve(pt_kb[k], query);
+
+                /* Loop over the resolvents and check for an inconsistency
+                 * If there is no inconsistency, set the clause variable
+                 * equal to the resolvent and restart the main loop */
+                for (uint l = 0; l < resolvents.size(); l++) {
+
+                    /* Inconsistency check. If two clauses resolve to an empty
+                     * clause the two clauses are inconsistent */
+                    if (resolvents[j].empty()) {
+                        return TRUE;
+                    }
+
+                    /* If the resolvent is consistent, restart the main loop
+                     * with the query as the resolvent*/
+                    query = resolvents[i];
+                    goto MAIN_LOOP_EXIT;
+
+                }
+
+
+
+
+            }
         }
         
-
-//        /* Check for tautology */
-//        cnf query_cnf;
-//        query_cnf.push_back(query);
-//        if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the 
-//            return FALSE;
-//        }
         
-        
-
+MAIN_LOOP_EXIT:     // Goto statement used to break out of triple loop
+        continue;
     }
 
 }
@@ -87,7 +138,7 @@ uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
         print_clause(kb[i]);
         cout << endl;
 #endif
-        
+
         /* Loop through the possible resolvents and recursively apply linear resolution to each*/
         for (uint j = 0; j < resolvents.size(); j++) {
 
@@ -110,8 +161,6 @@ uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
     }
     return NOT_FOUND;
 }
-
-
 
 /**
  * Resolve returns the set of all possible clauses obtained by resolving the
