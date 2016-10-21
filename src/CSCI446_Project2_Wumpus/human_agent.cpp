@@ -66,6 +66,7 @@ void Human_agent::make_move(int direction) {
         sleep(1);
         knowledge->qt_world->view->close();
     } else if ((next_tile & GOLD) > 0) {
+        engine->score = engine->score + 1000;
         cout << "Retrived the gold" << endl;
         sleep(1);
         knowledge->qt_world->view->close();
@@ -221,38 +222,8 @@ bool Human_agent::infer_wumpus(uint direction) {
 
 }
 
-void Human_agent::init_kb() {
-
-    cnf2D * heap = kb->kb_world_heap;
-
-    for (uint i = 0; i < (*heap).size(); i++) {
-        for (uint j = 0; j < (*heap).size(); j++) {
-
-            func_args fargs;
-            uint position_bits = kb->position_to_bits(position);
-            fargs.push_back(position_bits);
-            func fquery = kb->build_func(F_CONST, fargs);
-            pred_args pquery_arg;
-            pquery_arg.push_back(fquery);
-            if (i != 0 and i != N - 1) {
-                if (j != 0 and j != N - 1) {
-
-                    kb->add_percept_to_heap(P_NEGATION | P_AGENT, kb->position_to_bits(position), i, j);
-
-                } else {
-                    kb->add_percept_to_heap(P_WALL, kb->position_to_bits(position), i, j);
-                }
-            } else {
-                kb->add_percept_to_heap(P_WALL, kb->position_to_bits(position), i, j);
-            }
-
-
-        }
-    }
-
-}
-
-apoint Human_agent::find_right(Point * pos, uint dir) {
+Point Human_agent::find_right(Point * pos, uint dir){
+    //find position right of player
     uint x = pos->x;
     uint y = pos->y;
     switch (dir) {
@@ -271,12 +242,16 @@ apoint Human_agent::find_right(Point * pos, uint dir) {
         case SOUTH:
             x = x - 1;
     }
-    Point * p = new Point(x, y);
-    return kb->position_to_bits(p);
-
+    
+    return Point(x,y);
+    
+    
 }
 
-apoint Human_agent::find_left(Point * pos, uint dir) {
+
+
+Point Human_agent::find_left(Point * pos, uint dir){
+    //find position left of player
     uint x = pos->x;
     uint y = pos->y;
     switch (dir) {
@@ -295,12 +270,13 @@ apoint Human_agent::find_left(Point * pos, uint dir) {
         case SOUTH:
             x = x + 1;
     }
-    Point * p = new Point(x, y);
-    return kb->position_to_bits(p);
-
+   
+    return Point(x,y);
+    
 }
 
-apoint Human_agent::find_forward(Point * pos, uint dir) {
+Point Human_agent::find_forward(Point * pos, uint dir){
+    //find position of tile ahead of player
     uint x = pos->x;
     uint y = pos->y;
     switch (dir) {
@@ -319,12 +295,13 @@ apoint Human_agent::find_forward(Point * pos, uint dir) {
         case SOUTH:
             y = y - 1;
     }
-    Point * p = new Point(x, y);
-    return kb->position_to_bits(p);
-
+    
+    return Point(x,y);
+    
 }
 
-apoint Human_agent::find_backward(Point * pos, uint dir) {
+Point Human_agent::find_backward(Point * pos, uint dir){
+    //find position of tile behind player
     uint x = pos->x;
     uint y = pos->y;
     switch (dir) {
@@ -343,10 +320,11 @@ apoint Human_agent::find_backward(Point * pos, uint dir) {
         case SOUTH:
             y = y + -1;
     }
-    Point * p = new Point(x, y);
-    return kb->position_to_bits(p);
-
+    
+    return Point(x,y);
+    
 }
+
 
 clause Human_agent::create_clause(uint predicate, vector<uint> function, vector<uint> constant) {
     pred_args pargs;
@@ -363,19 +341,36 @@ clause Human_agent::create_clause(uint predicate, vector<uint> function, vector<
     return rule;
 }
 
-void Human_agent::execute_rhr() {
-    vector<uint> funcs;
-    funcs.push_back(F_CONST);
-    funcs.push_back(F_CONST);
+void Human_agent::execute_rhr(){
+    if (is_clear(find_right(position, orientation))){
+        //move backwards
+        int x;
+    }else if(!is_clear(find_right(position, orientation)) && is_clear(find_forward(position, orientation))){
+        //move forward
+        int x;
+        
+    }else if(!is_clear(find_right(position, orientation)) &&  !is_clear(find_forward(position, orientation))
+            &&  is_clear(find_left(position, orientation))){
+        //rotate and move left
+         int x;
+        
+    }else if(!is_clear(find_right(position, orientation)) &&  !is_clear(find_forward(position, orientation))){
+        //rotate left
+         int x;
+    }else if(!is_clear(find_forward(position, orientation))){
+        //rotate left
+        int x;
+    } else{
+        int x;
+    }
+ 
+    
+    
+    
+    
+    
+}
 
-    //vector<uint> func_args = {kb->position_to_bits(position), (orientation | A_CONST)};
-
-    clause t_left;
-    //t_left = create_clause(P_TURNLEFT, funcs, func_args);
-
-    clause t_right;
-
-    //t_right = create_clause(P_TURNRIGHT, funcs, func_args);
-
-    //clause t_forward(P_STEPFORWARD, funcs, func_args);
+bool Human_agent::is_clear(Point pos){   
+    return true;
 }
