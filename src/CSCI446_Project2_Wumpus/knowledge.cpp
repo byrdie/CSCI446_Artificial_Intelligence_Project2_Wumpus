@@ -14,7 +14,7 @@ Knowledge::Knowledge(string filename) {
     func_inv[F_SOUTH] = F_NORTH;
     func_inv[F_EAST] = F_WEST;
     func_inv[F_WEST] = F_EAST;
-    
+
 
 }
 
@@ -269,7 +269,7 @@ void Knowledge::print_func(func f) {
     if (func_tok == F_VAR) {
 
         cout << (char) ('a' + fa[0]);
-        
+
     } else if (func_tok == F_CONST) {
         vector<int> pos = bits_to_position(fa[0]);
         cout << "{";
@@ -299,7 +299,7 @@ void Knowledge::print_func_args(func_args fa) {
                 cout << pos[1];
                 cout << "}";
             } else {
-               cout << fa[l]; 
+                cout << fa[l];
             }
 
         } else {

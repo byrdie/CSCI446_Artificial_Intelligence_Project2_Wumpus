@@ -14,7 +14,8 @@ Engine::Engine(World * this_world) {
 }
 
 int Engine::move(int direction, Point * cur_pos) {
-
+    orient_to_direction(direction);
+    score++;
     vector<Point *> neighbors = world->find_neighbors(cur_pos);
 
     Point * test_pt = neighbors[direction];
@@ -32,31 +33,18 @@ int Engine::move(int direction, Point * cur_pos) {
 }
 
 void Engine:: orient_to_direction( int direction){
+    //Moves player orientation to direction and increments score correctly
     if(orientation == direction){
         score = score;
     }else if(abs(orientation - direction) % 2 == 0){
         orientation = (orientation + 2) % 4;
         score += 2;
-    }else if((orientation == NORTH) || (orientation == WEST)){
-        if ((orientation - direction) < 1){
-            orientation++;
-            score++;
-        }else{
-            orientation--;
-            score++;
-        }
-    }else{
-        switch(orientation){
-            case EAST:
-                if(direction == NORTH){
-                    orientation = NORTH;
-                    score++;
-                }else{
-                    orientation == SOUTH;
-                    score++;
-                }
-        }
+    }else {
+        orientation = direction;
+        score++;
     }
+//    cout << "Score: " << score << endl;
+//    cout << orientation << ", " << direction << endl;
     
     
     
