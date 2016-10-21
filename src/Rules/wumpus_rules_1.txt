@@ -1,18 +1,21 @@
-﻿s = Stench[s] -> (Wumpus[North[s]] v Wumpus[South[s]] v Wumpus[East[s]] v Wumpus[West[s]])
-ns = ¬ Stench[s] -> (¬ Wumpus[North[s]] ^ ¬ Wumpus[South[s]] ^ ¬ Wumpus[East[s]] ^ ¬ Wumpus[West[s]])
-nw = Safe[s] = ¬ Wumpus[s]
-w = ¬ Safe[s] = Wumpus[s]
+﻿w0 = Stench[s, t] -> (Wumpus[North[s], t] v Wumpus[South[s], t] v Wumpus[East[s], t] v Wumpus[West[s], t])
+w1 = ¬ Stench[s, t] -> (¬ Wumpus[North[s], t] ^ ¬ Wumpus[South[s], t] ^ ¬ Wumpus[East[s], t] ^ ¬ Wumpus[West[s], t])
+w2 = Scream[s, t] -> (¬ Wumpus[s, t2] ^ GreaterThan[t2, t1])
+w3 = (Wumpus[s, t] ^ AgentAt[r, t] ^ (SameX[r, s] v SameY[r, s]) -> Shoot[Direction[r, s]]
+w4 = Safe[s] = ¬ Wumpus[s]
+w5 = ¬ Safe[s] = Wumpus[s]
 
-Stench[s] -> Wumpus[North[s]] || Wumpus[South[s]] || Wumpus[East[s]] || Wumpus[West[s]]
-! Stench[s] -> ! Wumpus[North[s]] ^ ! Wumpus[South[s]] ^ ! Wumpus[East[s]] ^ ! Wumpus[West[s]]
+Stench[s, t] -> Wumpus[North[s], t] || Wumpus[South[s], t] || Wumpus[East[s], t] || Wumpus[West[s], t]
+! Stench[s, t] -> ! Wumpus[North[s], t] && ! Wumpus[South[s], t] && ! Wumpus[East[s], t] && ! Wumpus[West[s], t]
+(Wumpus[s, t] && AgentAt[r, t] && (SameX[r, s] || SameY[r, s]) -> Shoot[Direction[r, s]]
 Safe[s] -> ! Stench[s]
 ! Safe[s] -> Stench[s]
 
 
-g = Glitter[s] -> Gold[s]
-ng = ¬ Glitter[s] -> ¬ Gold[s]
-sg = Safe[s] -> Gold[s]
-win = Gold[s] -> Grab[s]
+g0 = Glitter[s] -> Gold[s]
+g1 = ¬ Glitter[s] -> ¬ Gold[s]
+g2 = Safe[s] -> Gold[s]
+g3 = Gold[s] -> Grab[s]
 
 Glitter[s] -> Gold[s]
 ! Glitter[s] -> ! Gold[s]
@@ -20,14 +23,14 @@ Safe[s] -> Gold[s]
 Gold[s] -> Grab[s]
 
 
-bn = Bump[North[s]] -> Wall[North[s]]
-bs = Bump[South[s]] -> Wall[South[s]]
-be = Bump[East[s]] -> Wall[East[s]]
-bw = Bump[West[s]] -> Wall[West[s]]
-nbw = ¬ Bump[North[s]] -> ¬ Wall[North[s]]
-nbs = ¬ Bump[South[s]] -> ¬ Wall[South[s]]
-nbe = ¬ Bump[East[s]] -> ¬ Wall[East[s]]
-nbw = ¬ Bump[West[s]] -> ¬ Wall[West[s]]
+b0 = Bump[North[s]] -> Wall[North[s]]
+b1 = Bump[South[s]] -> Wall[South[s]]
+b2 = Bump[East[s]] -> Wall[East[s]]
+b3 = Bump[West[s]] -> Wall[West[s]]
+b4 = ¬ Bump[North[s]] -> ¬ Wall[North[s]]
+b5 = ¬ Bump[South[s]] -> ¬ Wall[South[s]]
+b6 = ¬ Bump[East[s]] -> ¬ Wall[East[s]]
+b7 = ¬ Bump[West[s]] -> ¬ Wall[West[s]]
 
 Bump[North[s]] -> Wall[North[s]]
 Bump[South[s]] -> Wall[South[s]]
@@ -39,3 +42,12 @@ Bump[West[s]] -> Wall[West[s]]
 ! Bump[West[s]] -> ! Wall[West[s]]
 
 
+f0 = (Safe[North[s]] ^ ¬ Wall[North[s]] ^ Orientation[North[s]]) -> Forward[s]
+f1 = (Safe[South[s]] ^ ¬ Wall[South[s]] ^ Orientation[South[s]]) -> Forward[s]
+f2 = (Safe[East[s]] ^ ¬ Wall[East[s]] ^ Orientation[East[s]]) -> Forward[s]
+f3 = (Safe[West[s]] ^ ¬ Wall[West[s]] ^ Orientation[West[s]) -> Forward[s]
+
+(Safe[North[s]] && ! Wall[North[s]] && Orientation[North[s]]) -> Forward[s]
+(Safe[South[s]] && ! Wall[South[s]] && Orientation[South[s]]) -> Forward[s]
+(Safe[East[s]] && ! Wall[East[s]] && Orientation[East[s]]) -> Forward[s]
+(Safe[West[s]] && ! Wall[West[s]] && Orientation[West[s]) -> Forward[s]
