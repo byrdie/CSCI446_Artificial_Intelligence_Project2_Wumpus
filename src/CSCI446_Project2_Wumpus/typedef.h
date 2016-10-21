@@ -32,6 +32,7 @@
 #define P_ADJEXPLORED   0x00000800
 #define P_TURNLEFT      0x00001000
 #define P_TURNRIGHT     0x00002000
+#define P_AGENT         0x00004000
 
 // Define Functions
 // These must be larger than variables!

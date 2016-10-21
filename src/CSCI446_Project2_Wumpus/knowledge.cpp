@@ -14,6 +14,8 @@ Knowledge::Knowledge(uint sz, vector<string> rule_files) {
     }
 
     kb_world_heap = new cnf2D(N + 2, vector<cnf>(N + 2));
+    
+    
 
     func_inv[F_CONST] = F_CONST;
     func_inv[F_VAR] = F_VAR;
@@ -23,6 +25,14 @@ Knowledge::Knowledge(uint sz, vector<string> rule_files) {
     func_inv[F_WEST] = F_EAST;
 
 
+}
+
+void Knowledge::clear_stack(){
+    kb_time_stack.clear();
+}
+
+void Knowledge::clear_heap(uint x, uint y){
+    (*kb_world_heap)[x][y].clear();
 }
 
 void Knowledge::add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint y) {
@@ -46,6 +56,24 @@ void Knowledge::add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint
     pt_kb.push_back(rule);
     (*kb_world_heap)[x][y] = pt_kb;
 
+}
+
+void Knowledge::heap_to_stack(vector<Point *> pts){
+    
+    for(uint i = 0; i < pts.size(); i++){
+        
+        uint x = pts[i]->x;
+        uint y = pts[i]->y;
+        
+        cnf kb_pt = (*kb_world_heap)[x][y];
+        for(uint j = 0; j < kb_pt.size(); j++){
+            
+            kb_time_stack.push_back(kb_pt[j]);
+            
+        }
+        
+    }
+    
 }
 
 void Knowledge::add_percept_to_stack(pred_name pname, func_arg parg) {

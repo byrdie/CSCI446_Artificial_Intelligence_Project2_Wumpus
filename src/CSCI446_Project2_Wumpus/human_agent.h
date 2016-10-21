@@ -23,11 +23,13 @@ class Human_agent;
 
 class Human_agent {
 public:
+    uint N;
     Point * position;
     World * knowledge;
     Knowledge * kb;
     Engine * engine;
     QGraphicsPixmapItem * my_tile;
+    vector<Point *> search_tiles;
     
     uint time;
     
@@ -42,6 +44,11 @@ public:
     Point find_backward(Point * pos, uint dir);
     clause create_clause(uint predicate, vector<uint> function,  vector<uint> constant);
     void execute_rhr();
+    
+    infer_explored();
+    bool infer_move(uint direction);
+    
+    void init_kb();
     bool AdjExplored(Point * pos);
     bool is_clear(Point pos);
 };

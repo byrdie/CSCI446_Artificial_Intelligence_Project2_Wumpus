@@ -46,7 +46,10 @@ public:
 
     Knowledge(uint sz, vector<string> rule_files);
     
+    void clear_heap(uint x, uint y);
+    void clear_stack();
     void add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint y);
+    void heap_to_stack(vector<Point *> pts);
     void add_percept_to_stack(pred_name pname, func_arg parg);
 
     /* Set of functions used for unification */
@@ -60,7 +63,7 @@ public:
     /* Set of functions used for resolution */
     /* These functions are defined in resolve.cpp */
     uint linear_resolution(cnf kb, clause query, uint indent);
-    bool heap_input_resolution(clause query, uint x, uint y);
+    bool heap_input_resolution(clause query);
     cnf resolve(clause c_i, clause c_j);
 
     /* Set of functions dealing with negated predicates */
