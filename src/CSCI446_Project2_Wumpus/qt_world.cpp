@@ -47,6 +47,7 @@ void Qt_world::init_map() {
     base_wall_sprite = new QPixmap("sprites/wall.png");
     base_hero_sprite = new QPixmap("sprites/hero.png");
     base_wumpus_sprite = new QPixmap("sprites/wumpus2.png");
+    base_p_wumpus_sprite = new QPixmap("sprites/p_wumpus2.png");
     base_stench_sprite = new QPixmap("sprites/stench3.png");
     base_pit_sprite = new QPixmap("sprites/pit.png");
     base_p_pit_sprite = new QPixmap("sprites/p_pit.png");
@@ -65,6 +66,7 @@ void Qt_world::init_map() {
     sprite_map[WALL] = base_wall_sprite;
     sprite_map[EMPTY] = base_bg_sprite;
     sprite_map[POS_EMPTY] = base_p_cobble_sprite;
+    sprite_map[POS_WUM] = base_p_wumpus_sprite;
     sprite_map[AGENT] = base_hero_sprite;
     
     // Fill height map to know what elements to draw over
@@ -75,10 +77,11 @@ void Qt_world::init_map() {
     height_map[PIT] = 5;
     height_map[POS_PIT] = 2;
     height_map[BREEZE] = 9;
-    height_map[WALL] = 4;
+    height_map[WALL] = 10;
     height_map[EMPTY] = 4;
     height_map[POS_EMPTY] = 3;
     height_map[AGENT] = 6;
+    height_map[POS_WUM] = 3;
 
     // Construct map between indices and screen position
     for (int i = 0; i < N + 2; i++) {

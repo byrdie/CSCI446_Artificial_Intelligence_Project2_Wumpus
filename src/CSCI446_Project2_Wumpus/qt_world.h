@@ -55,6 +55,7 @@ public:
     QPixmap * base_wall_sprite;
     QPixmap * base_hero_sprite;
     QPixmap * base_wumpus_sprite;
+    QPixmap * base_p_wumpus_sprite;
     QPixmap * base_stench_sprite;
     QPixmap * base_pit_sprite;
     QPixmap * base_p_pit_sprite;

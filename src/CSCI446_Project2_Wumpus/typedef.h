@@ -67,7 +67,8 @@
 #define EMPTY   0x00000020
 #define AGENT   0x00000040
 #define POS_PIT   0x00000100
-#define POS_EMPTY 0x00000200
+#define POS_EMPTY   0x00000200
+#define POS_WUM     0x00000400
 
 // Definite move types
 #define EAST    0
@@ -102,7 +103,9 @@ typedef vector<vector<func>> theta; // A list of substitutions
 class Point {
 public:
     int x;
-    int y;;
+    int y;
+    ;
+
     Point(float xpos, float ypos) {
         x = xpos;
         y = ypos;

@@ -37,7 +37,7 @@ public:
     Human_agent(Engine * this_engine, int N);
     
     void make_move(int direction);
-    bool infer(uint direction);
+//    vector<bool> infer(uint direction);
     apoint find_right(Point * pos, uint dir);
     apoint find_left(Point * pos, uint dir);
     apoint find_forward(Point * pos, uint dir);
@@ -45,8 +45,10 @@ public:
     clause create_clause(uint predicate, vector<uint> function,  vector<uint> constant);
     void execute_rhr();
     
-    infer_explored();
-    bool infer_move(uint direction);
+    bool infer_pit(uint direction);
+    bool infer_wumpus(uint direction);
+    
+//    bool infer_move(uint direction);
     
     void init_kb();
 };

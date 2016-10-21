@@ -19,8 +19,8 @@ Human_agent::Human_agent(Engine * this_engine, int sz) {
     // ask the engine to be placed at the start position
     make_move(NORTH);
 
-    
-    
+
+
 
 }
 
@@ -81,19 +81,19 @@ void Human_agent::make_move(int direction) {
         kb->add_percept_to_heap(P_NEGATION | P_BREEZY, kb->position_to_bits(position), x, y);
     }
 
-    if ((next_tile & P_STINKY) > 0) {
+    if ((next_tile & STENCH) > 0) {
         kb->add_percept_to_heap(P_STINKY, kb->position_to_bits(position), x, y);
     } else {
         kb->add_percept_to_heap(P_NEGATION | P_STINKY, kb->position_to_bits(position), x, y);
     }
-    
+
     /*  */
     search_tiles.clear();
-    search_tiles.push_back(new Point(x,y));
-    search_tiles.push_back(new Point(x+1,y));
-    search_tiles.push_back(new Point(x-1,y));
-    search_tiles.push_back(new Point(x,y+1));
-    search_tiles.push_back(new Point(x+1,y));
+    search_tiles.push_back(new Point(x, y));
+    search_tiles.push_back(new Point(x + 1, y));
+    search_tiles.push_back(new Point(x - 1, y));
+    search_tiles.push_back(new Point(x, y + 1));
+    search_tiles.push_back(new Point(x + 1, y));
     kb->heap_to_stack(search_tiles);
 
 
@@ -104,79 +104,55 @@ void Human_agent::make_move(int direction) {
     x = position->x;
     y = position->y;
 
-    infer_move(orientation);
+    //    infer_move(orientation);
 
-    //    if (infer(F_NORTH)) {
-    //        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
-    //    } else {
-    //        knowledge->qt_world->set_tile(x, y + 1, POS_PIT);
-    //    }
-    //
-    //    if (infer(F_SOUTH)) {
-    //        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
-    //    } else {
-    //        knowledge->qt_world->set_tile(x, y - 1, POS_PIT);
-    //    }
-    //
-    //    if (infer(F_EAST)) {
-    //        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
-    //    } else {
-    //        knowledge->qt_world->set_tile(x + 1, y, POS_PIT);
-    //    }
-    //
-    //    if (infer(F_WEST)) {
-    //        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
-    //    } else {
-    //        knowledge->qt_world->set_tile(x - 1, y, POS_PIT);
-    //    }
-
-    time++; // make sure to increment the time
-
-}
-
-bool Human_agent::infer_explored(){
-    
-    for(uint i = 0; i < search_tiles.size(); i++){
-        
-        
-        
+    if (infer_pit(F_NORTH)) {
+        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
+    } else {
+        knowledge->qt_world->set_tile(x, y + 1, POS_PIT);
+    }
+    if (infer_pit(F_SOUTH)) {
+        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
+    } else {
+       knowledge->qt_world->set_tile(x, y - 1, POS_PIT); 
+    }
+    if (infer_pit(F_EAST)) {
+        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
+    }
+    else {
+        knowledge->qt_world->set_tile(x + 1, y, POS_PIT);
+    }
+    if (infer_pit(F_WEST)) {
+        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
+    } else {
+        knowledge->qt_world->set_tile(x - 1, y, POS_PIT);
     }
     
+    
+    if (infer_wumpus(F_NORTH)) {
+//        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
+    } else {
+        knowledge->qt_world->set_tile(x, y + 1, POS_WUM);
+    }
+    if (infer_wumpus(F_SOUTH)) {
+//        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
+    } else {
+        knowledge->qt_world->set_tile(x, y - 1, POS_WUM);
+    }
+    if (infer_wumpus(F_EAST)) {
+//        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
+    } else {
+        knowledge->qt_world->set_tile(x + 1, y, POS_WUM);
+    }
+    if (infer_wumpus(F_WEST)) {
+//        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
+    } else {
+        knowledge->qt_world->set_tile(x - 1, y, POS_WUM);
+    }
 }
 
-bool Human_agent::infer_move(uint direction) {
-    /* Build query */
-    func_args fargs;
-    func_args fargs2;
-    uint position_bits = kb->position_to_bits(position);
-    fargs.push_back(position_bits);
-    fargs2.push_back(direction);
-    func fquery = kb->build_func(F_CONST, fargs);
-    func fquer2 = kb->build_func(F_CONST, fargs2);
-    pred_args pquery_arg;
-    pquery_arg.push_back(fquery);
-    pquery_arg.push_back(fquer2);
-    pred p_query = kb->build_pred(P_STEPFORWARD, pquery_arg);
-    clause query;
-    query.push_back(p_query);
+bool Human_agent::infer_pit(uint direction) {
 
-#if debug_mode
-    cout << "The current knowledge base is:" << endl;
-    kb->print_kb(kb->kb_rules);
-    cout << endl;
-
-    cout << "We are trying to prove:" << endl;
-    kb->print_clause(query);
-    cout << endl << "*************************************" << endl;
-#endif
-    bool result = kb->heap_input_resolution(query, position->x, position->y);
-#if debug_mode
-    cout << "The result is: " << result << endl;
-#endif
-    return result;
-}
-
-bool Human_agent::infer(uint direction) {
 
     /* Build query */
     func_args fargs;
@@ -185,23 +161,62 @@ bool Human_agent::infer(uint direction) {
     func fquery = kb->build_func(direction, fargs);
     pred_args pquery_arg;
     pquery_arg.push_back(fquery);
+
+    /* query for pits */
     pred p_query = kb->build_pred(P_NEGATION | P_PIT, pquery_arg);
     clause query;
     query.push_back(p_query);
+
 #if debug_mode
     cout << "The current knowledge base is:" << endl;
     kb->print_kb(kb->kb_rules);
+    kb->print_kb(kb->kb_time_stack);
     cout << endl;
 
     cout << "We are trying to prove:" << endl;
     kb->print_clause(query);
     cout << endl << "*************************************" << endl;
 #endif
-    cnf neg_query = kb->negate_clause(query);
-    bool result = kb->heap_input_resolution(query, position->x, position->y);
+    bool result = kb->heap_input_resolution(query);
 #if debug_mode
     cout << "The result is: " << result << endl;
 #endif
+
+    return result;
+
+}
+
+bool Human_agent::infer_wumpus(uint direction) {
+
+
+    /* Build query */
+    func_args fargs;
+    uint position_bits = kb->position_to_bits(position);
+    fargs.push_back(position_bits);
+    func fquery = kb->build_func(direction, fargs);
+    pred_args pquery_arg;
+    pquery_arg.push_back(fquery);
+
+    /* query for pits */
+    pred p_query = kb->build_pred(P_NEGATION | P_WUMPUS, pquery_arg);
+    clause query;
+    query.push_back(p_query);
+
+#if debug_mode
+    cout << "The current knowledge base is:" << endl;
+    kb->print_kb(kb->kb_rules);
+    kb->print_kb(kb->kb_time_stack);
+    cout << endl;
+
+    cout << "We are trying to prove:" << endl;
+    kb->print_clause(query);
+    cout << endl << "*************************************" << endl;
+#endif
+    bool result = kb->heap_input_resolution(query);
+#if debug_mode
+    cout << "The result is: " << result << endl;
+#endif
+
     return result;
 
 }

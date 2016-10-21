@@ -447,7 +447,7 @@ void Knowledge::print_func_args(func_args fa) {
             }
 
         } else {
-            cout << (char) ('a' + fa[l]);
+            cout << (char) (('a' + fa[l])%26);
         }
 
         if (l != fa.size() - 1) {
