@@ -45,8 +45,9 @@ public:
     clause create_clause(uint predicate, vector<uint> function,  vector<uint> constant);
     void execute_rhr();
     
-    bool infer_pit(uint direction);
-    bool infer_wumpus(uint direction);
+    uint infer_pit(uint direction);
+    uint infer_wumpus(uint direction);
+    uint infer_barrier(uint direction);
     
 //    bool infer_move(uint direction);
     

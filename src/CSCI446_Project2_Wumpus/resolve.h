@@ -14,6 +14,7 @@
 #ifndef RESOLVE_H
 #define RESOLVE_H
 
+#include <queue>
 #include <iomanip>
 #include "knowledge.h"
 

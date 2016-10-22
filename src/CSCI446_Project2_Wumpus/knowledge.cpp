@@ -14,8 +14,8 @@ Knowledge::Knowledge(uint sz, vector<string> rule_files) {
     }
 
     kb_world_heap = new cnf2D(N + 2, vector<cnf>(N + 2));
-    
-    
+
+
 
     func_inv[F_CONST] = F_CONST;
     func_inv[F_VAR] = F_VAR;
@@ -23,15 +23,19 @@ Knowledge::Knowledge(uint sz, vector<string> rule_files) {
     func_inv[F_SOUTH] = F_NORTH;
     func_inv[F_EAST] = F_WEST;
     func_inv[F_WEST] = F_EAST;
+    func_inv[F_FORWARD] = F_BACKWARD;
+    func_inv[F_RIGHT] = F_LEFT;
+    func_inv[F_LEFT] = F_RIGHT;
+    func_inv[F_BACKWARD] = F_FORWARD;
 
 
 }
 
-void Knowledge::clear_stack(){
+void Knowledge::clear_stack() {
     kb_time_stack.clear();
 }
 
-void Knowledge::clear_heap(uint x, uint y){
+void Knowledge::clear_heap(uint x, uint y) {
     (*kb_world_heap)[x][y].clear();
 }
 
@@ -47,7 +51,7 @@ void Knowledge::add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint
     rule.push_back(pcon);
 
     cnf pt_kb = (*kb_world_heap)[x][y];
-    
+
     for (uint i = 0; i < pt_kb.size(); i++) {
         if (clause_eq(rule, pt_kb[i])) {
             return;
@@ -58,22 +62,35 @@ void Knowledge::add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint
 
 }
 
-void Knowledge::heap_to_stack(vector<Point *> pts){
-    
-    for(uint i = 0; i < pts.size(); i++){
-        
+void Knowledge::heap_to_stack(vector<Point *> pts) {
+
+    /* Make sure the stack is clear */
+    clear_stack();
+
+    /* add information from heap */
+    for (uint i = 0; i < pts.size(); i++) {
+
         uint x = pts[i]->x;
         uint y = pts[i]->y;
-        
+
         cnf kb_pt = (*kb_world_heap)[x][y];
-        for(uint j = 0; j < kb_pt.size(); j++){
-            
+        for (uint j = 0; j < kb_pt.size(); j++) {
+
             kb_time_stack.push_back(kb_pt[j]);
-            
+
         }
-        
+
     }
-    
+
+    /* add rules */
+    for (uint i = 0; i < kb_rules.size(); i++) {
+        kb_time_stack.push_back(kb_rules[i]);
+    }
+
+
+
+
+
 }
 
 void Knowledge::add_percept_to_stack(pred_name pname, func_arg parg) {
@@ -447,7 +464,7 @@ void Knowledge::print_func_args(func_args fa) {
             }
 
         } else {
-            cout << (char) (('a' + fa[l])%26);
+            cout << (char) (('a' + fa[l]) % 26);
         }
 
         if (l != fa.size() - 1) {
@@ -501,33 +518,95 @@ pred Knowledge::build_pred(uint predicate, pred_args args) {
     return return_pred;
 }
 
+clause Knowledge::eval_clause(clause c) {
+
+    clause c_eval;
+
+    for (uint i = 0; i < c.size(); i++) {
+
+        c_eval.push_back(eval_pred(c[i]));
+
+    }
+
+    return c_eval;
+
+}
+
+pred Knowledge::eval_pred(pred p) {
+
+    get<1>(p) = eval_pred_args(p_args(p));
+
+    return p;
+
+}
+
+pred_args Knowledge::eval_pred_args(pred_args pa) {
+
+    pred_args pa_eval;
+
+    for (uint i = 0; i < pa.size(); i++) {
+
+        pa_eval.push_back(eval_func(pa[i]));
+
+    }
+
+    return pa_eval;
+
+}
+
 func Knowledge::eval_func(func f) {
 
     func_args fargs = get<1>(f);
 
-    if ((fargs[0] & A_CONST) > 0) { // only evaluate if there is a constant
+    /* Only evaluate if all arguments are constants */
+    bool flag = false;
+    for (uint i = 0; i < fargs.size(); i++) {
+        if ((fargs[i] & A_CONST) == 0) {
+            flag = true;
+        }
+    }
+    if (flag) {
+        return f;
+    }
 
-        uint fname = get<0>(f);
 
+
+    uint fname = get<0>(f);
+
+    if (fargs.size() == 1) {
         if (fname == F_NORTH) {
             fargs[0] = fargs[0] + DY;
         } else if (fname == F_SOUTH) {
             fargs[0] = fargs[0] - DY;
-
         } else if (fname == F_EAST) {
             fargs[0] = fargs[0] + DX;
-
         } else if (fname == F_WEST) {
-            fargs[0] = fargs[0] + DX;
+            fargs[0] = fargs[0] - DX;
+        }
+    } else if (fargs.size() == 2) {
+
+        if (fname == F_FORWARD or fname == F_BACKWARD or fname == F_RIGHT or fname == F_LEFT) {
+
+            if (fargs[1] == NORTH) {
+                fargs[0] = fargs[0] + DY;
+            } else if (fargs[1] == SOUTH) {
+                fargs[0] = fargs[0] - DY;
+            } else if (fargs[1] == EAST) {
+                fargs[0] = fargs[0] + DX;
+            } else if (fargs[1] == WEST) {
+                fargs[0] = fargs[0] - DX;
+            }
 
         }
-        fname = F_CONST;
 
-        return build_func(fname, fargs);
-
-    } else {
-        return f;
     }
+
+
+    fname = F_CONST;
+
+    return build_func(fname, fargs);
+
+
 
 }
 

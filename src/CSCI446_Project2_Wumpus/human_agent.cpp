@@ -19,7 +19,7 @@ Human_agent::Human_agent(Engine * this_engine, int sz) {
     // ask the engine to be placed at the start position
     make_move(NORTH);
 
-
+    kb->print_kb(kb->kb_rules);
 
 
 }
@@ -115,12 +115,11 @@ void Human_agent::make_move(int direction) {
     if (infer_pit(F_SOUTH)) {
         knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
     } else {
-       knowledge->qt_world->set_tile(x, y - 1, POS_PIT); 
+        knowledge->qt_world->set_tile(x, y - 1, POS_PIT);
     }
     if (infer_pit(F_EAST)) {
         knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
-    }
-    else {
+    } else {
         knowledge->qt_world->set_tile(x + 1, y, POS_PIT);
     }
     if (infer_pit(F_WEST)) {
@@ -128,31 +127,52 @@ void Human_agent::make_move(int direction) {
     } else {
         knowledge->qt_world->set_tile(x - 1, y, POS_PIT);
     }
-    
-    
+
+
     if (infer_wumpus(F_NORTH)) {
-//        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
+        //        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
     } else {
         knowledge->qt_world->set_tile(x, y + 1, POS_WUM);
     }
     if (infer_wumpus(F_SOUTH)) {
-//        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
+        //        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
     } else {
         knowledge->qt_world->set_tile(x, y - 1, POS_WUM);
     }
     if (infer_wumpus(F_EAST)) {
-//        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
+        //        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
     } else {
         knowledge->qt_world->set_tile(x + 1, y, POS_WUM);
     }
     if (infer_wumpus(F_WEST)) {
-//        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
+        //        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
     } else {
         knowledge->qt_world->set_tile(x - 1, y, POS_WUM);
     }
+
+//    if (infer_barrier(F_NORTH)) {
+//        //        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
+//    } else {
+//        knowledge->qt_world->set_tile(x, y + 1, POS_WUM);
+//    }
+//    if (infer_barrier(F_SOUTH)) {
+//        //        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
+//    } else {
+//        knowledge->qt_world->set_tile(x, y - 1, POS_WUM);
+//    }
+//    if (infer_barrier(F_EAST)) {
+//        //        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
+//    } else {
+//        knowledge->qt_world->set_tile(x + 1, y, POS_WUM);
+//    }
+//    if (infer_barrier(F_WEST)) {
+//        //        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
+//    } else {
+//        knowledge->qt_world->set_tile(x - 1, y, POS_WUM);
+//    }
 }
 
-bool Human_agent::infer_pit(uint direction) {
+uint Human_agent::infer_pit(uint direction) {
 
 
     /* Build query */
@@ -170,7 +190,6 @@ bool Human_agent::infer_pit(uint direction) {
 
 #if debug_mode
     cout << "The current knowledge base is:" << endl;
-    kb->print_kb(kb->kb_rules);
     kb->print_kb(kb->kb_time_stack);
     cout << endl;
 
@@ -178,7 +197,7 @@ bool Human_agent::infer_pit(uint direction) {
     kb->print_clause(query);
     cout << endl << "*************************************" << endl;
 #endif
-    bool result = kb->heap_input_resolution(query);
+    uint result = kb->input_resolution_bfs(query);
 #if debug_mode
     cout << "The result is: " << result << endl;
 #endif
@@ -187,7 +206,7 @@ bool Human_agent::infer_pit(uint direction) {
 
 }
 
-bool Human_agent::infer_wumpus(uint direction) {
+uint Human_agent::infer_wumpus(uint direction) {
 
 
     /* Build query */
@@ -205,7 +224,6 @@ bool Human_agent::infer_wumpus(uint direction) {
 
 #if debug_mode
     cout << "The current knowledge base is:" << endl;
-    kb->print_kb(kb->kb_rules);
     kb->print_kb(kb->kb_time_stack);
     cout << endl;
 
@@ -213,7 +231,7 @@ bool Human_agent::infer_wumpus(uint direction) {
     kb->print_clause(query);
     cout << endl << "*************************************" << endl;
 #endif
-    bool result = kb->heap_input_resolution(query);
+    uint result = kb->input_resolution_bfs(query);
 #if debug_mode
     cout << "The result is: " << result << endl;
 #endif
@@ -222,7 +240,42 @@ bool Human_agent::infer_wumpus(uint direction) {
 
 }
 
-Point Human_agent::find_right(Point * pos, uint dir){
+uint Human_agent::infer_barrier(uint direction) {
+
+
+    /* Build query */
+    func_args fargs;
+    uint position_bits = kb->position_to_bits(position);
+    fargs.push_back(position_bits);
+    func fquery = kb->build_func(direction, fargs);
+    pred_args pquery_arg;
+    pquery_arg.push_back(fquery);
+
+    /* query for pits */
+    pred p_query = kb->build_pred(P_NEGATION | P_WALL, pquery_arg);
+    clause query;
+    query.push_back(p_query);
+
+#if debug_mode
+    cout << "The current knowledge base is:" << endl;
+    kb->print_kb(kb->kb_rules);
+    kb->print_kb(kb->kb_time_stack);
+    cout << endl;
+
+    cout << "We are trying to prove:" << endl;
+    kb->print_clause(query);
+    cout << endl << "*************************************" << endl;
+#endif
+    uint result = kb->heap_input_resolution(query);
+#if debug_mode
+    cout << "The result is: " << result << endl;
+#endif
+
+    return result;
+
+}
+
+Point Human_agent::find_right(Point * pos, uint dir) {
     //find position right of player
     uint x = pos->x;
     uint y = pos->y;
@@ -242,15 +295,13 @@ Point Human_agent::find_right(Point * pos, uint dir){
         case SOUTH:
             x = x - 1;
     }
-    
-    return Point(x,y);
-    
-    
+
+    return Point(x, y);
+
+
 }
 
-
-
-Point Human_agent::find_left(Point * pos, uint dir){
+Point Human_agent::find_left(Point * pos, uint dir) {
     //find position left of player
     uint x = pos->x;
     uint y = pos->y;
@@ -270,12 +321,12 @@ Point Human_agent::find_left(Point * pos, uint dir){
         case SOUTH:
             x = x + 1;
     }
-   
-    return Point(x,y);
-    
+
+    return Point(x, y);
+
 }
 
-Point Human_agent::find_forward(Point * pos, uint dir){
+Point Human_agent::find_forward(Point * pos, uint dir) {
     //find position of tile ahead of player
     uint x = pos->x;
     uint y = pos->y;
@@ -295,12 +346,12 @@ Point Human_agent::find_forward(Point * pos, uint dir){
         case SOUTH:
             y = y - 1;
     }
-    
-    return Point(x,y);
-    
+
+    return Point(x, y);
+
 }
 
-Point Human_agent::find_backward(Point * pos, uint dir){
+Point Human_agent::find_backward(Point * pos, uint dir) {
     //find position of tile behind player
     uint x = pos->x;
     uint y = pos->y;
@@ -320,11 +371,10 @@ Point Human_agent::find_backward(Point * pos, uint dir){
         case SOUTH:
             y = y + -1;
     }
-    
-    return Point(x,y);
-    
-}
 
+    return Point(x, y);
+
+}
 
 clause Human_agent::create_clause(uint predicate, vector<uint> function, vector<uint> constant) {
     pred_args pargs;
@@ -341,36 +391,36 @@ clause Human_agent::create_clause(uint predicate, vector<uint> function, vector<
     return rule;
 }
 
-void Human_agent::execute_rhr(){
-    if (is_clear(find_right(position, orientation))){
+void Human_agent::execute_rhr() {
+    if (is_clear(find_right(position, orientation))) {
         //move backwards
         int x;
-    }else if(!is_clear(find_right(position, orientation)) && is_clear(find_forward(position, orientation))){
+    } else if (!is_clear(find_right(position, orientation)) && is_clear(find_forward(position, orientation))) {
         //move forward
         int x;
-        
-    }else if(!is_clear(find_right(position, orientation)) &&  !is_clear(find_forward(position, orientation))
-            &&  is_clear(find_left(position, orientation))){
+
+    } else if (!is_clear(find_right(position, orientation)) && !is_clear(find_forward(position, orientation))
+            && is_clear(find_left(position, orientation))) {
         //rotate and move left
-         int x;
-        
-    }else if(!is_clear(find_right(position, orientation)) &&  !is_clear(find_forward(position, orientation))){
-        //rotate left
-         int x;
-    }else if(!is_clear(find_forward(position, orientation))){
+        int x;
+
+    } else if (!is_clear(find_right(position, orientation)) && !is_clear(find_forward(position, orientation))) {
         //rotate left
         int x;
-    } else{
+    } else if (!is_clear(find_forward(position, orientation))) {
+        //rotate left
+        int x;
+    } else {
         int x;
     }
- 
-    
-    
-    
-    
-    
+
+
+
+
+
+
 }
 
-bool Human_agent::is_clear(Point pos){   
+bool Human_agent::is_clear(Point pos) {
     return true;
 }

@@ -2,6 +2,105 @@
 
 #include "resolve.h"
 
+uint Knowledge::input_resolution_bfs(clause query) {
+
+    cnf kb = kb_time_stack; // Make a copy of the KB
+
+    /* negate theorem to be proven */
+    query = negate_clause(query)[0];
+
+    /* Define a tree to store the results of the bfs */
+    uint max_depth = 10; // Don't keep trying after this depth
+    vector<vector < clause >> rtree(max_depth);
+
+    /* Define the query to be at the root node */
+    vector<clause> rtree_top;
+    rtree_top.push_back(query);
+    rtree[0] = rtree_top;
+
+    /* Loop through each layer of the resolution tree */
+    for (uint i = 0; i < rtree.size(); i++) {
+
+        /* loop through though each resolvent for each layer */
+        vector<clause> this_row = rtree[i];
+        vector<clause> next_row;
+        for (uint j = 0; j < this_row.size(); j++) {
+
+            /* Select the next rule to be resolved */
+            clause input = eval_clause(this_row[j]);
+
+            /* Check if the rule is a tautology */
+            cnf query_cnf;
+            query_cnf.push_back(input);
+            if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the KB
+#if debug_mode
+                cout << setw((i + 1) * 5) << ' ';
+                cout << "The rule ";
+                print_clause(input);
+                cout << " is a tautology.";
+                cout << endl;
+#endif
+                return FALSE;
+            }
+
+            /* Attempt to resolve the input with every clause in the KB */
+            for (uint k = 0; k < kb.size(); k++) {
+
+#if debug_mode
+                cout << setw(i * 5) << ' ';
+                cout << "Resolve ";
+                print_clause(input);
+                cout << " and ";
+                print_clause(kb[k]);
+                cout << endl;
+#endif
+
+                /* Possibly delete rules as they're used here */
+
+                /* Attempt to resolve each clause */
+                cnf resolvents = resolve(kb[k], input);
+
+                /* Loop over the resolvents and check for an inconsistency
+                 * If there is no inconsistency, set the clause variable
+                 * equal to the resolvent and restart the main loop */
+                for (uint l = 0; l < resolvents.size(); l++) {
+
+                    /* Inconsistency check. If two clauses resolve to an empty
+                     * clause the two clauses are inconsistent */
+                    if (resolvents[l].empty()) {
+#if debug_mode
+                        cout << setw((i + 1) * 5) << ' ';
+                        cout << "The rule ";
+                        print_clause(input);
+                        cout << " is a contradiction.";
+                        cout << endl;
+#endif
+                        return TRUE;
+                    }
+
+#if debug_mode
+                    cout << setw((i + 1) * 5) << ' ';
+                    cout << "Result ";
+                    print_clause(resolvents[l]);
+                    cout << endl;
+#endif
+
+                    /* If the resolvent is consistent, restart the main loop
+                     * with the query as the resolvent*/
+                    next_row.push_back(resolvents[l]);
+
+                }
+
+
+
+            }
+
+        }
+        rtree[i+1] = next_row;
+    }
+
+    return NOT_FOUND;
+}
 
 bool Knowledge::heap_input_resolution(clause query) {
 
@@ -10,23 +109,27 @@ bool Knowledge::heap_input_resolution(clause query) {
 
     /* negate theorem to be proven */
     query = negate_clause(query)[0];
-    
+
+
+
     clause input_query = query; // Make a copy of the input query for later
 
-    uint max_depth = 10; // Don't keep trying after this depth
+
 
     /* Resolve clauses until we hit the max depth */
+    uint max_depth = 10; // Don't keep trying after this depth
     for (uint i = 0; i < max_depth; i++) {
 
-        /* Check if the query is a tautology of the knowledge at this
-         * spatial point */
+        query = eval_clause(query); // Evaluate all the functions within the query to prevent function nesting
+
+        /* Check if the query is a tautology */
         cnf query_cnf;
         query_cnf.push_back(query);
         if (subset(query_cnf, pt_kb)) { // A tautology exists if the rule is already in th
             return FALSE;
         }
 
-        for (uint k = 0; k < pt_kb.size(); k++) { // loop over clauses
+        for (int k = pt_kb.size() - 1; k > -1; k--) { // loop over clauses in inverse order
 
 #if debug_mode
             cout << setw(i * 5) << ' ';
@@ -61,38 +164,38 @@ bool Knowledge::heap_input_resolution(clause query) {
             }
         }
 
-        /* Loop over the clauses in the static rules */
-        for (uint k = 0; k < kb_rules.size(); k++) { // loop over clauses
-#if debug_mode
-            cout << setw(i * 5) << ' ';
-            cout << "Resolve ";
-            print_clause(query);
-            cout << " and ";
-            print_clause(kb_rules[k]);
-            cout << endl;
-#endif
-            
-            /* Attempt to resolve each clause */
-            cnf resolvents = resolve(kb_rules[k], query);
-
-            /* Loop over the resolvents and check for an inconsistency
-             * If there is no inconsistency, set the clause variable
-             * equal to the resolvent and restart the main loop */
-            for (uint l = 0; l < resolvents.size(); l++) {
-
-                /* Inconsistency check. If two clauses resolve to an empty
-                 * clause the two clauses are inconsistent */
-                if (resolvents[l].empty()) {
-                    return TRUE;
-                }
-
-                /* If the resolvent is consistent, restart the main loop
-                 * with the query as the resolvent*/
-                query = resolvents[l];
-                goto MAIN_LOOP_EXIT;
-
-            }
-        }
+        //        /* Loop over the clauses in the static rules */
+        //        for (uint k = 0; k < kb_rules.size(); k++) { // loop over clauses
+        //#if debug_mode
+        //            cout << setw(i * 5) << ' ';
+        //            cout << "Resolve ";
+        //            print_clause(query);
+        //            cout << " and ";
+        //            print_clause(kb_rules[k]);
+        //            cout << endl;
+        //#endif
+        //            
+        //            /* Attempt to resolve each clause */
+        //            cnf resolvents = resolve(kb_rules[k], query);
+        //
+        //            /* Loop over the resolvents and check for an inconsistency
+        //             * If there is no inconsistency, set the clause variable
+        //             * equal to the resolvent and restart the main loop */
+        //            for (uint l = 0; l < resolvents.size(); l++) {
+        //
+        //                /* Inconsistency check. If two clauses resolve to an empty
+        //                 * clause the two clauses are inconsistent */
+        //                if (resolvents[l].empty()) {
+        //                    return TRUE;
+        //                }
+        //
+        //                /* If the resolvent is consistent, restart the main loop
+        //                 * with the query as the resolvent*/
+        //                query = resolvents[l];
+        //                goto MAIN_LOOP_EXIT;
+        //
+        //            }
+        //        }
 
 
 MAIN_LOOP_EXIT: // Goto statement used to break out of triple loop
@@ -113,6 +216,8 @@ uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
         cout << "RECURSION LIMIT REACHED!" << endl;
         return FALSE;
     }
+
+
 
     /* Check for tautology */
     cnf query_cnf;

@@ -220,62 +220,76 @@ int RuleParser::find_next_delim(string str, int * index) {
 void RuleParser::initialize_token_map() {
     pred_tok_map["Breezy"] = P_BREEZY;
     pred_tok_map["Pit"] = P_PIT;
-    pred_tok_map["Safe"] = P_SAFE;
+    //    pred_tok_map["Safe"] = P_SAFE;
     pred_tok_map["Wall"] = P_WALL;
-    pred_tok_map["Stench"] = P_STENCH;
-    pred_tok_map["Breeze"] = P_BREEZE;
+    //    pred_tok_map["Stench"] = P_STENCH;
+    //    pred_tok_map["Breeze"] = P_BREEZE;
     pred_tok_map["Stinky"] = P_STINKY;
     pred_tok_map["Wumpus"] = P_WUMPUS;
-    
+
     pred_tok_map["Explored"] = P_EXPLORED;
 
-    pred_tok_map["IsClear"]  = P_ISCLEAR;
+    pred_tok_map["IsClear"] = P_ISCLEAR;
     pred_tok_map["AdjExplored"] = P_ADJEXPLORED;
-    
+
     pred_tok_map["StepForward"] = P_STEPFORWARD;
-    pred_tok_map["TurnRight"] =P_TURNRIGHT;
+    pred_tok_map["TurnRight"] = P_TURNRIGHT;
     pred_tok_map["TurnLeft"] = P_TURNLEFT;
-    
-    pred_str_map[P_STEPFORWARD] = "StepForward";
-    pred_str_map[P_TURNRIGHT] = "TurnRight";
-    pred_str_map[P_TURNLEFT] = "TurnLeft";
+
+
     pred_tok_map["Agent"] = P_AGENT;
-    
-        
+
+    pred_tok_map["MaxX"] = P_MAXX;
+    pred_tok_map["MaxY"] = P_MAXY;
+    pred_tok_map["MinX"] = P_MINX;
+    pred_tok_map["MinY"] = P_MINY;
+
+
     func_tok_map["north"] = F_NORTH;
     func_tok_map["south"] = F_SOUTH;
     func_tok_map["east"] = F_EAST;
     func_tok_map["west"] = F_WEST;
-    
+
     func_tok_map["right"] = F_RIGHT;
     func_tok_map["left"] = F_LEFT;
     func_tok_map["forward"] = F_FORWARD;
     func_tok_map["backward"] = F_BACKWARD;
-    
-    
+
+
 
     pred_str_map[P_BREEZY] = "Breezy";
     pred_str_map[P_PIT] = "Pit";
-    pred_str_map[P_SAFE] = "Safe";
+    //    pred_str_map[P_SAFE] = "Safe";
     pred_str_map[P_WALL] = "Wall";
-    pred_str_map[P_STENCH] = "Stench";
-    pred_str_map[P_BREEZE] = "Breeze";
+    //    pred_str_map[P_STENCH] = "Stench";
+    //    pred_str_map[P_BREEZE] = "Breeze";
     pred_str_map[P_STINKY] = "Stinky";
     pred_str_map[P_WUMPUS] = "Wumpus";
-    
+
     pred_str_map[P_EXPLORED] = "Explored";
-  
-    pred_str_map[P_ISCLEAR]  = "IsClear";
+
+    pred_str_map[P_ISCLEAR] = "IsClear";
     pred_str_map[P_ADJEXPLORED] = "AdjExplored";
     pred_str_map[P_AGENT] = "Agent";
+
+    pred_str_map[P_STEPFORWARD] = "StepForward";
+    pred_str_map[P_TURNRIGHT] = "TurnRight";
+    pred_str_map[P_TURNLEFT] = "TurnLeft";
+    
+    pred_str_map[P_MAXX] = "MaxX";
+    pred_str_map[P_MAXY] = "MaxY";
+    pred_str_map[P_MINX] = "MinX";
+    pred_str_map[P_MINY] = "MinY";
 
     func_str_map[F_NORTH] = "north";
     func_str_map[F_SOUTH] = "south";
     func_str_map[F_EAST] = "east";
     func_str_map[F_WEST] = "west";
 
-    func_str_map[F_RIGHT] ="right";
+    func_str_map[F_RIGHT] = "right";
     func_str_map[F_LEFT] = "left";
-    func_str_map[F_FORWARD] ="forward";
+    func_str_map[F_FORWARD] = "forward";
     func_str_map[F_BACKWARD] = "backward";
+
+
 }

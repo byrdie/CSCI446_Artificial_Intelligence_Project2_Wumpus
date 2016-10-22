@@ -59,12 +59,16 @@ public:
     theta unify_var(func x, func y, theta sub_list);
     vector<vector<uint>> unify_arg(uint x, uint y, vector<vector<uint>> sub_list);
     theta sub_var(func x, func y, theta sub_list); // x is assumed to be a variable
+    theta sub_const(func x, func y, theta sub_list);    // x is assumed to be a constant
 
     /* Set of functions used for resolution */
     /* These functions are defined in resolve.cpp */
     uint linear_resolution(cnf kb, clause query, uint indent);
     bool heap_input_resolution(clause query);
+    uint input_resolution_bfs(clause query);
     cnf resolve(clause c_i, clause c_j);
+    bool check_tautology(cnf kb, clause c);
+    bool check_contradiction(cnf kb, clause c);
 
     /* Set of functions dealing with negated predicates */
     bool is_neg(pred p);
@@ -104,7 +108,10 @@ public:
     func build_fconst(uint arg);
     pred build_pred(uint predicate, pred_args args);
 
-    /*  */
+    /* Set of functions for evaluating logical functions */
+    clause eval_clause(clause c);
+    pred eval_pred(pred c);
+    pred_args eval_pred_args(pred_args pa);
     pred_arg eval_func(func f);
 
     /* This set of functions returns a list of the constant 2D points within */

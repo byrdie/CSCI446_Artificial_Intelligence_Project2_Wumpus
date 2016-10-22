@@ -19,12 +19,16 @@
 #define P_UNNEGATION    0x7FFFFFFF
 #define P_BREEZY        0x00000001      // breezy predicate
 #define P_PIT           0x00000002      // pit predicate
-#define P_SAFE          0x00000004      // safe predicate
+//#define P_SAFE          0x00000004      // safe predicate
 #define P_WALL          0x00000008
 #define P_STINKY        0x00000010
 #define P_WUMPUS        0x00000020
-#define P_STENCH        0x00000040
-#define P_BREEZE        0x00000080
+//#define P_STENCH        0x00000040
+//#define P_BREEZE        0x00000080
+#define P_MAXX          0x00000040
+#define P_MAXY          0x00000080
+#define P_MINX          0x00000004
+#define P_MINY          0x02000000
 
 #define P_EXPLORED      0x00000100
 #define P_ISCLEAR       0x00000200
@@ -45,8 +49,8 @@
 #define F_WEST          0x00100000
 #define F_RIGHT         0x00200000
 #define F_LEFT          0x00400000
-#define F_FORWARD       0x00400000
-#define F_BACKWARD      0x00600000
+#define F_FORWARD       0x00800000
+#define F_BACKWARD      0x01000000
 /* How far to move for each cardinal function  */
 #define DX              0x00010000
 #define DY              0x00000001
