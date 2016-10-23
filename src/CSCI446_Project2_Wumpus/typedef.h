@@ -14,7 +14,6 @@
 #ifndef TYPEDEF_H
 #define TYPEDEF_H
 
-#define cout sout
 
 /* Define an integer representation of predicates*/
 #define P_NEGATION      0x80000000      // predicate inversion
