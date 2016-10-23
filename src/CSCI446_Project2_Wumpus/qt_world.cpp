@@ -41,6 +41,20 @@ Qt_world::Qt_world(int num_tiles, Human_agent * h_agent) {
     init_map();
 }
 
+Qt_world::Qt_world(int num_tiles, Reactive_agent * h_agent) {
+    // Initialize variables
+    N = num_tiles;
+    win_sz = 1000;
+    scale = win_sz / (num_tiles + 2);
+
+    // Initialize Qt variables
+    scene = new QGraphicsScene(0, 0, win_sz, win_sz);
+    view = new World_view(scene, h_agent);
+    view->resize(win_sz,win_sz);
+    view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
+    init_map();
+}
+
 void Qt_world::init_map() {
     base_bg_sprite = new QPixmap("sprites/cobble.png");
     base_p_cobble_sprite = new QPixmap("sprites/p_cobble.png");
@@ -135,26 +149,31 @@ World_view::World_view(QGraphicsScene * scene, Human_agent * h_agent) : QGraphic
     agent = h_agent;
 }
 
+World_view::World_view(QGraphicsScene * scene, Reactive_agent * h_agent) : QGraphicsView(scene) {
+    ragent = h_agent;
+}
+
 World_view::World_view(QGraphicsScene * scene) : QGraphicsView(scene) {
     agent = 0;
+    ragent = 0;
 }
 
 void World_view::keyPressEvent(QKeyEvent * e) {
 
 
-    if (agent != 0) {
+    if (ragent != 0) {
         switch (e->key()) {
             case Qt::Key_A:
-                agent->make_move(WEST);
+                ragent->make_move(WEST);
                 break;
             case Qt::Key_S:
-                agent->make_move(NORTH);
+                ragent->make_move(NORTH);
                 break;
             case Qt::Key_W:
-                agent->make_move(SOUTH);
+                ragent->make_move(SOUTH);
                 break;
             case Qt::Key_D:
-                agent->make_move(EAST);
+                ragent->make_move(EAST);
                 break;
             default:
                 std::cout << "invalid input" << std::endl;

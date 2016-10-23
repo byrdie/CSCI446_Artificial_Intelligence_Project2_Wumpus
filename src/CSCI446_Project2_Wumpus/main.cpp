@@ -12,13 +12,13 @@ int main(int argc, char *argv[]) {
 
             QApplication app(argc, argv);
     
-            init_rand();
+            init_rand(1477256127);
         
             int N = 7;
             
             World * world = new World(N, 3, 3, 0);
             Engine * engine = new Engine(world);
-            Human_agent * player = new Human_agent(engine, N);
+            Reactive_agent * player = new Reactive_agent(engine, N);
 
 
     //    test_unification();

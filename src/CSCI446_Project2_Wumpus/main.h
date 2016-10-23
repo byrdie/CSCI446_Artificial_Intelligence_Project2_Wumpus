@@ -19,6 +19,7 @@
 #include "rule_parser.h"
 #include "human_agent.h"
 #include "tests.h"
+#include "reactive_agent.h"
 
 using namespace std;
 

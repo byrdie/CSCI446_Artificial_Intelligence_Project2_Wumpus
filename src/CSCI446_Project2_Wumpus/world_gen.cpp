@@ -24,6 +24,24 @@ World::World(int side_length, Human_agent * agent) {
     qt_world->view->show();
 }
 
+World::World(int side_length, Reactive_agent * agent) {
+
+    N = side_length;
+    qt_world = new Qt_world(N, agent);
+
+    // Fill empty board with fog of war
+    for (int i = 0; i < N + 2; i++) {
+        vector<int> world_vec_row;
+        for (int j = 0; j < N + 2; j++) {
+            world_vec_row.push_back(FOG);
+            qt_world->set_tile(i, j, FOG);
+        }
+        world_vec.push_back(world_vec_row);
+    }
+
+    qt_world->view->show();
+}
+
 // Create a master world with elements
 
 World::World(int side_length, int n_wumpi, int n_pit, int n_barrier) {
