@@ -42,21 +42,21 @@ uint Knowledge::input_resolution_bfs(clause query) {
 
             /* Select the next rule to be resolved */
             clause input = this_row[j];
-//            clause input = eval_clause(this_row[j]);
+            //            clause input = eval_clause(this_row[j]);
 
 
 
             /* Attempt to resolve the input with every clause in the KB */
             for (uint k = 0; k < kb.size(); k++) {
 
-//#if debug_mode
-//                cout << setw(i * 5) << ' ';
-//                cout << "Resolve ";
-//                print_clause(input);
-//                cout << " and ";
-//                print_clause(kb[k]);
-//                cout << endl;
-//#endif
+                //#if debug_mode
+                //                cout << setw(i * 5) << ' ';
+                //                cout << "Resolve ";
+                //                print_clause(input);
+                //                cout << " and ";
+                //                print_clause(kb[k]);
+                //                cout << endl;
+                //#endif
 
                 /* Possibly delete rules as they're used here */
 
@@ -83,7 +83,7 @@ uint Knowledge::input_resolution_bfs(clause query) {
                     query_cnf.push_back(resolvents[l]);
                     if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the KB
 #if debug_mode
-                        cout << setw((i + 1) * 5) << ' ';
+                        cout << setw(i * 5) << ' ';
                         cout << "The rule ";
                         print_clause(resolvents[l]);
                         cout << " is a tautology.";
@@ -96,7 +96,7 @@ uint Knowledge::input_resolution_bfs(clause query) {
                      * clause the two clauses are inconsistent */
                     if (resolvents[l].empty()) {
 #if debug_mode
-                        cout << setw((i + 1) * 5) << ' ';
+                        cout << setw(i * 5) << ' ';
                         cout << "The rule ";
                         print_clause(input);
                         cout << " is a contradiction.";
@@ -106,7 +106,7 @@ uint Knowledge::input_resolution_bfs(clause query) {
                     }
 
 #if debug_mode
-                    cout << setw((i + 1) * 5) << ' ';
+                    cout << setw(i * 5) << ' ';
                     cout << "Result ";
                     print_clause(resolvents[l]);
                     cout << endl;

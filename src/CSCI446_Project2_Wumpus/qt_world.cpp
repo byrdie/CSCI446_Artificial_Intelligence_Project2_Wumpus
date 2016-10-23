@@ -100,8 +100,8 @@ void Qt_world::init_map() {
     height_map[POS_EMPTY] = 3;
     height_map[AGENT] = 6;
     height_map[POS_WUM] = 3;
-    height_map[IS_CLEAR] = 5;
-    height_map[NOT_CLEAR] = 2;
+    height_map[IS_CLEAR] = 10;
+    height_map[NOT_CLEAR] = 10;
 
     // Construct map between indices and screen position
     for (int i = 0; i < N + 2; i++) {
