@@ -76,7 +76,7 @@ void Human_agent::make_move(int direction) {
         sleep(1);
         knowledge->qt_world->view->close();
     } else {
-        
+
     }
 
     if ((next_tile & PIT) > 0) {
@@ -93,7 +93,12 @@ void Human_agent::make_move(int direction) {
     }
 
 
-    kb->add_percept_to_heap(P_AGENT, kb->position_to_bits(position), x, y);
+    //    kb->add_percept_to_heap(P_AGENT, kb->position_to_bits(position), x, y);
+    kb->add_percept_to_heap(P_AGENT, kb->build_fcardinal(NORTH, x - 1, y), x, y);
+    kb->add_percept_to_heap(P_AGENT, kb->build_fcardinal(SOUTH, x + 1, y), x, y);
+    kb->add_percept_to_heap(P_AGENT, kb->build_fcardinal(EAST, x, y - 1), x, y);
+    kb->add_percept_to_heap(P_AGENT, kb->build_fcardinal(WEST, x, y + 1), x, y);
+
     //add perceps to kb
 
     //        if ((next_tile & BREEZE) > 0) {
@@ -125,7 +130,7 @@ void Human_agent::make_move(int direction) {
     //    search_tiles.push_back(new Point(x + 1, y - 1));
     //    search_tiles.push_back(new Point(x - 1, y + 1));
     //    search_tiles.push_back(new Point(x - 1, y - 1));
-    //    kb->heap_to_stack(search_tiles);
+    kb->heap_to_stack(search_tiles);
 
 
     //    if ((next_tile & STENCH) > 0) {
@@ -193,22 +198,26 @@ void Human_agent::make_move(int direction) {
     //        knowledge->qt_world->set_tile(x - 1, y, WALL);
     //    }
 
-    if (infer_clear(F_NORTH)) {
+    if (infer_clear(F_NORTH) == 1) {
+        //        kb->add_percept_to_heap(P_ISCLEAR, kb->position_to_bits(neighbors[NORTH]), x, y);
         knowledge->qt_world->set_tile(x, y + 1, IS_CLEAR);
     } else {
         knowledge->qt_world->set_tile(x, y + 1, NOT_CLEAR);
     }
-    if (infer_clear(F_SOUTH)) {
+    if (infer_clear(F_SOUTH) == 1) {
+        //        kb->add_percept_to_heap(P_ISCLEAR, kb->position_to_bits(neighbors[SOUTH]), x, y);
         knowledge->qt_world->set_tile(x, y - 1, IS_CLEAR);
     } else {
         knowledge->qt_world->set_tile(x, y - 1, NOT_CLEAR);
     }
-    if (infer_clear(F_EAST)) {
+    if (infer_clear(F_EAST) == 1) {
+        //        kb->add_percept_to_heap(P_ISCLEAR, kb->position_to_bits(neighbors[EAST]), x, y);
         knowledge->qt_world->set_tile(x + 1, y, IS_CLEAR);
     } else {
         knowledge->qt_world->set_tile(x + 1, y, NOT_CLEAR);
     }
-    if (infer_clear(F_WEST)) {
+    if (infer_clear(F_WEST) == 1) {
+        //        kb->add_percept_to_heap(P_ISCLEAR, kb->position_to_bits(neighbors[WEST]), x, y);
         knowledge->qt_world->set_tile(x - 1, y, IS_CLEAR);
     } else {
         knowledge->qt_world->set_tile(x - 1, y, NOT_CLEAR);
@@ -299,7 +308,9 @@ uint Human_agent::infer_barrier(uint direction) {
     clause query;
     query.push_back(p_query);
 
-    //#if debug_mode
+    //#if debug_mode        cout << "The current knowledge base is:" << endl;
+    kb->print_kb(kb->kb_time_stack);
+    cout << endl;
     //    cout << "The current knowledge base is:" << endl;
     //    kb->print_kb(kb->kb_time_stack);
     //    cout << endl;
@@ -334,9 +345,9 @@ uint Human_agent::infer_clear(uint direction) {
     query.push_back(p_query);
 
 #if debug_mode
-    //    cout << "The current knowledge base is:" << endl;
-    //    kb->print_kb(kb->kb_time_stack);
-    //    cout << endl;
+    //        cout << "The current knowledge base is:" << endl;
+    //        kb->print_kb(kb->kb_time_stack);
+    //        cout << endl;
     cout << "__________________________________________________________________" << endl;
     cout << "We are trying to prove:" << endl;
     kb->print_clause(query);
@@ -378,6 +389,9 @@ uint Human_agent::find_left(uint dir) {
 }
 
 uint Human_agent::find_forward(uint dir) {
+    cout << "The current knowledge base is:" << endl;
+    kb->print_kb(kb->kb_time_stack);
+    cout << endl;
     switch (dir) {
         case EAST:
             return F_EAST;

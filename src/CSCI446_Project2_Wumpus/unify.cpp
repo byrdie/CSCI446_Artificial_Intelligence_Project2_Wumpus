@@ -52,16 +52,15 @@ theta Knowledge::unify_var(func x, func y, theta sub_list) {
         return sub_list;
 
     } 
-//    else if (xname == F_CONST and yname != F_CONST) {
-//
-//        sub_list = sub_const(x, y, sub_list);
-//
-//    } 
-//    else if (yname == F_CONST and xname != F_CONST) {
-//
-//        sub_list = sub_const(y, x, sub_list);
-//
-//    } 
+    else if (xname == F_CONST and yname != F_CONST) {
+
+        sub_list = sub_const(x, y, sub_list);
+
+    } else if (yname == F_CONST and xname != F_CONST) {
+
+        sub_list = sub_const(y, x, sub_list);
+
+    } 
     else if (xname == F_VAR) { // x is a variable; y is variable or function
 
         sub_list = sub_var(x, y, sub_list);
@@ -243,19 +242,25 @@ theta Knowledge::sub_var(func x, func y, theta sub_list) {
 theta Knowledge::sub_const(func x, func y, theta sub_list) {
 
     vector<func> back_sub;
-    int inverse = func_inv[get<0>(y)];
-    if (inverse != 0) { // inverse exists
-        get<0>(x) = inverse;
-        get<0>(y) = F_VAR;
-        back_sub.push_back(y);
-        back_sub.push_back(x);
-        sub_list.push_back(back_sub);
-    } else {
-        cout << "Attempting to invert non-invertible function" << endl;
+    if ((get<1>(y)[0] & A_CONST) == 0) {
+        int inverse = func_inv[get<0>(y)];
+        if (inverse != 0) { // inverse exists
+            get<0>(x) = inverse;
+            get<0>(y) = F_VAR;
+            back_sub.push_back(y);
+            back_sub.push_back(x);
+            sub_list.push_back(back_sub);
+        } else {
+            cout << "Attempting to invert non-invertible function" << endl;
 
+            theta empty_list;
+            return empty_list;
+        }
+    } else {
         theta empty_list;
         return empty_list;
     }
+
 
     return sub_list;
 

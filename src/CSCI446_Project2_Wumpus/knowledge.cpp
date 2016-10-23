@@ -17,11 +17,19 @@ Knowledge::Knowledge(uint sz, vector<string> rule_files) {
     for (uint i = 0; i < (*kb_world_heap).size(); i++) {
         for (uint j = 0; j < (*kb_world_heap)[0].size(); j++) {
             Point pt(i, j);
-            add_percept_to_heap(P_NEGATION | P_AGENT, position_to_bits(&pt), i, j);
-            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(NORTH, i, j), i, j);
-            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(SOUTH, i, j), i, j);
-            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(EAST, i, j), i, j);
-            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(WEST, i, j), i, j);
+            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(NORTH, i - 1, j), i, j);
+            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(SOUTH, i + 1, j), i, j);
+            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(EAST, i, j - 1), i, j);
+            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(WEST, i, j + 1), i, j);
+
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(NORTH, i - 1, j), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(SOUTH, i + 1, j), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(EAST, i, j - 1), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(WEST, i, j + 1), i, j);
+
+            //            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(SOUTH, i, j), i, j);
+            //            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(EAST, i, j), i, j);
+            //            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(WEST, i, j), i, j);
         }
     }
 
@@ -118,8 +126,6 @@ void Knowledge::heap_to_stack(vector<Point *> pts) {
             for (uint k = 0; k < (*kb_world_heap)[i][j].size(); k++) {
                 kb_time_stack.push_back((*kb_world_heap)[i][j][k]);
             }
-
-
         }
     }
 
@@ -548,19 +554,19 @@ func Knowledge::build_func(uint function, func_args args) {
 func Knowledge::build_fcardinal(uint dir, uint x, uint y) {
 
     func_name fname;
-    
+
     switch (dir) {
         case EAST:
-            fname =  F_EAST;
+            fname = F_EAST;
             break;
         case NORTH:
-            fname =  F_NORTH;
+            fname = F_NORTH;
             break;
         case WEST:
-            fname =  F_WEST;
+            fname = F_WEST;
             break;
         case SOUTH:
-            fname =  F_SOUTH;
+            fname = F_SOUTH;
             break;
     }
 
@@ -571,7 +577,6 @@ func Knowledge::build_fcardinal(uint dir, uint x, uint y) {
     return build_func(fname, fargs);
 
 }
-
 
 func Knowledge::build_fvar(uint arg) {
     func return_func;

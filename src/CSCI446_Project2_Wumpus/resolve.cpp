@@ -42,7 +42,7 @@ uint Knowledge::input_resolution_bfs(clause query) {
 
             /* Select the next rule to be resolved */
             clause input = this_row[j];
-            //            clause input = eval_clause(this_row[j]);
+//                        clause input = eval_clause(this_row[j]);
 
 
 
