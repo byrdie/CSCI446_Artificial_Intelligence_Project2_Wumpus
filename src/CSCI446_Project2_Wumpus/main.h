@@ -17,7 +17,7 @@
 #include "world_gen.h"
 #include "qt_world.h"
 #include "rule_parser.h"
-#include "human_agent.h"
+#include "logic_agent.h"
 #include "tests.h"
 
 using namespace std;

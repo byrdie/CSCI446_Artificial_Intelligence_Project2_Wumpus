@@ -27,7 +27,7 @@ Qt_world::Qt_world(int num_tiles) {
 
 }
 
-Qt_world::Qt_world(int num_tiles, Human_agent * h_agent) {
+Qt_world::Qt_world(int num_tiles, Logic_agent * h_agent) {
     // Initialize variables
     N = num_tiles;
     win_sz = 1000;
@@ -56,6 +56,7 @@ void Qt_world::init_map() {
     base_fog_sprite = new QPixmap("sprites/fog.png");
     base_clear_sprite = new QPixmap("sprites/clear.png");
     base_not_clear_sprite = new QPixmap("sprites/not_clear.png");
+    base_move_sprite = new QPixmap("sprites/move.png");
 
     // Initialize map between bits and sprites
     sprite_map[FOG] = base_fog_sprite;
@@ -72,6 +73,7 @@ void Qt_world::init_map() {
     sprite_map[AGENT] = base_hero_sprite;
     sprite_map[IS_CLEAR] = base_clear_sprite;
     sprite_map[NOT_CLEAR] = base_not_clear_sprite;
+    sprite_map[MOVE] = base_move_sprite;
     
     // Fill height map to know what elements to draw over
     height_map[FOG] = 1;
@@ -88,6 +90,7 @@ void Qt_world::init_map() {
     height_map[POS_WUM] = 3;
     height_map[IS_CLEAR] = 10;
     height_map[NOT_CLEAR] = 10;
+    height_map[MOVE] = 5;
 
     // Construct map between indices and screen position
     for (int i = 0; i < N + 2; i++) {
@@ -131,7 +134,7 @@ void Qt_world::move_tile(QGraphicsPixmapItem * tile, int x, int y) {
  * is to overwrite the keyPressEvents to provide input for human players
  * @param scene
  */
-World_view::World_view(QGraphicsScene * scene, Human_agent * h_agent) : QGraphicsView(scene) {
+World_view::World_view(QGraphicsScene * scene, Logic_agent * h_agent) : QGraphicsView(scene) {
     agent = h_agent;
 }
 
@@ -144,18 +147,20 @@ void World_view::keyPressEvent(QKeyEvent * e) {
 
     if (agent != 0) {
         switch (e->key()) {
-            case Qt::Key_A:
-                agent->make_move(WEST);
-                break;
-            case Qt::Key_S:
-                agent->make_move(NORTH);
-                break;
-            case Qt::Key_W:
-                agent->make_move(SOUTH);
-                break;
-            case Qt::Key_D:
-                agent->make_move(EAST);
-                break;
+//            case Qt::Key_A:
+//                agent->make_move(WEST);
+//                break;
+//            case Qt::Key_S:
+//                agent->make_move(NORTH);
+//                break;
+//            case Qt::Key_W:
+//                agent->make_move(SOUTH);
+//                break;
+//            case Qt::Key_D:
+//                agent->make_move(EAST);
+//                break;
+            case Qt::Key_Space:
+                agent->make_move();
             default:
                 std::cout << "invalid input" << std::endl;
         }

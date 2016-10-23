@@ -17,15 +17,15 @@ Knowledge::Knowledge(uint sz, vector<string> rule_files) {
     for (uint i = 0; i < (*kb_world_heap).size(); i++) {
         for (uint j = 0; j < (*kb_world_heap)[0].size(); j++) {
             Point pt(i, j);
-            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(NORTH, i - 1, j), i, j);
-            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(SOUTH, i + 1, j), i, j);
-            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(EAST, i, j - 1), i, j);
-            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(WEST, i, j + 1), i, j);
+//            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(EAST, i - 1, j), i, j);
+//            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(WEST, i + 1, j), i, j);
+//            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(NORTH, i, j - 1), i, j);
+//            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinalSOUTH, i, j + 1), i, j);
 
-            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(NORTH, i - 1, j), i, j);
-            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(SOUTH, i + 1, j), i, j);
-            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(EAST, i, j - 1), i, j);
-            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(WEST, i, j + 1), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(EAST, i - 1, j), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(WEST, i + 1, j), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(NORTH, i, j - 1), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(SOUTH, i, j + 1), i, j);
 
             //            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(SOUTH, i, j), i, j);
             //            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(EAST, i, j), i, j);
@@ -55,7 +55,7 @@ void Knowledge::clear_stack() {
 }
 
 void Knowledge::clear_heap(uint x, uint y) {
-    (*kb_world_heap)[x][y].clear();
+    ((*kb_world_heap)[x][y]).clear();
 }
 
 void Knowledge::add_to_rules(pred_name pname, func_arg parg) {

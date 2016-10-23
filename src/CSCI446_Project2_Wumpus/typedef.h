@@ -14,6 +14,8 @@
 #ifndef TYPEDEF_H
 #define TYPEDEF_H
 
+#define cout sout
+
 /* Define an integer representation of predicates*/
 #define P_NEGATION      0x80000000      // predicate inversion
 #define P_UNNEGATION    0x7FFFFFFF
@@ -79,6 +81,7 @@
 #define POS_WUM     0x00000400
 #define IS_CLEAR    0x00000800
 #define NOT_CLEAR   0x00001000
+#define MOVE        0x00002000
 
 // Definite move types
 #define EAST    0

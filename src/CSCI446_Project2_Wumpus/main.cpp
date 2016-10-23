@@ -14,11 +14,11 @@ int main(int argc, char *argv[]) {
     
             init_rand();
         
-            int N = 7;
+            int N = 10;
             
-            World * world = new World(N, 3, 3, 0);
+            World * world = new World(N, 2, 2, 2);
             Engine * engine = new Engine(world);
-            Human_agent * player = new Human_agent(engine, N);
+            Logic_agent * player = new Logic_agent(engine, N);
 
 
     //    test_unification();
