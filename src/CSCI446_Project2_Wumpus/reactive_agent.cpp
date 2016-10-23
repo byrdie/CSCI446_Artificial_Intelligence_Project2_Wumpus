@@ -18,9 +18,10 @@ Reactive_agent::Reactive_agent(Engine * this_engine, int sz) {
     position = new Point(START_X, START_Y - 1);
     engine = this_engine;
     time = 0;
-
+    take_risk = 0;
     orientation = NORTH;
     my_tile = knowledge->qt_world->set_tile(position->x, position->y, AGENT);
+    
     // ask the engine to be placed at the start position
     make_move(NORTH);
 
@@ -68,14 +69,17 @@ void Reactive_agent::make_move(int direction) {
     qApp->processEvents();
 
     if ((next_tile & WUMPUS) > 0) {
+        cout << "Score: " <<  engine->score << endl;
         cout << "Killed by a Wumpus" << endl;
         sleep(1);
         knowledge->qt_world->view->close();
     } else if ((next_tile & PIT) > 0) {
+        cout << "Score: " <<  engine->score << endl;
         cout << "Fell into a pit" << endl;
         sleep(1);
         knowledge->qt_world->view->close();
     } else if ((next_tile & GOLD) > 0) {
+        cout << "Score: " <<  engine->score << endl;
         engine->score = engine->score + 1000;
         cout << "Retrived the gold" << endl;
         sleep(1);
@@ -110,44 +114,69 @@ void Reactive_agent::make_move(int direction) {
 }
 
 void Reactive_agent::s_or_b_pick() {
+    //case for handling if spot is stinky or breezy
+    
+    if(take_risk > 300){
+        //If an undiscovered spot has not been discovered in 300 moves take a risk
+        vector<uint> clear_adj;
+        for (uint i = 0; i < neighbors.size(); i++) {      
+        if (!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR) )) {
+            clear_adj.push_back(i);
+        }
+    }
+    }else{
+        
+    
     vector<uint> clear_adj;
-    for (uint i = 0; i < neighbors.size(); i++) {
-        if (knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR) {
+    //find all adjacent squares that are marked clear and not marked not_clear
+    for (uint i = 0; i < neighbors.size(); i++) {      
+        if (knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR) )) {
             clear_adj.push_back(i);
         }
     }
 
+    //pick a random clear square
     if (clear_adj.size() > 0) {
         int r = rand() % clear_adj.size();
-        make_move(clear_adj[r]);
+        next_move = clear_adj[r];
     } else {
+        //pick a random square
         int r = rand() % neighbors.size();
-        make_move(r);
+        next_move = r;
+    }
     }
 }
 
 void Reactive_agent::pick() {
+    //handles case where current square does not have a breeze or a stench
     vector<uint> n_clear_adj;
+    
     for (uint i = 0; i < neighbors.size(); i++) {
-        if (!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)) {
+        //if a square is not marked clear and not marked not clear, add to possible moves
+        if (!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR) )) {
             n_clear_adj.push_back(i);
         }
     }
-
+    //if there are unexplored adject squares randomly choose one
     if (n_clear_adj.size() > 0) {
         int r = rand() % n_clear_adj.size();
-        make_move(n_clear_adj[r]);
+        next_move = n_clear_adj[r];
+        take_risk = 0;
+
     } else {
+        take_risk++;
+        //pick a square that IS_CLEAR and not NOT_CLEAR
         vector<uint> nn_clear_adj;
         for (uint i = 0; i < neighbors.size(); i++) {
-            if ((knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)&&!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR) ) {
+            
+            if ((knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR) )) {
                 nn_clear_adj.push_back(i);
+
             }
         }
 
-
         int r = rand() % nn_clear_adj.size();
-        make_move(nn_clear_adj[r]);
+        next_move = nn_clear_adj[r];
     }
 }
 

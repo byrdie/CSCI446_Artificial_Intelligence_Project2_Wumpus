@@ -170,12 +170,13 @@ void World_view::keyPressEvent(QKeyEvent * e) {
                 agent->make_move(NORTH);
                 break;
             case Qt::Key_W:
-                agent->make_move(SOUTH);
+               agent->make_move(SOUTH);
                 break;
             case Qt::Key_D:
                 agent->make_move(EAST);
                 break;
             default:
+                
                 std::cout << "invalid input" << std::endl;
         }
     }

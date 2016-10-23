@@ -31,6 +31,8 @@ public:
     vector<Point *> neighbors;
     uint time;
     uint orientation;
+    uint next_move;
+    uint take_risk;
     Reactive_agent(Engine * this_engine, int N);
     
     void make_move(int direction);
