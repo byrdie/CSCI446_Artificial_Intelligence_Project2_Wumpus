@@ -254,6 +254,8 @@ void RuleParser::initialize_token_map() {
     func_tok_map["left"] = F_LEFT;
     func_tok_map["forward"] = F_FORWARD;
     func_tok_map["backward"] = F_BACKWARD;
+    func_tok_map["getX"] = F_GETX;
+    func_tok_map["getY"] = F_GETY;
 
 
 
@@ -290,6 +292,9 @@ void RuleParser::initialize_token_map() {
     func_str_map[F_LEFT] = "left";
     func_str_map[F_FORWARD] = "forward";
     func_str_map[F_BACKWARD] = "backward";
+    
+    func_str_map[F_GETX] = "getX";
+    func_str_map[F_GETY] = "getY";
 
 
 }

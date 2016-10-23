@@ -14,6 +14,11 @@ Knowledge::Knowledge(uint sz, vector<string> rule_files) {
     }
 
     kb_world_heap = new cnf2D(N + 2, vector<cnf>(N + 2));
+//    for (uint i = 0; i < (*kb_world_heap).size(); i++) {
+//        for (uint j = 0; j < (*kb_world_heap)[0].size(); j++) {
+//            add_percept_to_heap(P_NEGATION | P_WALL, position_to_bits(new Point(i, j)), i, j);
+//        }
+//    }
 
 
 
@@ -27,7 +32,8 @@ Knowledge::Knowledge(uint sz, vector<string> rule_files) {
     func_inv[F_RIGHT] = F_LEFT;
     func_inv[F_LEFT] = F_RIGHT;
     func_inv[F_BACKWARD] = F_FORWARD;
-
+    func_inv[F_GETX] = F_GETX;
+    func_inv[F_GETY] = F_GETY;
 
 }
 
@@ -37,6 +43,21 @@ void Knowledge::clear_stack() {
 
 void Knowledge::clear_heap(uint x, uint y) {
     (*kb_world_heap)[x][y].clear();
+}
+
+void Knowledge::add_to_rules(pred_name pname, func_arg parg) {
+
+    func_args fargs;
+    fargs.push_back(parg);
+    func fcon = build_func(F_CONST, fargs);
+    pred_args pargs;
+    pargs.push_back(fcon);
+    pred pcon = build_pred(pname, pargs);
+    clause rule;
+    rule.push_back(pcon);
+
+    kb_rules.push_back(rule);
+
 }
 
 void Knowledge::add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint y) {
@@ -67,20 +88,30 @@ void Knowledge::heap_to_stack(vector<Point *> pts) {
     /* Make sure the stack is clear */
     clear_stack();
 
-    /* add information from heap */
-    for (uint i = 0; i < pts.size(); i++) {
+    for (uint i = 0; i < (*kb_world_heap).size(); i++) {
+        for (uint j = 0; j < (*kb_world_heap)[i].size(); j++) {
+            for(uint k = 0; k < (*kb_world_heap)[i][j].size(); k++){
+                kb_time_stack.push_back((*kb_world_heap)[i][j][k]);
+            }
 
-        uint x = pts[i]->x;
-        uint y = pts[i]->y;
-
-        cnf kb_pt = (*kb_world_heap)[x][y];
-        for (uint j = 0; j < kb_pt.size(); j++) {
-
-            kb_time_stack.push_back(kb_pt[j]);
 
         }
-
     }
+
+//    /* add information from heap */
+//    for (uint i = 0; i < pts.size(); i++) {
+//
+//        uint x = pts[i]->x;
+//        uint y = pts[i]->y;
+//
+//        cnf kb_pt = (*kb_world_heap)[x][y];
+//        for (uint j = 0; j < kb_pt.size(); j++) {
+//
+//            kb_time_stack.push_back(kb_pt[j]);
+//
+//        }
+//
+//    }
 
     /* add rules */
     for (uint i = 0; i < kb_rules.size(); i++) {
@@ -354,6 +385,8 @@ vector<aconst> Knowledge::get_points_pred_args(pred_args pa) {
 
     }
 
+    return constants;
+
 }
 
 vector<aconst> Knowledge::get_points_func(func f) {
@@ -464,7 +497,7 @@ void Knowledge::print_func_args(func_args fa) {
             }
 
         } else {
-            cout << (char) (('a' + fa[l]) % 26);
+            cout << (char) ('a' + (fa[l] % 26));
         }
 
         if (l != fa.size() - 1) {
@@ -582,6 +615,10 @@ func Knowledge::eval_func(func f) {
             fargs[0] = fargs[0] + DX;
         } else if (fname == F_WEST) {
             fargs[0] = fargs[0] - DX;
+        } else if (fname == F_GETX) {
+            fargs[0] = ((fargs[0] & ONLYX) >> 16) | A_CONST;
+        } else if (fname == F_GETY) {
+            fargs[0] = (fargs[0] & ONLYY) | A_CONST;
         }
     } else if (fargs.size() == 2) {
 

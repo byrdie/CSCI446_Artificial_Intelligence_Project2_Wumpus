@@ -48,6 +48,7 @@ public:
     
     void clear_heap(uint x, uint y);
     void clear_stack();
+    void add_to_rules(pred_name pname, func_arg parg);
     void add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint y);
     void heap_to_stack(vector<Point *> pts);
     void add_percept_to_stack(pred_name pname, func_arg parg);

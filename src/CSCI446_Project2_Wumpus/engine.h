@@ -28,7 +28,7 @@ public:
     int orientation;
     uint score;
     int move(int direction, Point * cur_pos);
-    void orient_to_direction(int direction);
+    int orient_to_direction(int direction, int orientation);
 private:
     World * world;
     

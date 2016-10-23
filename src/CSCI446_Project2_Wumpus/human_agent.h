@@ -30,6 +30,7 @@ public:
     Engine * engine;
     QGraphicsPixmapItem * my_tile;
     vector<Point *> search_tiles;
+    vector<Point *> neighbors;
     
     uint time;
     
@@ -38,16 +39,17 @@ public:
     
     void make_move(int direction);
 //    vector<bool> infer(uint direction);
-    Point find_right(Point * pos, uint dir);
-    Point find_left(Point * pos, uint dir);
-    Point find_forward(Point * pos, uint dir);
-    Point find_backward(Point * pos, uint dir);
+    uint find_right(uint dir);
+    uint find_left(uint dir);
+    uint find_forward(uint dir);
+    uint find_backward(uint dir);
     clause create_clause(uint predicate, vector<uint> function,  vector<uint> constant);
     void execute_rhr();
     
     uint infer_pit(uint direction);
     uint infer_wumpus(uint direction);
     uint infer_barrier(uint direction);
+    uint infer_clear(uint direction);
     
 //    bool infer_move(uint direction);
     

@@ -51,15 +51,18 @@ theta Knowledge::unify_var(func x, func y, theta sub_list) {
 
         return sub_list;
 
-    } else if (xname == F_CONST and yname != F_CONST) {
-
-        sub_list = sub_const(x, y, sub_list);
-
-    } else if (yname == F_CONST and xname != F_CONST) {
-
-        sub_list = sub_const(y, x, sub_list);
-
-    } else if (xname == F_VAR) { // x is a variable; y is variable or function
+    } 
+//    else if (xname == F_CONST and yname != F_CONST) {
+//
+//        sub_list = sub_const(x, y, sub_list);
+//
+//    } 
+//    else if (yname == F_CONST and xname != F_CONST) {
+//
+//        sub_list = sub_const(y, x, sub_list);
+//
+//    } 
+    else if (xname == F_VAR) { // x is a variable; y is variable or function
 
         sub_list = sub_var(x, y, sub_list);
 

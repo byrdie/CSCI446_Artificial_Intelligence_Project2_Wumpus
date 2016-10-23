@@ -14,7 +14,7 @@ Human_agent::Human_agent(Engine * this_engine, int sz) {
     engine = this_engine;
     time = 0;
 
-    orientation = SOUTH;
+    orientation = NORTH;
     my_tile = knowledge->qt_world->set_tile(position->x, position->y, AGENT);
     // ask the engine to be placed at the start position
     make_move(NORTH);
@@ -22,19 +22,26 @@ Human_agent::Human_agent(Engine * this_engine, int sz) {
     kb->print_kb(kb->kb_rules);
 
 
+
 }
 
 void Human_agent::make_move(int direction) {
 
 
+
     int next_tile = engine->move(direction, position);
     int x;
     int y;
+    neighbors = knowledge->find_neighbors(position);
     if ((next_tile & WALL) > 0) {
 
-        vector<Point *> neighbors = knowledge->find_neighbors(position);
+
         x = neighbors[direction]->x;
         y = neighbors[direction]->y;
+
+        kb->clear_heap(x, y);
+        kb->clear_stack();
+
         //add wall clause to kb
         kb->add_percept_to_heap(P_WALL, kb->position_to_bits(neighbors[direction]), x, y);
 
@@ -42,6 +49,13 @@ void Human_agent::make_move(int direction) {
 
         x = position->x;
         y = position->y;
+
+        kb->clear_heap(x, y);
+        kb->clear_stack();
+
+        kb->add_percept_to_heap(P_NEGATION | P_WALL, kb->position_to_bits(position), x, y);
+
+
 
     }
 
@@ -72,10 +86,16 @@ void Human_agent::make_move(int direction) {
         knowledge->qt_world->view->close();
     }
 
-    kb->clear_heap(x, y);
-    kb->clear_stack();
+
     kb->add_percept_to_heap(P_AGENT, kb->position_to_bits(position), x, y);
     //add perceps to kb
+
+    //        if ((next_tile & BREEZE) > 0) {
+    //        kb->add_percept_to_heap(P_BREEZY, kb->position_to_bits(position), x, y);
+    //    } else {
+    //        kb->add_percept_to_heap(P_NEGATION | P_BREEZY, kb->position_to_bits(position), x, y);
+    //    }
+
     if ((next_tile & BREEZE) > 0) {
         kb->add_percept_to_heap(P_BREEZY, kb->position_to_bits(position), x, y);
     } else {
@@ -94,7 +114,11 @@ void Human_agent::make_move(int direction) {
     search_tiles.push_back(new Point(x + 1, y));
     search_tiles.push_back(new Point(x - 1, y));
     search_tiles.push_back(new Point(x, y + 1));
-    search_tiles.push_back(new Point(x + 1, y));
+    search_tiles.push_back(new Point(x, y - 1));
+    search_tiles.push_back(new Point(x + 1, y + 1));
+    search_tiles.push_back(new Point(x + 1, y - 1));
+    search_tiles.push_back(new Point(x - 1, y + 1));
+    search_tiles.push_back(new Point(x - 1, y - 1));
     kb->heap_to_stack(search_tiles);
 
 
@@ -107,69 +131,82 @@ void Human_agent::make_move(int direction) {
 
     //    infer_move(orientation);
 
-    if (infer_pit(F_NORTH)) {
-        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
-    } else {
-        knowledge->qt_world->set_tile(x, y + 1, POS_PIT);
-    }
-    if (infer_pit(F_SOUTH)) {
-        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
-    } else {
-        knowledge->qt_world->set_tile(x, y - 1, POS_PIT);
-    }
-    if (infer_pit(F_EAST)) {
-        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
-    } else {
-        knowledge->qt_world->set_tile(x + 1, y, POS_PIT);
-    }
-    if (infer_pit(F_WEST)) {
-        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
-    } else {
-        knowledge->qt_world->set_tile(x - 1, y, POS_PIT);
-    }
+    //    if (infer_pit(F_NORTH)) {
+    //        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
+    //    } else {
+    //        knowledge->qt_world->set_tile(x, y + 1, POS_PIT);
+    //    }
+    //    if (infer_pit(F_SOUTH)) {
+    //        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
+    //    } else {
+    //        knowledge->qt_world->set_tile(x, y - 1, POS_PIT);
+    //    }
+    //    if (infer_pit(F_EAST)) {
+    //        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
+    //    } else {
+    //        knowledge->qt_world->set_tile(x + 1, y, POS_PIT);
+    //    }
+    //    if (infer_pit(F_WEST)) {
+    //        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
+    //    } else {
+    //        knowledge->qt_world->set_tile(x - 1, y, POS_PIT);
+    //    }
+    //
+    //
+    //    if (infer_wumpus(F_NORTH)) {
+    //        //        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
+    //    } else {
+    //        knowledge->qt_world->set_tile(x, y + 1, POS_WUM);
+    //    }
+    //    if (infer_wumpus(F_SOUTH)) {
+    //        //        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
+    //    } else {
+    //        knowledge->qt_world->set_tile(x, y - 1, POS_WUM);
+    //    }
+    //    if (infer_wumpus(F_EAST)) {
+    //        //        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
+    //    } else {
+    //        knowledge->qt_world->set_tile(x + 1, y, POS_WUM);
+    //    }
+    //    if (infer_wumpus(F_WEST)) {
+    //        //        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
+    //    } else {
+    //        knowledge->qt_world->set_tile(x - 1, y, POS_WUM);
+    //    }
+    //
+    //    if (infer_barrier(F_NORTH) == 1) {
+    //        knowledge->qt_world->set_tile(x, y + 1, WALL);
+    //    }
+    //    if (infer_barrier(F_SOUTH) == 1) {
+    //        knowledge->qt_world->set_tile(x, y - 1, WALL);
+    //    }
+    //    if (infer_barrier(F_EAST) == 1) {
+    //        knowledge->qt_world->set_tile(x + 1, y, WALL);
+    //    }
+    //    if (infer_barrier(F_WEST) == 1) {
+    //        knowledge->qt_world->set_tile(x - 1, y, WALL);
+    //    }
 
-
-    if (infer_wumpus(F_NORTH)) {
-        //        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
+    if (infer_clear(F_NORTH)) {
+        knowledge->qt_world->set_tile(x, y + 1, IS_CLEAR);
     } else {
-        knowledge->qt_world->set_tile(x, y + 1, POS_WUM);
+        knowledge->qt_world->set_tile(x, y + 1, NOT_CLEAR);
     }
-    if (infer_wumpus(F_SOUTH)) {
-        //        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
+    if (infer_clear(F_SOUTH)) {
+        knowledge->qt_world->set_tile(x, y - 1, IS_CLEAR);
     } else {
-        knowledge->qt_world->set_tile(x, y - 1, POS_WUM);
+        knowledge->qt_world->set_tile(x, y - 1, NOT_CLEAR);
     }
-    if (infer_wumpus(F_EAST)) {
-        //        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
+    if (infer_clear(F_EAST)) {
+        knowledge->qt_world->set_tile(x + 1, y, IS_CLEAR);
     } else {
-        knowledge->qt_world->set_tile(x + 1, y, POS_WUM);
+        knowledge->qt_world->set_tile(x + 1, y, NOT_CLEAR);
     }
-    if (infer_wumpus(F_WEST)) {
-        //        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
+    if (infer_clear(F_WEST)) {
+        knowledge->qt_world->set_tile(x - 1, y, IS_CLEAR);
     } else {
-        knowledge->qt_world->set_tile(x - 1, y, POS_WUM);
+        knowledge->qt_world->set_tile(x - 1, y, NOT_CLEAR);
     }
-
-//    if (infer_barrier(F_NORTH)) {
-//        //        knowledge->qt_world->set_tile(x, y + 1, POS_EMPTY);
-//    } else {
-//        knowledge->qt_world->set_tile(x, y + 1, POS_WUM);
-//    }
-//    if (infer_barrier(F_SOUTH)) {
-//        //        knowledge->qt_world->set_tile(x, y - 1, POS_EMPTY);
-//    } else {
-//        knowledge->qt_world->set_tile(x, y - 1, POS_WUM);
-//    }
-//    if (infer_barrier(F_EAST)) {
-//        //        knowledge->qt_world->set_tile(x + 1, y, POS_EMPTY);
-//    } else {
-//        knowledge->qt_world->set_tile(x + 1, y, POS_WUM);
-//    }
-//    if (infer_barrier(F_WEST)) {
-//        //        knowledge->qt_world->set_tile(x - 1, y, POS_EMPTY);
-//    } else {
-//        knowledge->qt_world->set_tile(x - 1, y, POS_WUM);
-//    }
 }
 
 uint Human_agent::infer_pit(uint direction) {
@@ -188,19 +225,19 @@ uint Human_agent::infer_pit(uint direction) {
     clause query;
     query.push_back(p_query);
 
-#if debug_mode
-    cout << "The current knowledge base is:" << endl;
-    kb->print_kb(kb->kb_time_stack);
-    cout << endl;
-
-    cout << "We are trying to prove:" << endl;
-    kb->print_clause(query);
-    cout << endl << "*************************************" << endl;
-#endif
+    //#if debug_mode
+    //    cout << "The current knowledge base is:" << endl;
+    //    kb->print_kb(kb->kb_time_stack);
+    //    cout << endl;
+    //
+    //    cout << "We are trying to prove:" << endl;
+    //    kb->print_clause(query);
+    //    cout << endl << "*************************************" << endl;
+    //#endif
     uint result = kb->input_resolution_bfs(query);
-#if debug_mode
-    cout << "The result is: " << result << endl;
-#endif
+    //#if debug_mode
+    //    cout << "The result is: " << result << endl;
+    //#endif
 
     return result;
 
@@ -222,19 +259,19 @@ uint Human_agent::infer_wumpus(uint direction) {
     clause query;
     query.push_back(p_query);
 
-#if debug_mode
-    cout << "The current knowledge base is:" << endl;
-    kb->print_kb(kb->kb_time_stack);
-    cout << endl;
-
-    cout << "We are trying to prove:" << endl;
-    kb->print_clause(query);
-    cout << endl << "*************************************" << endl;
-#endif
+    //#if debug_mode
+    //    cout << "The current knowledge base is:" << endl;
+    //    kb->print_kb(kb->kb_time_stack);
+    //    cout << endl;
+    //
+    //    cout << "We are trying to prove:" << endl;
+    //    kb->print_clause(query);
+    //    cout << endl << "*************************************" << endl;
+    //#endif
     uint result = kb->input_resolution_bfs(query);
-#if debug_mode
-    cout << "The result is: " << result << endl;
-#endif
+    //#if debug_mode
+    //    cout << "The result is: " << result << endl;
+    //#endif
 
     return result;
 
@@ -252,13 +289,46 @@ uint Human_agent::infer_barrier(uint direction) {
     pquery_arg.push_back(fquery);
 
     /* query for pits */
-    pred p_query = kb->build_pred(P_NEGATION | P_WALL, pquery_arg);
+    pred p_query = kb->build_pred(P_WALL, pquery_arg);
+    clause query;
+    query.push_back(p_query);
+
+    //#if debug_mode
+    //    cout << "The current knowledge base is:" << endl;
+    //    kb->print_kb(kb->kb_time_stack);
+    //    cout << endl;
+    //
+    //    cout << "We are trying to prove:" << endl;
+    //    kb->print_clause(query);
+    //    cout << endl << "*************************************" << endl;
+    //#endif
+    uint result = kb->input_resolution_bfs(query);
+    //#if debug_mode
+    //    cout << "The result is: " << result << endl;
+    //#endif
+
+    return result;
+
+}
+
+uint Human_agent::infer_clear(uint direction) {
+
+
+    /* Build query */
+    func_args fargs;
+    uint position_bits = kb->position_to_bits(position);
+    fargs.push_back(position_bits);
+    func fquery = kb->build_func(direction, fargs);
+    pred_args pquery_arg;
+    pquery_arg.push_back(fquery);
+
+    /* query for pits */
+    pred p_query = kb->build_pred(P_ISCLEAR, pquery_arg);
     clause query;
     query.push_back(p_query);
 
 #if debug_mode
     cout << "The current knowledge base is:" << endl;
-    kb->print_kb(kb->kb_rules);
     kb->print_kb(kb->kb_time_stack);
     cout << endl;
 
@@ -266,114 +336,65 @@ uint Human_agent::infer_barrier(uint direction) {
     kb->print_clause(query);
     cout << endl << "*************************************" << endl;
 #endif
-    uint result = kb->heap_input_resolution(query);
-#if debug_mode
+    uint result = kb->input_resolution_bfs(query);
+    //#if debug_mode
     cout << "The result is: " << result << endl;
-#endif
+    //#endif
 
     return result;
 
 }
 
-Point Human_agent::find_right(Point * pos, uint dir) {
-    //find position right of player
-    uint x = pos->x;
-    uint y = pos->y;
+uint Human_agent::find_right(uint dir) {
     switch (dir) {
         case EAST:
-            y = y - 1;
-            break;
-
+            return F_SOUTH;
         case NORTH:
-            x = x + 1;
-            break;
-
+            return F_EAST;
         case WEST:
-            y = y + 1;
-            break;
-
+            return F_NORTH;
         case SOUTH:
-            x = x - 1;
+            return F_WEST;
     }
-
-    return Point(x, y);
-
-
 }
 
-Point Human_agent::find_left(Point * pos, uint dir) {
-    //find position left of player
-    uint x = pos->x;
-    uint y = pos->y;
+uint Human_agent::find_left(uint dir) {
     switch (dir) {
         case EAST:
-            y = y + 1;
-            break;
-
+            return F_NORTH;
         case NORTH:
-            x = x - 1;
-            break;
-
+            return F_WEST;
         case WEST:
-            y = y - 1;
-            break;
-
+            return F_SOUTH;
         case SOUTH:
-            x = x + 1;
+            return F_EAST;
     }
-
-    return Point(x, y);
-
 }
 
-Point Human_agent::find_forward(Point * pos, uint dir) {
-    //find position of tile ahead of player
-    uint x = pos->x;
-    uint y = pos->y;
+uint Human_agent::find_forward(uint dir) {
     switch (dir) {
         case EAST:
-            x = x + 1;
-            break;
-
+            return F_EAST;
         case NORTH:
-            y = y + 1;
-            break;
-
+            return F_NORTH;
         case WEST:
-            x = x - 1;
-            break;
-
+            return F_WEST;
         case SOUTH:
-            y = y - 1;
+            return F_SOUTH;
     }
-
-    return Point(x, y);
-
 }
 
-Point Human_agent::find_backward(Point * pos, uint dir) {
-    //find position of tile behind player
-    uint x = pos->x;
-    uint y = pos->y;
+uint Human_agent::find_backward(uint dir) {
     switch (dir) {
         case EAST:
-            x = x - 1;
-            break;
-
+            return F_WEST;
         case NORTH:
-            y = y - 1;
-            break;
-
+            return F_SOUTH;
         case WEST:
-            x = x + 1;
-            break;
-
+            return F_EAST;
         case SOUTH:
-            y = y + -1;
+            return F_NORTH;
     }
-
-    return Point(x, y);
-
 }
 
 clause Human_agent::create_clause(uint predicate, vector<uint> function, vector<uint> constant) {
@@ -392,22 +413,22 @@ clause Human_agent::create_clause(uint predicate, vector<uint> function, vector<
 }
 
 void Human_agent::execute_rhr() {
-    if (is_clear(find_right(position, orientation))) {
+    if (infer_clear(find_right(orientation)) == TRUE) {
         //move backwards
         int x;
-    } else if (!is_clear(find_right(position, orientation)) && is_clear(find_forward(position, orientation))) {
+    } else if ((infer_clear(find_right(orientation)) == FALSE) and (infer_clear(find_forward(orientation)) == TRUE)) {
         //move forward
         int x;
 
-    } else if (!is_clear(find_right(position, orientation)) && !is_clear(find_forward(position, orientation))
-            && is_clear(find_left(position, orientation))) {
+    } else if ((infer_clear(find_right(orientation)) == FALSE) and (infer_clear(find_forward(orientation)) == FALSE)
+            and (infer_clear(find_left(orientation)) == TRUE)) {
         //rotate and move left
         int x;
 
-    } else if (!is_clear(find_right(position, orientation)) && !is_clear(find_forward(position, orientation))) {
+    } else if ((infer_clear(find_right(orientation)) == FALSE) and (infer_clear(find_forward(orientation)) == FALSE)) {
         //rotate left
         int x;
-    } else if (!is_clear(find_forward(position, orientation))) {
+    } else if (infer_clear(find_forward(orientation)) == FALSE) {
         //rotate left
         int x;
     } else {
@@ -421,6 +442,3 @@ void Human_agent::execute_rhr() {
 
 }
 
-bool Human_agent::is_clear(Point pos) {
-    return true;
-}

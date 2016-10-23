@@ -54,6 +54,8 @@ void Qt_world::init_map() {
     base_breeze_sprite = new QPixmap("sprites/breeze.png");
     base_gold_sprite = new QPixmap("sprites/gold.png");
     base_fog_sprite = new QPixmap("sprites/fog.png");
+    base_clear_sprite = new QPixmap("sprites/clear.png");
+    base_not_clear_sprite = new QPixmap("sprites/not_clear.png");
 
     // Initialize map between bits and sprites
     sprite_map[FOG] = base_fog_sprite;
@@ -68,6 +70,8 @@ void Qt_world::init_map() {
     sprite_map[POS_EMPTY] = base_p_cobble_sprite;
     sprite_map[POS_WUM] = base_p_wumpus_sprite;
     sprite_map[AGENT] = base_hero_sprite;
+    sprite_map[IS_CLEAR] = base_clear_sprite;
+    sprite_map[NOT_CLEAR] = base_not_clear_sprite;
     
     // Fill height map to know what elements to draw over
     height_map[FOG] = 1;
@@ -82,6 +86,8 @@ void Qt_world::init_map() {
     height_map[POS_EMPTY] = 3;
     height_map[AGENT] = 6;
     height_map[POS_WUM] = 3;
+    height_map[IS_CLEAR] = 5;
+    height_map[NOT_CLEAR] = 2;
 
     // Construct map between indices and screen position
     for (int i = 0; i < N + 2; i++) {

@@ -51,9 +51,13 @@
 #define F_LEFT          0x00400000
 #define F_FORWARD       0x00800000
 #define F_BACKWARD      0x01000000
+#define F_GETX          0x04000000
+#define F_GETY          0x08000000
 /* How far to move for each cardinal function  */
 #define DX              0x00010000
 #define DY              0x00000001
+#define ONLYX           0x3FFF0000
+#define ONLYY           0x0000FFFF
 
 // Define Argument types
 #define A_CONST     0x80000000      // predicate inversion
@@ -73,6 +77,8 @@
 #define POS_PIT   0x00000100
 #define POS_EMPTY   0x00000200
 #define POS_WUM     0x00000400
+#define IS_CLEAR    0x00000800
+#define NOT_CLEAR   0x00001000
 
 // Definite move types
 #define EAST    0

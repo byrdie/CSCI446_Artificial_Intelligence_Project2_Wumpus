@@ -9,8 +9,22 @@ uint Knowledge::input_resolution_bfs(clause query) {
     /* negate theorem to be proven */
     query = negate_clause(query)[0];
 
+    //    /* Check if the rule is a tautology */
+    //    cnf query_cnf;
+    //    query_cnf.push_back(resolvents[l]);
+    //    if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the KB
+    //#if debug_mode
+    //        cout << setw((i + 1) * 5) << ' ';
+    //        cout << "The rule ";
+    //        print_clause(input);
+    //        cout << " is a tautology.";
+    //        cout << endl;
+    //#endif
+    //        return FALSE;
+    //    }
+
     /* Define a tree to store the results of the bfs */
-    uint max_depth = 10; // Don't keep trying after this depth
+    uint max_depth = 12; // Don't keep trying after this depth
     vector<vector < clause >> rtree(max_depth);
 
     /* Define the query to be at the root node */
@@ -19,7 +33,7 @@ uint Knowledge::input_resolution_bfs(clause query) {
     rtree[0] = rtree_top;
 
     /* Loop through each layer of the resolution tree */
-    for (uint i = 0; i < rtree.size(); i++) {
+    for (uint i = 0; i < rtree.size() - 1; i++) {
 
         /* loop through though each resolvent for each layer */
         vector<clause> this_row = rtree[i];
@@ -27,35 +41,25 @@ uint Knowledge::input_resolution_bfs(clause query) {
         for (uint j = 0; j < this_row.size(); j++) {
 
             /* Select the next rule to be resolved */
-            clause input = eval_clause(this_row[j]);
+            clause input = this_row[j];
+//            clause input = eval_clause(this_row[j]);
 
-            /* Check if the rule is a tautology */
-            cnf query_cnf;
-            query_cnf.push_back(input);
-            if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the KB
-#if debug_mode
-                cout << setw((i + 1) * 5) << ' ';
-                cout << "The rule ";
-                print_clause(input);
-                cout << " is a tautology.";
-                cout << endl;
-#endif
-                return FALSE;
-            }
+
 
             /* Attempt to resolve the input with every clause in the KB */
             for (uint k = 0; k < kb.size(); k++) {
 
-#if debug_mode
-                cout << setw(i * 5) << ' ';
-                cout << "Resolve ";
-                print_clause(input);
-                cout << " and ";
-                print_clause(kb[k]);
-                cout << endl;
-#endif
+//#if debug_mode
+//                cout << setw(i * 5) << ' ';
+//                cout << "Resolve ";
+//                print_clause(input);
+//                cout << " and ";
+//                print_clause(kb[k]);
+//                cout << endl;
+//#endif
 
                 /* Possibly delete rules as they're used here */
+
 
                 /* Attempt to resolve each clause */
                 cnf resolvents = resolve(kb[k], input);
@@ -64,6 +68,29 @@ uint Knowledge::input_resolution_bfs(clause query) {
                  * If there is no inconsistency, set the clause variable
                  * equal to the resolvent and restart the main loop */
                 for (uint l = 0; l < resolvents.size(); l++) {
+
+#if debug_mode
+                    cout << setw(i * 5) << ' ';
+                    cout << "Resolve ";
+                    print_clause(input);
+                    cout << " and ";
+                    print_clause(kb[k]);
+                    cout << endl;
+#endif
+
+                    /* Check if the rule is a tautology */
+                    cnf query_cnf;
+                    query_cnf.push_back(resolvents[l]);
+                    if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the KB
+#if debug_mode
+                        cout << setw((i + 1) * 5) << ' ';
+                        cout << "The rule ";
+                        print_clause(resolvents[l]);
+                        cout << " is a tautology.";
+                        cout << endl;
+#endif
+                        return FALSE;
+                    }
 
                     /* Inconsistency check. If two clauses resolve to an empty
                      * clause the two clauses are inconsistent */
@@ -96,7 +123,7 @@ uint Knowledge::input_resolution_bfs(clause query) {
             }
 
         }
-        rtree[i+1] = next_row;
+        rtree[i + 1] = next_row;
     }
 
     return NOT_FOUND;

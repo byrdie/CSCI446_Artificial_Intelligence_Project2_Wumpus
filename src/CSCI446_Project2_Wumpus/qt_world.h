@@ -62,6 +62,8 @@ public:
     QPixmap * base_breeze_sprite;
     QPixmap * base_gold_sprite;
     QPixmap * base_fog_sprite;
+    QPixmap * base_clear_sprite;
+    QPixmap * base_not_clear_sprite;
     
     // Dictionary between sprites and bits
     map<int, QPixmap *> sprite_map;
