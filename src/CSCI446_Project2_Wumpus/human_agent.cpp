@@ -39,11 +39,11 @@ void Human_agent::make_move(int direction) {
         x = neighbors[direction]->x;
         y = neighbors[direction]->y;
 
-        kb->clear_heap(x, y);
+        //        kb->clear_heap(x, y);
         kb->clear_stack();
 
         //add wall clause to kb
-        kb->add_percept_to_heap(P_WALL, kb->position_to_bits(neighbors[direction]), x, y);
+        kb->add_percept_to_heap(P_WALL, kb->build_fcardinal(direction, position->x, position->y), x, y);
 
     } else {
 
@@ -75,11 +75,17 @@ void Human_agent::make_move(int direction) {
         cout << "Killed by a Wumpus" << endl;
         sleep(1);
         knowledge->qt_world->view->close();
-    } else if ((next_tile & PIT) > 0) {
+    } else {
+        
+    }
+
+    if ((next_tile & PIT) > 0) {
         cout << "Fell into a pit" << endl;
         sleep(1);
         knowledge->qt_world->view->close();
-    } else if ((next_tile & GOLD) > 0) {
+    } else {
+    }
+    if ((next_tile & GOLD) > 0) {
         engine->score = engine->score + 1000;
         cout << "Retrived the gold" << endl;
         sleep(1);
@@ -109,17 +115,17 @@ void Human_agent::make_move(int direction) {
     }
 
     /*  */
-    search_tiles.clear();
-    search_tiles.push_back(new Point(x, y));
-    search_tiles.push_back(new Point(x + 1, y));
-    search_tiles.push_back(new Point(x - 1, y));
-    search_tiles.push_back(new Point(x, y + 1));
-    search_tiles.push_back(new Point(x, y - 1));
-    search_tiles.push_back(new Point(x + 1, y + 1));
-    search_tiles.push_back(new Point(x + 1, y - 1));
-    search_tiles.push_back(new Point(x - 1, y + 1));
-    search_tiles.push_back(new Point(x - 1, y - 1));
-    kb->heap_to_stack(search_tiles);
+    //    search_tiles.clear();
+    //    search_tiles.push_back(new Point(x, y));
+    //    search_tiles.push_back(new Point(x + 1, y));
+    //    search_tiles.push_back(new Point(x - 1, y));
+    //    search_tiles.push_back(new Point(x, y + 1));
+    //    search_tiles.push_back(new Point(x, y - 1));
+    //    search_tiles.push_back(new Point(x + 1, y + 1));
+    //    search_tiles.push_back(new Point(x + 1, y - 1));
+    //    search_tiles.push_back(new Point(x - 1, y + 1));
+    //    search_tiles.push_back(new Point(x - 1, y - 1));
+    //    kb->heap_to_stack(search_tiles);
 
 
     //    if ((next_tile & STENCH) > 0) {
@@ -328,10 +334,10 @@ uint Human_agent::infer_clear(uint direction) {
     query.push_back(p_query);
 
 #if debug_mode
-    cout << "The current knowledge base is:" << endl;
-    kb->print_kb(kb->kb_time_stack);
-    cout << endl;
-
+    //    cout << "The current knowledge base is:" << endl;
+    //    kb->print_kb(kb->kb_time_stack);
+    //    cout << endl;
+    cout << "__________________________________________________________________" << endl;
     cout << "We are trying to prove:" << endl;
     kb->print_clause(query);
     cout << endl << "*************************************" << endl;

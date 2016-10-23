@@ -14,11 +14,16 @@ Knowledge::Knowledge(uint sz, vector<string> rule_files) {
     }
 
     kb_world_heap = new cnf2D(N + 2, vector<cnf>(N + 2));
-//    for (uint i = 0; i < (*kb_world_heap).size(); i++) {
-//        for (uint j = 0; j < (*kb_world_heap)[0].size(); j++) {
-//            add_percept_to_heap(P_NEGATION | P_WALL, position_to_bits(new Point(i, j)), i, j);
-//        }
-//    }
+    for (uint i = 0; i < (*kb_world_heap).size(); i++) {
+        for (uint j = 0; j < (*kb_world_heap)[0].size(); j++) {
+            Point pt(i, j);
+            add_percept_to_heap(P_NEGATION | P_AGENT, position_to_bits(&pt), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(NORTH, i, j), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(SOUTH, i, j), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(EAST, i, j), i, j);
+            add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(WEST, i, j), i, j);
+        }
+    }
 
 
 
@@ -83,6 +88,26 @@ void Knowledge::add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint
 
 }
 
+void Knowledge::add_percept_to_heap(pred_name pname, pred_arg parg, uint x, uint y) {
+
+    pred_args pargs;
+    pargs.push_back(parg);
+    pred pcon = build_pred(pname, pargs);
+    clause rule;
+    rule.push_back(pcon);
+
+    cnf pt_kb = (*kb_world_heap)[x][y];
+
+    for (uint i = 0; i < pt_kb.size(); i++) {
+        if (clause_eq(rule, pt_kb[i])) {
+            return;
+        }
+    }
+    pt_kb.push_back(rule);
+    (*kb_world_heap)[x][y] = pt_kb;
+
+}
+
 void Knowledge::heap_to_stack(vector<Point *> pts) {
 
     /* Make sure the stack is clear */
@@ -90,7 +115,7 @@ void Knowledge::heap_to_stack(vector<Point *> pts) {
 
     for (uint i = 0; i < (*kb_world_heap).size(); i++) {
         for (uint j = 0; j < (*kb_world_heap)[i].size(); j++) {
-            for(uint k = 0; k < (*kb_world_heap)[i][j].size(); k++){
+            for (uint k = 0; k < (*kb_world_heap)[i][j].size(); k++) {
                 kb_time_stack.push_back((*kb_world_heap)[i][j][k]);
             }
 
@@ -98,20 +123,20 @@ void Knowledge::heap_to_stack(vector<Point *> pts) {
         }
     }
 
-//    /* add information from heap */
-//    for (uint i = 0; i < pts.size(); i++) {
-//
-//        uint x = pts[i]->x;
-//        uint y = pts[i]->y;
-//
-//        cnf kb_pt = (*kb_world_heap)[x][y];
-//        for (uint j = 0; j < kb_pt.size(); j++) {
-//
-//            kb_time_stack.push_back(kb_pt[j]);
-//
-//        }
-//
-//    }
+    //    /* add information from heap */
+    //    for (uint i = 0; i < pts.size(); i++) {
+    //
+    //        uint x = pts[i]->x;
+    //        uint y = pts[i]->y;
+    //
+    //        cnf kb_pt = (*kb_world_heap)[x][y];
+    //        for (uint j = 0; j < kb_pt.size(); j++) {
+    //
+    //            kb_time_stack.push_back(kb_pt[j]);
+    //
+    //        }
+    //
+    //    }
 
     /* add rules */
     for (uint i = 0; i < kb_rules.size(); i++) {
@@ -519,6 +544,34 @@ func Knowledge::build_func(uint function, func_args args) {
 
 
 }
+
+func Knowledge::build_fcardinal(uint dir, uint x, uint y) {
+
+    func_name fname;
+    
+    switch (dir) {
+        case EAST:
+            fname =  F_EAST;
+            break;
+        case NORTH:
+            fname =  F_NORTH;
+            break;
+        case WEST:
+            fname =  F_WEST;
+            break;
+        case SOUTH:
+            fname =  F_SOUTH;
+            break;
+    }
+
+    Point pt(x, y);
+    apoint bpt = position_to_bits(&pt);
+    func_args fargs;
+    fargs.push_back(bpt);
+    return build_func(fname, fargs);
+
+}
+
 
 func Knowledge::build_fvar(uint arg) {
     func return_func;

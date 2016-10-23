@@ -50,6 +50,7 @@ public:
     void clear_stack();
     void add_to_rules(pred_name pname, func_arg parg);
     void add_percept_to_heap(pred_name pname, func_arg parg, uint x, uint y);
+    void add_percept_to_heap(pred_name pname, pred_arg parg, uint x, uint y);
     void heap_to_stack(vector<Point *> pts);
     void add_percept_to_stack(pred_name pname, func_arg parg);
 
@@ -107,6 +108,7 @@ public:
     func build_func(uint function, func_args args);
     func build_fvar(uint arg);
     func build_fconst(uint arg);
+    func build_fcardinal(uint dir, uint x, uint y);
     pred build_pred(uint predicate, pred_args args);
 
     /* Set of functions for evaluating logical functions */
