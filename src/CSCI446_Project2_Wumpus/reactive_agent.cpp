@@ -5,15 +5,16 @@
  */
 #include "reactive_agent.h"                                                                                              
 #include "engine.h"
+#include <fstream>
 
-Reactive_agent::Reactive_agent(Engine * this_engine, int sz) {
+Reactive_agent::Reactive_agent(Engine * this_engine, int sz, string filenames) {
 
     N = sz;
 
     // Initialize class variables
     vector<string> rule_files;
     rule_files.push_back("Rules/all_rules.txt");
-
+    filename = filenames;
     knowledge = new World(sz, this);
     position = new Point(START_X, START_Y - 1);
     engine = this_engine;
@@ -21,17 +22,31 @@ Reactive_agent::Reactive_agent(Engine * this_engine, int sz) {
     take_risk = 0;
     orientation = NORTH;
     my_tile = knowledge->qt_world->set_tile(position->x, position->y, AGENT);
-    
+
     // ask the engine to be placed at the start position
     make_move(NORTH);
-
+    run_test();
 
 
 
 
 }
 
-void Reactive_agent::make_move(int direction) {
+void Reactive_agent::output_stats(uint gold) {
+    ofstream myfile;
+    myfile.open(filename, std::ios::out | std::ios::app);
+     
+    myfile << N << "," << engine->num_obstacles() << "," << engine->score << "," << gold << endl;
+    
+    
+    
+}
+
+void Reactive_agent::run_test() {
+    while(make_move(next_move));
+}
+
+bool Reactive_agent::make_move(int direction) {
 
 
 
@@ -69,21 +84,24 @@ void Reactive_agent::make_move(int direction) {
     qApp->processEvents();
 
     if ((next_tile & WUMPUS) > 0) {
-        cout << "Score: " <<  engine->score << endl;
         cout << "Killed by a Wumpus" << endl;
+        output_stats(0);
         sleep(1);
         knowledge->qt_world->view->close();
+        return false;
     } else if ((next_tile & PIT) > 0) {
-        cout << "Score: " <<  engine->score << endl;
         cout << "Fell into a pit" << endl;
+        output_stats(0);
         sleep(1);
         knowledge->qt_world->view->close();
+        return false;
     } else if ((next_tile & GOLD) > 0) {
-        cout << "Score: " <<  engine->score << endl;
         engine->score = engine->score + 1000;
         cout << "Retrived the gold" << endl;
+        output_stats(1);
         sleep(1);
         knowledge->qt_world->view->close();
+        return false;
     }
 
 
@@ -108,52 +126,61 @@ void Reactive_agent::make_move(int direction) {
         pick();
     }
 
-
+    return true;
 
 
 }
 
 void Reactive_agent::s_or_b_pick() {
     //case for handling if spot is stinky or breezy
-    
-    if(take_risk > 300){
+
+    if (take_risk > 500) {
         //If an undiscovered spot has not been discovered in 300 moves take a risk
         vector<uint> clear_adj;
-        for (uint i = 0; i < neighbors.size(); i++) {      
-        if (!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR) )) {
-            clear_adj.push_back(i);
+        for (uint i = 0; i < neighbors.size(); i++) {
+            if (!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR))) {
+                clear_adj.push_back(i);
+            }
         }
-    }
-    }else{
-        
-    
-    vector<uint> clear_adj;
-    //find all adjacent squares that are marked clear and not marked not_clear
-    for (uint i = 0; i < neighbors.size(); i++) {      
-        if (knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR) )) {
-            clear_adj.push_back(i);
-        }
-    }
 
-    //pick a random clear square
-    if (clear_adj.size() > 0) {
-        int r = rand() % clear_adj.size();
-        next_move = clear_adj[r];
+        if (clear_adj.size() > 0) {
+            int r = rand() % clear_adj.size();
+            next_move = clear_adj[r];
+        } else {
+            //pick a random square
+            int r = rand() % neighbors.size();
+            next_move = r;
+        }
     } else {
-        //pick a random square
-        int r = rand() % neighbors.size();
-        next_move = r;
-    }
+
+
+        vector<uint> clear_adj;
+        //find all adjacent squares that are marked clear and not marked not_clear
+        for (uint i = 0; i < neighbors.size(); i++) {
+            if (knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR && (!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR))) {
+                clear_adj.push_back(i);
+            }
+        }
+
+        //pick a random clear square
+        if (clear_adj.size() > 0) {
+            int r = rand() % clear_adj.size();
+            next_move = clear_adj[r];
+        } else {
+            //pick a random square
+            int r = rand() % neighbors.size();
+            next_move = r;
+        }
     }
 }
 
 void Reactive_agent::pick() {
     //handles case where current square does not have a breeze or a stench
     vector<uint> n_clear_adj;
-    
+
     for (uint i = 0; i < neighbors.size(); i++) {
         //if a square is not marked clear and not marked not clear, add to possible moves
-        if (!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR) )) {
+        if (!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR))) {
             n_clear_adj.push_back(i);
         }
     }
@@ -168,8 +195,8 @@ void Reactive_agent::pick() {
         //pick a square that IS_CLEAR and not NOT_CLEAR
         vector<uint> nn_clear_adj;
         for (uint i = 0; i < neighbors.size(); i++) {
-            
-            if ((knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR) )) {
+
+            if ((knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & IS_CLEAR)&&(!(knowledge->world_vec[neighbors[i]->x][neighbors[i]->y] & NOT_CLEAR))) {
                 nn_clear_adj.push_back(i);
 
             }

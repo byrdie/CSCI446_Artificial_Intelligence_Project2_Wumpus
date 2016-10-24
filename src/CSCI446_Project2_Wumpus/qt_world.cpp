@@ -182,7 +182,7 @@ World_view::World_view(QGraphicsScene * scene) : QGraphicsView(scene) {
 void World_view::keyPressEvent(QKeyEvent * e) {
 
 
-    if (agent != 0) {
+    if (ragent != 0) {
         switch (e->key()) {
 //            case Qt::Key_A:
 //                agent->make_move(WEST);
@@ -197,7 +197,7 @@ void World_view::keyPressEvent(QKeyEvent * e) {
 //                agent->make_move(EAST);
 //                break;
             case Qt::Key_Space:
-                agent->make_move();
+                ragent->run_test();
             default:
                 
                 std::cout << "invalid input" << std::endl;

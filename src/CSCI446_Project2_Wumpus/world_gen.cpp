@@ -109,10 +109,10 @@ World::World(int side_length, int n_wumpi, int n_pit, int n_barrier) {
         qt_world->set_tile(next_pt->x, next_pt->y, WALL);
     }
 
-//    // Place the gold
-//    Point * next_pt = add_element(GOLD);
-//    gold_list.push_back(next_pt);
-//    qt_world->set_tile(next_pt->x, next_pt->y, GOLD);
+    // Place the gold
+    Point * next_pt = add_element(GOLD);
+    gold_list.push_back(next_pt);
+    qt_world->set_tile(next_pt->x, next_pt->y, GOLD);
 
     //Place the stench
     for (int i = 0; i < num_wumpi; i++) {

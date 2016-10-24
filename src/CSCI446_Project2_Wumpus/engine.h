@@ -29,6 +29,7 @@ public:
     int score;
     int move(int direction, Point * cur_pos);
     int orient_to_direction(int direction, int orientation);
+    int num_obstacles();
 private:
     World * world;
     
