@@ -59,6 +59,7 @@ public:
     Point * add_element(int elem);
     vector<Point *> add_effect(Point * center, int effect_bits);
     vector<Point *> find_neighbors(Point * center);
+    void reset(int side_length, int n_wumpi, int n_pit, int n_barrier);
     
 };
 

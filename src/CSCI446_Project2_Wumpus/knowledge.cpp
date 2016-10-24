@@ -122,28 +122,28 @@ void Knowledge::heap_to_stack(vector<Point *> pts) {
     /* Make sure the stack is clear */
     clear_stack();
 
-    for (uint i = 0; i < (*kb_world_heap).size(); i++) {
-        for (uint j = 0; j < (*kb_world_heap)[i].size(); j++) {
-            for (uint k = 0; k < (*kb_world_heap)[i][j].size(); k++) {
-                kb_time_stack.push_back((*kb_world_heap)[i][j][k]);
-            }
-        }
-    }
+//    for (uint i = 0; i < (*kb_world_heap).size(); i++) {
+//        for (uint j = 0; j < (*kb_world_heap)[i].size(); j++) {
+//            for (uint k = 0; k < (*kb_world_heap)[i][j].size(); k++) {
+//                kb_time_stack.push_back((*kb_world_heap)[i][j][k]);
+//            }
+//        }
+//    }
 
-    //    /* add information from heap */
-    //    for (uint i = 0; i < pts.size(); i++) {
-    //
-    //        uint x = pts[i]->x;
-    //        uint y = pts[i]->y;
-    //
-    //        cnf kb_pt = (*kb_world_heap)[x][y];
-    //        for (uint j = 0; j < kb_pt.size(); j++) {
-    //
-    //            kb_time_stack.push_back(kb_pt[j]);
-    //
-    //        }
-    //
-    //    }
+        /* add information from heap */
+        for (uint i = 0; i < pts.size(); i++) {
+    
+            uint x = pts[i]->x;
+            uint y = pts[i]->y;
+    
+            cnf kb_pt = (*kb_world_heap)[x][y];
+            for (uint j = 0; j < kb_pt.size(); j++) {
+    
+                kb_time_stack.push_back(kb_pt[j]);
+    
+            }
+    
+        }
 
     /* add rules */
     for (uint i = 0; i < kb_rules.size(); i++) {

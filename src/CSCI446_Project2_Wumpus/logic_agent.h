@@ -40,11 +40,11 @@ public:
     bool clearE;
     bool clearW;
     bool stuck;
-    
+    string filename;
     vector<int> move_stack;
     
     uint orientation;
-    Logic_agent(Engine * this_engine, int N);
+    Logic_agent(Engine * this_engine, int N, string file);
     
     void make_move();
 //    vector<bool> infer(uint direction);
@@ -52,6 +52,7 @@ public:
     uint find_left(uint dir);
     uint find_forward(uint dir);
     uint find_backward(uint dir);
+    
     clause create_clause(uint predicate, vector<uint> function,  vector<uint> constant);
     void execute_rhr();
     
@@ -65,6 +66,8 @@ public:
     void init_kb();
     bool AdjExplored(Point * pos);
     bool is_clear(Point pos);
+    
+    void output_stats(uint gold);
 };
 
 #endif /* LOGIC_AGENT_H */

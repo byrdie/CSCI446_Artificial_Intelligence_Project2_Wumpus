@@ -33,18 +33,21 @@ public:
     uint orientation;
     uint next_move;
     uint take_risk;
-    Reactive_agent(Engine * this_engine, int N);
+    string filename;
+    Reactive_agent(Engine * this_engine, int N, string filenames);
     
-    void make_move(int direction);
-//    vector<bool> infer(uint direction);
+    bool make_move(int direction);
+
     uint find_right(uint dir);
     uint find_left(uint dir);
     uint find_forward(uint dir);
     uint find_backward(uint dir);
     void s_or_b_pick();
     void pick();
+    void output_stats(uint gold);
+    void run_test();
     
-//    bool infer_move(uint direction);
+
     
 
     bool AdjExplored(Point * pos);

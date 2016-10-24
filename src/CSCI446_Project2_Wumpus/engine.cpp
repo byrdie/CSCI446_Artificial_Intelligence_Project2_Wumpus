@@ -50,3 +50,6 @@ int Engine:: orient_to_direction(int direction, int orientation){
     
     
 }
+int Engine::num_obstacles(){
+    return world->num_pits;
+}

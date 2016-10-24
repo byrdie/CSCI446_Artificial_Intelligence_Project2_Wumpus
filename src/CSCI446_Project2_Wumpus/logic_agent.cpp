@@ -1,7 +1,7 @@
 #include "logic_agent.h"
 #include "engine.h"
 
-Logic_agent::Logic_agent(Engine * this_engine, int sz) {
+Logic_agent::Logic_agent(Engine * this_engine, int sz, string file) {
 
     N = sz;
 
@@ -12,14 +12,14 @@ Logic_agent::Logic_agent(Engine * this_engine, int sz) {
     knowledge = new World(sz, this);
     position = new Point(START_X, START_Y - 1);
     engine = this_engine;
-
-    time = 0;
+    filename = file;
 
     orientation = NORTH;
     my_tile = knowledge->qt_world->set_tile(position->x, position->y, AGENT);
     // ask the engine to be placed at the start position
     clearN = true;
 
+    make_move();
     kb->print_kb(&kb->out, kb->kb_rules);
 
 
@@ -117,6 +117,7 @@ void Logic_agent::make_move() {
 
         if ((next_tile & WUMPUS) > 0) {
             cout << "Killed by a Wumpus" << endl;
+            output_stats(0);
             sleep(1);
             knowledge->qt_world->view->close();
             return;
@@ -124,12 +125,14 @@ void Logic_agent::make_move() {
 
         if ((next_tile & PIT) > 0) {
             cout << "Fell into a pit" << endl;
+            output_stats(0);
             sleep(1);
             knowledge->qt_world->view->close();
             return;
         }
         if ((next_tile & GOLD) > 0) {
             engine->score = engine->score + 1000;
+            output_stats(1);
             cout << "Retrived the gold" << endl;
             sleep(1);
             knowledge->qt_world->view->close();
@@ -155,6 +158,13 @@ void Logic_agent::make_move() {
         } else {
             kb->add_percept_to_heap(P_NEGATION | P_STINKY, kb->position_to_bits(position), x, y);
         }
+
+        search_tiles.clear();
+        search_tiles.push_back(new Point(x, y));
+        search_tiles.push_back(new Point(x + 1, y));
+        search_tiles.push_back(new Point(x - 1, y));
+        search_tiles.push_back(new Point(x, y + 1));
+        search_tiles.push_back(new Point(x, y - 1));
         kb->heap_to_stack(search_tiles);
 
         clearN = infer_clear(F_NORTH) == 1;
@@ -293,7 +303,13 @@ clause Logic_agent::create_clause(uint predicate, vector<uint> function, vector<
     return rule;
 }
 
+void Logic_agent::output_stats(uint gold) {
+    ofstream myfile;
+    myfile.open(filename, std::ios::out | std::ios::app);
 
+    myfile << N << " " << engine->num_obstacles() << " " << engine->score << " " << endl;
+    cout << N << " " << engine->num_obstacles() << " " << engine->score << " " << endl;
+}
 
 
 
