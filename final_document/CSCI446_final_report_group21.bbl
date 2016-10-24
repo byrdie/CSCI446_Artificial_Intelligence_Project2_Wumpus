@@ -10,4 +10,10 @@ Russel, S. and Norvig, P. (2010).
 \newblock {\em Artificial Intelligence: A Modern Approach}.
 \newblock Pearson Education, Upper Saddle River, New Jersey 07458, 3rd edition.
 
+\bibitem[Weiss, 1999]{reactive}
+Weiss, G. (1999).
+\newblock {\em Multiagent Systems: A Modern Approach to Distributed Artificial
+  Intelligence}.
+\newblock MIT Press, Cambridge, Massachusetts.
+
 \end{thebibliography}
