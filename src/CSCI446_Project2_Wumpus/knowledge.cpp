@@ -5,7 +5,8 @@
 Knowledge::Knowledge(uint sz, vector<string> rule_files) {
 
     N = sz;
-
+    out.open("../output/output.txt");
+    latex.open("../output/latex_output.tex");
     rule_parser = new RuleParser();
 
     kb_rules = rule_parser->parse_cnf(rule_files[0]);
@@ -17,10 +18,10 @@ Knowledge::Knowledge(uint sz, vector<string> rule_files) {
     for (uint i = 0; i < (*kb_world_heap).size(); i++) {
         for (uint j = 0; j < (*kb_world_heap)[0].size(); j++) {
             Point pt(i, j);
-//            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(EAST, i - 1, j), i, j);
-//            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(WEST, i + 1, j), i, j);
-//            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(NORTH, i, j - 1), i, j);
-//            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinalSOUTH, i, j + 1), i, j);
+            //            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(EAST, i - 1, j), i, j);
+            //            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(WEST, i + 1, j), i, j);
+            //            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinal(NORTH, i, j - 1), i, j);
+            //            add_percept_to_heap(P_NEGATION | P_AGENT, build_fcardinalSOUTH, i, j + 1), i, j);
 
             add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(EAST, i - 1, j), i, j);
             add_percept_to_heap(P_NEGATION | P_WALL, build_fcardinal(WEST, i + 1, j), i, j);
@@ -445,94 +446,94 @@ vector<aconst> Knowledge::get_points_func_args(func_args fa) {
  * Series of function to print out a knowledge base for viewing
  * @param kb the knowledge base in CNF form
  */
-void Knowledge::print_kb(cnf kb) {
+void Knowledge::print_kb(ofstream *s, cnf kb) {
     for (uint i = 0; i < kb.size(); i++) {
-        print_clause(kb[i]);
-        cout << endl;
+        print_clause(s, kb[i]);
+        *s << endl;
     }
 }
 
-void Knowledge::print_clause(clause c) {
+void Knowledge::print_clause(ofstream *s, clause c) {
     for (uint j = 0; j < c.size(); j++) {
-        print_pred(c[j]);
+        print_pred(s, c[j]);
         if (j != (c.size() - 1)) {
-            cout << " || ";
+            *s << " || ";
         }
     }
 }
 
-void Knowledge::print_pred(pred p) {
+void Knowledge::print_pred(ofstream *s, pred p) {
 
     int pred_tok = get<0>(p);
 
     if (pred_tok & P_NEGATION) {
-        cout << "~";
+        *s << "!";
         pred_tok = pred_tok & P_UNNEGATION;
     }
 
     string pred_name = rule_parser->pred_str_map[pred_tok];
-    cout << pred_name;
-    cout << "(";
-    print_pred_args(get<1>(p));
-    cout << ")";
+    *s << pred_name;
+    *s << "(";
+    print_pred_args(s, get<1>(p));
+    *s << ")";
 }
 
-void Knowledge::print_pred_args(pred_args pa) {
+void Knowledge::print_pred_args(ofstream *s, pred_args pa) {
 
     for (uint k = 0; k < pa.size(); k++) {
-        print_func(pa[k]);
+        print_func(s, pa[k]);
         if (k != (pa.size() - 1)) {
-            cout << ", ";
+            *s << ", ";
         }
     }
 }
 
-void Knowledge::print_func(func f) {
+void Knowledge::print_func(ofstream *s, func f) {
     int func_tok = get<0>(f);
     func_args fa = get<1>(f);
 
     if (func_tok == F_VAR) {
 
-        cout << (char) ('a' + fa[0]);
+        *s << (char) ('a' + fa[0]);
 
     } else if (func_tok == F_CONST) {
         Point pos = bits_to_position(fa[0]);
-        cout << "{";
-        cout << pos.x;
-        cout << ",";
-        cout << pos.y;
-        cout << "}";
+        *s << "{";
+        *s << pos.x;
+        *s << ",";
+        *s << pos.y;
+        *s << "}";
     } else {
         string func_name = rule_parser->func_str_map[func_tok];
-        cout << func_name;
-        cout << "(";
-        print_func_args(fa);
-        cout << ")";
+        *s << func_name;
+        *s << "(";
+        print_func_args(s, fa);
+        *s << ")";
     }
 }
 
-void Knowledge::print_func_args(func_args fa) {
+void Knowledge::print_func_args(ofstream *s, func_args fa) {
 
     for (uint l = 0; l < fa.size(); l++) {
 
         if ((fa[l] & A_CONST) > 0) {
             if ((fa[l] & A_POINT) > 0) {
                 Point pos = bits_to_position(fa[0]);
-                cout << "{";
-                cout << pos.x;
-                cout << ",";
-                cout << pos.y;
-                cout << "}";
+                *s << "{";
+                *s << pos.x;
+                *s << ",";
+                *s << pos.y;
+                *s << "}";
             } else {
-                cout << fa[l];
+                *s << fa[l];
             }
 
         } else {
-            cout << (char) ('a' + (fa[l] % 26));
+            *s << (char) ('a' + (fa[l] % 26));
         }
 
         if (l != fa.size() - 1) {
-            cout << ",";
+            *s << ",";
         }
     }
 }

@@ -81,6 +81,7 @@ public:
     Qt_world(int num_tiles, Human_agent * h_agent);
     Qt_world(int num_tiles, Reactive_agent * h_agent);
     void init_map();
+    void save_world(char * filename);
     
     QGraphicsPixmapItem *  set_tile(int x, int y, int elem_bits);
     void move_tile(QGraphicsPixmapItem * tile, int x, int y);

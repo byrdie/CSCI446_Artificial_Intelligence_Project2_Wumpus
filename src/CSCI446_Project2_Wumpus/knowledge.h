@@ -14,7 +14,7 @@
 #ifndef KNOWLEDGE_H
 #define KNOWLEDGE_H
 
-#define debug_mode false
+#define debug_mode true
 
 #include <iostream>
 #include <vector>
@@ -32,20 +32,24 @@ class Knowledge;
 class Knowledge {
 public:
 
-    uint N;     // The size of the cave
+    uint N; // The size of the cave
     RuleParser * rule_parser;
-    
+
     /* Static rules, loaded from file */
-    cnf kb_rules;   // Rules containing variables
-    
+    cnf kb_rules; // Rules containing variables
+
     /* Dynamic rules, filled by the agent */
-    cnf2D * kb_world_heap;  // Rules are stored by position
-    cnf kb_time_stack;   // Rules are added on the back. these rules contain time
+    cnf2D * kb_world_heap; // Rules are stored by position
+    cnf kb_time_stack; // Rules are added on the back. these rules contain time
+
+    ofstream out;
+    ofstream latex;
+
 
     map<int, int> func_inv;
 
     Knowledge(uint sz, vector<string> rule_files);
-    
+
     void clear_heap(uint x, uint y);
     void clear_stack();
     void add_to_rules(pred_name pname, func_arg parg);
@@ -61,16 +65,16 @@ public:
     theta unify_var(func x, func y, theta sub_list);
     vector<vector<uint>> unify_arg(uint x, uint y, vector<vector<uint>> sub_list);
     theta sub_var(func x, func y, theta sub_list); // x is assumed to be a variable
-    theta sub_const(func x, func y, theta sub_list);    // x is assumed to be a constant
+    theta sub_const(func x, func y, theta sub_list); // x is assumed to be a constant
 
     /* Set of functions used for resolution */
     /* These functions are defined in resolve.cpp */
-    uint linear_resolution(cnf kb, clause query, uint indent);
-    bool heap_input_resolution(clause query);
     uint input_resolution_bfs(clause query);
     cnf resolve(clause c_i, clause c_j);
-    bool check_tautology(cnf kb, clause c);
-    bool check_contradiction(cnf kb, clause c);
+    void print_tautology(clause c, uint i);
+    void print_contradiction(clause c, uint i);
+    void print_resolution(clause c1, clause c2, uint i);
+    void print_result(clause c, uint i);
 
     /* Set of functions dealing with negated predicates */
     bool is_neg(pred p);
@@ -97,12 +101,12 @@ public:
     bool subset(cnf c1, cnf c2);
 
     /* C++ function set to print the members of the AST */
-    void print_kb(cnf kb);
-    void print_clause(clause c);
-    void print_pred(pred p);
-    void print_pred_args(pred_args pa);
-    void print_func(func f);
-    void print_func_args(func_args fa);
+    void print_kb(ofstream *s, cnf kb);
+    void print_clause(ofstream *s, clause c);
+    void print_pred(ofstream *s, pred p);
+    void print_pred_args(ofstream* s, pred_args pa);
+    void print_func(ofstream *s, func f);
+    void print_func_args(ofstream *s, func_args fa);
 
     /* C++ function set to build members of the AST */
     func build_func(uint function, func_args args);

@@ -4,24 +4,12 @@
 
 uint Knowledge::input_resolution_bfs(clause query) {
 
+
+
     cnf kb = kb_time_stack; // Make a copy of the KB
 
     /* negate theorem to be proven */
     query = negate_clause(query)[0];
-
-    //    /* Check if the rule is a tautology */
-    //    cnf query_cnf;
-    //    query_cnf.push_back(resolvents[l]);
-    //    if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the KB
-    //#if debug_mode
-    //        cout << setw((i + 1) * 5) << ' ';
-    //        cout << "The rule ";
-    //        print_clause(input);
-    //        cout << " is a tautology.";
-    //        cout << endl;
-    //#endif
-    //        return FALSE;
-    //    }
 
     /* Define a tree to store the results of the bfs */
     uint max_depth = 12; // Don't keep trying after this depth
@@ -42,21 +30,11 @@ uint Knowledge::input_resolution_bfs(clause query) {
 
             /* Select the next rule to be resolved */
             clause input = this_row[j];
-//                        clause input = eval_clause(this_row[j]);
-
+            //                        clause input = eval_clause(this_row[j]);
 
 
             /* Attempt to resolve the input with every clause in the KB */
             for (uint k = 0; k < kb.size(); k++) {
-
-                //#if debug_mode
-                //                cout << setw(i * 5) << ' ';
-                //                cout << "Resolve ";
-                //                print_clause(input);
-                //                cout << " and ";
-                //                print_clause(kb[k]);
-                //                cout << endl;
-                //#endif
 
                 /* Possibly delete rules as they're used here */
 
@@ -69,48 +47,26 @@ uint Knowledge::input_resolution_bfs(clause query) {
                  * equal to the resolvent and restart the main loop */
                 for (uint l = 0; l < resolvents.size(); l++) {
 
-#if debug_mode
-                    cout << setw(i * 5) << ' ';
-                    cout << "Resolve ";
-                    print_clause(input);
-                    cout << " and ";
-                    print_clause(kb[k]);
-                    cout << endl;
-#endif
+                    print_resolution(input, kb[k], i);
+
 
                     /* Check if the rule is a tautology */
                     cnf query_cnf;
                     query_cnf.push_back(resolvents[l]);
-                    if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the KB
-#if debug_mode
-                        cout << setw(i * 5) << ' ';
-                        cout << "The rule ";
-                        print_clause(resolvents[l]);
-                        cout << " is a tautology.";
-                        cout << endl;
-#endif
+                    if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the KB                   
+                        print_tautology(resolvents[l], i);
                         return FALSE;
                     }
 
                     /* Inconsistency check. If two clauses resolve to an empty
                      * clause the two clauses are inconsistent */
                     if (resolvents[l].empty()) {
-#if debug_mode
-                        cout << setw(i * 5) << ' ';
-                        cout << "The rule ";
-                        print_clause(input);
-                        cout << " is a contradiction.";
-                        cout << endl;
-#endif
+                        print_contradiction(input, i);
                         return TRUE;
                     }
 
-#if debug_mode
-                    cout << setw(i * 5) << ' ';
-                    cout << "Result ";
-                    print_clause(resolvents[l]);
-                    cout << endl;
-#endif
+                    print_result(resolvents[l], i);
+
 
                     /* If the resolvent is consistent, restart the main loop
                      * with the query as the resolvent*/
@@ -122,7 +78,11 @@ uint Knowledge::input_resolution_bfs(clause query) {
 
             }
 
-            break;
+            /* Usually not necessary to check more than this */
+            if (j == 1) {
+                break;
+            }
+
         }
         rtree[i + 1] = next_row;
     }
@@ -130,171 +90,78 @@ uint Knowledge::input_resolution_bfs(clause query) {
     return NOT_FOUND;
 }
 
-bool Knowledge::heap_input_resolution(clause query) {
-
-    cnf rkb = kb_rules; // Make a copy of the rules
-    cnf pt_kb = kb_time_stack; // Make a copy of the heap
-
-    /* negate theorem to be proven */
-    query = negate_clause(query)[0];
-
-
-
-    clause input_query = query; // Make a copy of the input query for later
-
-
-
-    /* Resolve clauses until we hit the max depth */
-    uint max_depth = 10; // Don't keep trying after this depth
-    for (uint i = 0; i < max_depth; i++) {
-
-        query = eval_clause(query); // Evaluate all the functions within the query to prevent function nesting
-
-        /* Check if the query is a tautology */
-        cnf query_cnf;
-        query_cnf.push_back(query);
-        if (subset(query_cnf, pt_kb)) { // A tautology exists if the rule is already in th
-            return FALSE;
-        }
-
-        for (int k = pt_kb.size() - 1; k > -1; k--) { // loop over clauses in inverse order
-
+void Knowledge::print_tautology(clause c, uint i) {
 #if debug_mode
-            cout << setw(i * 5) << ' ';
-            cout << "Resolve ";
-            print_clause(query);
-            cout << " and ";
-            print_clause(pt_kb[k]);
-            cout << endl;
+    out << setw(i * 1) << '-';
+    out << "The rule ";
+    print_clause(&out, c);
+    out << " is a tautology.";
+    out << endl;
+
+    latex << "\\texttt{";
+    latex << setw(i * 1) << '-';
+    latex << "The rule ";
+    print_clause(&latex, c);
+    latex << " is a tautology.";
+    latex << "} \\\\";
+    latex << endl;
 #endif
-
-            /* Possibly delete rules as they're used here */
-
-            /* Attempt to resolve each clause */
-            cnf resolvents = resolve(pt_kb[k], query);
-
-            /* Loop over the resolvents and check for an inconsistency
-             * If there is no inconsistency, set the clause variable
-             * equal to the resolvent and restart the main loop */
-            for (uint l = 0; l < resolvents.size(); l++) {
-
-                /* Inconsistency check. If two clauses resolve to an empty
-                 * clause the two clauses are inconsistent */
-                if (resolvents[l].empty()) {
-                    return TRUE;
-                }
-
-                /* If the resolvent is consistent, restart the main loop
-                 * with the query as the resolvent*/
-                query = resolvents[l];
-                goto MAIN_LOOP_EXIT;
-
-            }
-        }
-
-        //        /* Loop over the clauses in the static rules */
-        //        for (uint k = 0; k < kb_rules.size(); k++) { // loop over clauses
-        //#if debug_mode
-        //            cout << setw(i * 5) << ' ';
-        //            cout << "Resolve ";
-        //            print_clause(query);
-        //            cout << " and ";
-        //            print_clause(kb_rules[k]);
-        //            cout << endl;
-        //#endif
-        //            
-        //            /* Attempt to resolve each clause */
-        //            cnf resolvents = resolve(kb_rules[k], query);
-        //
-        //            /* Loop over the resolvents and check for an inconsistency
-        //             * If there is no inconsistency, set the clause variable
-        //             * equal to the resolvent and restart the main loop */
-        //            for (uint l = 0; l < resolvents.size(); l++) {
-        //
-        //                /* Inconsistency check. If two clauses resolve to an empty
-        //                 * clause the two clauses are inconsistent */
-        //                if (resolvents[l].empty()) {
-        //                    return TRUE;
-        //                }
-        //
-        //                /* If the resolvent is consistent, restart the main loop
-        //                 * with the query as the resolvent*/
-        //                query = resolvents[l];
-        //                goto MAIN_LOOP_EXIT;
-        //
-        //            }
-        //        }
-
-
-MAIN_LOOP_EXIT: // Goto statement used to break out of triple loop
-        continue;
-    }
-    return NOT_FOUND;
 }
 
-/**
- * Recursive function to execute linear resolution strategy
- * @param kb
- * @param query MUST BE ALREADY NEGATED!
- * @return 0 for false, 1 for true, 2 for not found 
- */
-uint Knowledge::linear_resolution(cnf kb, clause query, uint indent) {
-
-    if (indent > 30) {
-        cout << "RECURSION LIMIT REACHED!" << endl;
-        return FALSE;
-    }
-
-
-
-    /* Check for tautology */
-    cnf query_cnf;
-    query_cnf.push_back(query);
-    if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the 
-        return FALSE;
-    }
-
-    /* Loop through the knowledge base to find a resolution */
-    for (uint i = 0; i < kb.size(); i++) {
-
-        /* After we use a rule, move to the back of the rule priority */
-        cnf kbc = kb;
-        auto it = kbc.begin() + i;
-        rotate(it, it + 1, kbc.end());
-
-        /* Attempt to resolve each clause */
-        cnf resolvents = resolve(kb[i], query);
-
+void Knowledge::print_contradiction(clause c, uint i) {
 #if debug_mode
-        cout << setw(indent) << ' ';
-        cout << "Resolve ";
-        print_clause(query);
-        cout << " and ";
-        print_clause(kb[i]);
-        cout << endl;
+    
+    out << setw((i + 1) * 5) << '-';
+    out << "The rule ";
+    print_clause(&out, c);
+    out << " is a contradiction.";
+    out << endl;
+
+    latex << "\\texttt{";
+    latex << setw((i + 1) * 5) << '-';
+    latex << "The rule ";
+    print_clause(&latex, c);
+    latex << " is a contradiction.";
+    latex << "} \\\\";
+    latex << endl;
 #endif
+}
 
-        /* Loop through the possible resolvents and recursively apply linear resolution to each*/
-        for (uint j = 0; j < resolvents.size(); j++) {
+void Knowledge::print_resolution(clause c1, clause c2, uint i) {
+#if debug_mode
+    out << setfill('-') << setw((i + 1) * 5);
+    out << "Resolve ";
+    print_clause(&out, c1);
+    out << " and ";
+    print_clause(&out, c2);
+    out << endl;
 
-            /* Check for an inconsistency */
-            if (resolvents[j].empty()) {
-                return TRUE;
-            }
+    latex << setfill('-');
+    latex << "\\texttt{";
+    latex << setw(i * 5) << '-';
+    latex << "Resolve ";
+    print_clause(&latex, c1);
+    latex << " and ";
+    print_clause(&latex, c2);
+    latex << "}\\\\";
+    latex << endl;
+#endif
+}
 
-            /* Apply linear resolution to the resolvents */
-            uint result = linear_resolution(kbc, resolvents[j], indent + 5);
+void Knowledge::print_result(clause c, uint i) {
+#if debug_mode
+    out << setw((i + 1) * 5) << '-';
+    out << "Result ";
+    print_clause(&out, c);
+    out << endl;
 
-            /* return if linear_resolution found a result, otherwise continue looping */
-            if (result != NOT_FOUND) {
-                return result;
-            }
-
-        }
-
-
-    }
-    return NOT_FOUND;
+    latex << "\\texttt{";
+    latex << setw((i + 1) * 5) << '-';
+    latex << "Result ";
+    print_clause(&latex, c);
+    latex << "}\\\\";
+    latex << endl;
+#endif
 }
 
 /**

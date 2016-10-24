@@ -22,7 +22,7 @@ Qt_world::Qt_world(int num_tiles) {
     scene = new QGraphicsScene(0, 0, win_sz, win_sz);
     view = new World_view(scene);
     view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
-    view->resize(win_sz,win_sz);
+    view->resize(win_sz, win_sz);
     init_map();
 
 }
@@ -36,7 +36,7 @@ Qt_world::Qt_world(int num_tiles, Human_agent * h_agent) {
     // Initialize Qt variables
     scene = new QGraphicsScene(0, 0, win_sz, win_sz);
     view = new World_view(scene, h_agent);
-    view->resize(win_sz,win_sz);
+    view->resize(win_sz, win_sz);
     view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
     init_map();
 }
@@ -50,7 +50,7 @@ Qt_world::Qt_world(int num_tiles, Logic_agent * h_agent) {
     // Initialize Qt variables
     scene = new QGraphicsScene(0, 0, win_sz, win_sz);
     view = new World_view(scene, h_agent);
-    view->resize(win_sz,win_sz);
+    view->resize(win_sz, win_sz);
     view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
     init_map();
 }
@@ -64,7 +64,7 @@ Qt_world::Qt_world(int num_tiles, Reactive_agent * h_agent) {
     // Initialize Qt variables
     scene = new QGraphicsScene(0, 0, win_sz, win_sz);
     view = new World_view(scene, h_agent);
-    view->resize(win_sz,win_sz);
+    view->resize(win_sz, win_sz);
     view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
     init_map();
 }
@@ -102,7 +102,7 @@ void Qt_world::init_map() {
     sprite_map[IS_CLEAR] = base_clear_sprite;
     sprite_map[NOT_CLEAR] = base_not_clear_sprite;
     sprite_map[MOVE] = base_move_sprite;
-    
+
     // Fill height map to know what elements to draw over
     height_map[FOG] = 1;
     height_map[GOLD] = 5;
@@ -146,7 +146,7 @@ QGraphicsPixmapItem * Qt_world::set_tile(int x, int y, int elem_bits) {
             tile->setPixmap(*sprite);
             tile->setPos(ind2win[x][y]->x, ind2win[x][y]->y);
             tile->setZValue(z);
-            
+
         }
 
     }
@@ -155,6 +155,17 @@ QGraphicsPixmapItem * Qt_world::set_tile(int x, int y, int elem_bits) {
 
 void Qt_world::move_tile(QGraphicsPixmapItem * tile, int x, int y) {
     tile->setPos(ind2win[x][y]->x, ind2win[x][y]->y);
+}
+
+void Qt_world::save_world(char * filename) {
+    scene->clearSelection(); // Selections would also render to the file
+//    scene->setSceneRect(scene->itemsBoundingRect()); // Re-shrink the scene to it's bounding contents
+    QImage image(scene->sceneRect().size().toSize(), QImage::Format_ARGB32); // Create the image with the exact size of the shrunk scene
+    image.fill(Qt::transparent); // Start all pixels transparent
+
+    QPainter painter(&image);
+    scene->render(&painter);
+    image.save(filename);
 }
 
 /**
@@ -184,22 +195,22 @@ void World_view::keyPressEvent(QKeyEvent * e) {
 
     if (agent != 0) {
         switch (e->key()) {
-//            case Qt::Key_A:
-//                agent->make_move(WEST);
-//                break;
-//            case Qt::Key_S:
-//                agent->make_move(NORTH);
-//                break;
-//            case Qt::Key_W:
-//                agent->make_move(SOUTH);
-//                break;
-//            case Qt::Key_D:
-//                agent->make_move(EAST);
-//                break;
+                //            case Qt::Key_A:
+                //                agent->make_move(WEST);
+                //                break;
+                //            case Qt::Key_S:
+                //                agent->make_move(NORTH);
+                //                break;
+                //            case Qt::Key_W:
+                //                agent->make_move(SOUTH);
+                //                break;
+                //            case Qt::Key_D:
+                //                agent->make_move(EAST);
+                //                break;
             case Qt::Key_Space:
                 agent->make_move();
             default:
-                
+
                 std::cout << "invalid input" << std::endl;
         }
     }

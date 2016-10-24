@@ -18,7 +18,7 @@ Human_agent::Human_agent(Engine * this_engine, int sz) {
     // ask the engine to be placed at the start position
     make_move(NORTH);
 
-    kb->print_kb(kb->kb_rules);
+//    kb->print_kb(kb->out, kb->kb_rules);
 
 
 
@@ -222,7 +222,7 @@ uint Human_agent::infer_clear(uint direction) {
     cout << endl;
     cout << "__________________________________________________________________" << endl;
     cout << "We are trying to prove:" << endl;
-    kb->print_clause(query);
+//    kb->print_clause(query);
     cout << endl << "*************************************" << endl;
 #endif
     uint result = kb->input_resolution_bfs(query);
@@ -264,7 +264,7 @@ uint Human_agent::find_left(uint dir) {
 
 uint Human_agent::find_forward(uint dir) {
     cout << "The current knowledge base is:" << endl;
-    kb->print_kb(kb->kb_time_stack);
+//    kb->print_kb(kb->kb_time_stack);
     cout << endl;
     switch (dir) {
         case EAST:

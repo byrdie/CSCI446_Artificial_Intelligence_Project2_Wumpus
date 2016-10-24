@@ -6,6 +6,30 @@
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/world_gen.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/human_agent.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/rule_parser.h</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/inference.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/knowledge.h</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/tests.h</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/engine.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/resolve.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/inference.h</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/typedef.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/qt_world.h</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/rule_parser.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/world_gen.h</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/human_agent.h</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/resolve.h</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/main.h</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/unify.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/qt_world.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/main.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/knowledge.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/typedef.h</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/tests.cpp</file>
+            <file>file:/home/byrdie/School/Classes/CSCI446_Artificial_Intelligence/CSCI446_Artificial_Intelligence_Project2_Wumpus/src/CSCI446_Project2_Wumpus/engine.h</file>
+        </group>
     </open-files>
 </project-private>

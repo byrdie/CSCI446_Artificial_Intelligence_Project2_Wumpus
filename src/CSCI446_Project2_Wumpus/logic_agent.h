@@ -33,6 +33,8 @@ public:
     vector<Point *> search_tiles;
     vector<Point *> neighbors;
     
+    uint time;
+    
     bool clearN;
     bool clearS;
     bool clearE;

@@ -13,13 +13,14 @@ Logic_agent::Logic_agent(Engine * this_engine, int sz) {
     position = new Point(START_X, START_Y - 1);
     engine = this_engine;
 
+    time = 0;
 
     orientation = NORTH;
     my_tile = knowledge->qt_world->set_tile(position->x, position->y, AGENT);
     // ask the engine to be placed at the start position
     clearN = true;
 
-    kb->print_kb(kb->kb_rules);
+    kb->print_kb(&kb->out, kb->kb_rules);
 
 
 
@@ -50,7 +51,7 @@ void Logic_agent::make_move() {
             direction = SOUTH;
         } else {
             cout << move_stack.size() << endl;
-            if (move_stack.size() != 0) {
+            if (move_stack.size() > 0) {
                 direction = move_stack.back();
                 cout << "popping " << direction << " off the stack" << endl;
                 move_stack.pop_back();
@@ -112,8 +113,7 @@ void Logic_agent::make_move() {
 
         knowledge->qt_world->move_tile(my_tile, position->x, position->y);
         knowledge->qt_world->set_tile(x - 1, y, IS_CLEAR);
-        qApp->processEvents();
-        qApp->processEvents();
+
 
         if ((next_tile & WUMPUS) > 0) {
             cout << "Killed by a Wumpus" << endl;
@@ -215,33 +215,21 @@ void Logic_agent::make_move() {
             knowledge->qt_world->set_tile(x - 1, y, NOT_CLEAR);
         }
 
-        /* Determine next move */
-        if (clearN and knowledge->world_vec[x][y + 1] == FOG) {
-            direction = NORTH;
-        } else if (clearE and knowledge->world_vec[x + 1][y] == FOG) {
-            direction = EAST;
-        } else if (clearW and knowledge->world_vec[x - 1][y] == FOG) {
-            direction = WEST;
-        } else if (clearS and knowledge->world_vec[x][y - 1] == FOG) {
-            direction = SOUTH;
-        } else {
-            direction = move_stack.back();
-        }
+        qApp->processEvents();
+        qApp->processEvents();
 
-        switch (direction) {
-            case NORTH:
-                knowledge->qt_world->set_tile(x, y + 1, MOVE);
-                break;
-            case SOUTH:
-                knowledge->qt_world->set_tile(x, y - 1, MOVE);
-                break;
-            case WEST:
-                knowledge->qt_world->set_tile(x - 1, y, MOVE);
-                break;
-            case EAST:
-                knowledge->qt_world->set_tile(x + 1, y, MOVE);
-                break;
-        }
+        char * filename = new char[100];
+        sprintf(filename, "../output/frames/%d.png", time);
+        knowledge->qt_world->save_world(filename);
+
+        char latex_image[100];
+        sprintf(latex_image, "     \\includegraphics[width=0.5\\textwidth]{frames/%d.png}", time);
+
+        kb->latex << "\\begin{center}" << endl;
+        kb->latex << latex_image << endl;
+        kb->latex << "\\end{center}" << endl;
+
+        time++;
     }
 
 }
@@ -265,16 +253,25 @@ uint Logic_agent::infer_clear(uint direction) {
 #if debug_mode
     //    cout << "The current knowledge base is:" << endl;
     //    kb->print_kb(kb->kb_time_stack);
-    cout << endl;
-    cout << "__________________________________________________________________" << endl;
-    cout << "We are trying to prove:" << endl;
-    kb->print_clause(query);
-    cout << endl << "*************************************" << endl;
+    kb->out << endl;
+    kb->out << "__________________________________________________________________" << endl;
+    kb->out << "We are trying to prove:" << endl;
+    kb->print_clause(&kb->out, query);
+    kb->out << endl;
+    kb->out << "__________________________________________________________________" << endl;
+
+    kb->latex << endl;
+    kb->latex << "\\hrulefill \\\\" << endl;
+    kb->latex << "\\texttt{We are trying to prove:} \\\\" << endl;
+    kb->latex << "\\texttt{";
+    kb->print_clause(&kb->latex, query);
+    kb->latex << "} \\\\" << endl;
 #endif
     uint result = kb->input_resolution_bfs(query);
-    //#if debug_mode
-    cout << "The result is: " << result << endl;
-    //#endif
+#if debug_mode
+    kb->out << "The result is: " << result << endl;
+    kb->latex << "\\texttt{The result is: " << result << "} \\\\" << endl;
+#endif
 
     return result;
 
