@@ -97,7 +97,7 @@
 
 \begin{abstract}
 	Our project attempts to solve the problem of Logic and the Wumpus World by using two agents of varying sophistication to navigate the environment.
-	 The agents used are a reasoning agent and a reactive agent. The reasoning agent utilized first-order logic and resolution to navigate the world while the reactive agent used its current state and its previous states to make decisions. The performances of these two agents were compared to determine which one navigated the Wumpus World in the least amount of steps. It was found that the reasoning agent performed better on Wumpus Worlds of varying size, though this difference became much more apparent on Wumpus Worlds that are larger or have a large number of obstacles.
+	 The agents used are a reasoning agent and a reactive agent. The reasoning agent utilized first-order logic and resolution to navigate the world while the reactive agent uses its current state and its previous states to make decisions. The performances of these two agents were compared to determine which one navigated the Wumpus World in the least amount of steps. It was found that the reasoning agent performed better on Wumpus Worlds of varying size, though this difference became much more apparent on Wumpus Worlds that are larger or have a large number of obstacles.
 \end{abstract}
 \section{Introduction}
 Our task was to create a reasoning agent and reactive agent to navigate a Wumpus World.
@@ -123,15 +123,15 @@ To create our Wumpus World we used a two dimensional vector of unsigned integers
 \end{figure}
 \section{Reactive Agent}
 The first agent that was implemented was the reactive agent.
- This agent was not attached to the logical reasoning system and made decisions using an \texttt{if/else} tree.
-  This agent was not a purely reactive agent as it saved old states and used that information to improve its functionality\cite{reactive}.
+ This agent is not attached to the logical reasoning system and made decisions using an \texttt{if/else} tree.
+  This agent is not a purely reactive agent as it saves old states and uses that information to improve its functionality\cite{reactive}.
   
 
 The reactive agent had very basic functionality.
  As it searched the space, it would mark squares that have been visited as safe.
   If the agent encountered a breeze or a stench it would move to a randomly chosen safe tile.
    If the agent was on a tile that was not breezy and not smelly, it randomly chose from the set of adjacent tiles that had not been explored yet.
-    If all tiles squares had been explored, a tile was chosen at random.
+    If all tiles had been explored, a tile was chosen at random.
 
 The reactive agent also had a special mode that was used to take chances if the space was currently searched sufficiently.
  To implement this we added a counter that incremented ever time the agent had to move to a previously explored tile and was set to zero every time the agent encountered an unexplored tile.
@@ -215,7 +215,7 @@ So to navigate the wumpus world, our agent simply asks if a square is clear. The
 	
 	\subsection{Experimental Approach}
 	To measure the performance of our agents, we made a scoring system that decrements each time a move is made.
-	 A move is defined as rotating left, rotating right, and moving forward.
+	 A move is defined as rotating left, rotating right, or moving forward.
 	  The score will start at 1000 and finding the gold will yield an additional 1000 points to be added to the score.
 	
 	Using the performance measurement, we then varied the parameters of the wumpus world such as the size, number of wumpi, number of pits, etc. and plotted the relationships between the size of the world, number of obstacles, and the score.
