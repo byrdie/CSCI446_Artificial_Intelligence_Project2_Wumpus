@@ -112,8 +112,43 @@
 \section{Reactive Agent}
 
 \section{Reasoning Agent}
-\subsection{Unification}
+Our reasoning agent has the ability to navigate through each of the caves while avoiding wumpi, pits and barriers in search of the gold. We did not have time to implement a shooting routine, so wumpi and pits are notionally the same to our program. The reasoning agent is designed to navigate the caves through the use of af first-order logic \textit{inference engine}. This inference engine is an automated theorem prover based on unification and resolution. These algorithms use clauses in conjuctive normal form (CNF) that represent the rules of the wumpus world. The inference engine can use these rules, and the knowledge gained exploring the cave to locate and avoid obstacles.
+
 \subsection{Resolution}
+The application of resolution to automated theorem proving was introduced by J.A. Robinson in 1965.
+In first-order logic, resolution forms a single inference rule that can be used to construct proofs by refutation \cite{robinson}. 
+Our reasoning agent will use resolution to prove that a square in the wumpus word is safe.
+
+Two clauses in CNF may be resolved if they contain complementary literals. In predicate-order logic, two literals are complimentary if one is the negation of the other. 
+In first-order logic, we add the additional distinction that two literals are complimentary if one is the negation of the other following unification (variable substitution)\cite{ai}. 
+For example, the clauses
+\begin{gather*}
+\text{Breezy}(s) \lor \neg \text{Pit}(s) \\
+\text{Clear}(r) \lor \text{Pit}(r) \lor \text{Wall}(r) \lor \text{Wumpus}(r) \\
+\end{gather*}
+contain the complementary literals $\neg \text{Pit}(s)$ and $\text{Pit}(r)$, since $r$ and $s$ are taken to be variables in this example. 
+If two clauses can be resolved, the result of the resolution is a new clause with the complementary literals removed \cite{ai}. 
+For example, resolving the clauses presented above, we get
+\begin{equation*}
+\text{Breezy}(s) \lor \text{Clear}(s) \lor \text{Wall}(s) \lor \text{Wumpus}(s)
+\end{equation*}
+We can use resolution for theorem proving by using proof by contradiction. 
+In the wumpus world, our agent asks the inference engine a yes/no question.
+The inference engine then negates the query and uses resolution to find either a tautology or a contradiction.
+
+Initially, we based our resolution algorithm off of the function \textsc{PL-Resolution} described in Figure 7.5 of Russell and Norvig. 
+This algorithm attempts to find a contradiction or tautology by resolving every resolvable clause with every other resolvable clause. 
+As one might expect, this technique is very inefficient, so we turned to an algorithm known as \textit{linear resolution}. 
+Linear resolution improves on the exhaustive approach pf \textsc{PL-Resolution} by only attempting to resolve clauses that are either in the knowledge base or an ancestor of the original input query\cite{ai}. 
+By only resolving clauses with the input query, we were able to drastically reduce the search space of the resolution algorithm.
+
+In linear resolution, the search space forms a tree, since each successive resolution step produces an arbitrary number of descendants, where each descendant will be again be resolved with the knowledge base. The performance of our resolution algorithm then directly depends on the strategy for searching this linear resolution tree. The strategy adopted by our implementation is the breadth-first strategy described by Lawrence and Starkey. For this search strategy, the inference engine resolves every clause at each layer, before descending to the next layer. This approach prevents the resolution algorithm from getting stuck in the search tree if it uses unideal rule.
+
+To further improve the efficiency of the resolution problem, we made sure to only search local rules. In the wumpus world, the knowledge base consists of many facts associated with each location, but our rules only concern neighboring squares. Therefore, we only tried to resolve rules from the squares adjacent to the agent's current square. This prevented the resolution process from having to search the whole board for a single rule.
+\subsection{Unification}
+
+Our implementation of resolution relies on the concept of unification to check if two clauses can be unified. Our unification algorithm is based off of the function \textsc{Unify} presented in Russell and Norvig Figure 9.1. Since many of our rules contain functions, we improved on Russell and Norvig's implementation using the unification algorithm described by Robinson \cite{robinson}.
+
 \subsection{Pathfinding}
 
 		
@@ -139,7 +174,7 @@
 
 
 	%\bibliographystyle{apj}
-	\bibliographystyle{unsrt}
+	\bibliographystyle{apalike}
 	
 	\bibliography{sources}
 \end{document}

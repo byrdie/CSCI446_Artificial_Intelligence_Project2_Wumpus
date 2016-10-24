@@ -50,22 +50,22 @@ void run_test() {
     string logic_file = "../Results/Logic_results.txt";
     string reactive_file = "../Results/Reactive_results.txt";
 
-    int s_num_obs = 1;
+    int s_num_obs = 3;
     int num_obs = 3;
 
     int num_runs = 3;
 
     int size_step = 5;
-    int num_steps = 5;
+    int num_steps = 6;
 
-    int start = 5;
+    int start = 10;
 
-    for (int i = 1; i <= num_steps; i++) {
+    for (int i = 2; i <= num_steps; i++) {
         for (int j = 0; j < num_runs; j++) {
             for (int k = 0; k < num_obs; k++) {
 
                 int seed = init_rand();
-                World * world = new World(i*size_step, (s_num_obs + k)*i, (s_num_obs + k)*i, (s_num_obs + k)*i);
+                World * world = new World(i*size_step, (s_num_obs* k), (s_num_obs * k), (s_num_obs * k));
                 Engine * engine = new Engine(world);
                 Logic_agent * l_agent = new Logic_agent(engine, i*size_step, logic_file);
                 world->qt_world->view->close();
@@ -75,7 +75,7 @@ void run_test() {
                 
                 
                 init_rand(seed);
-                world = new World(i*size_step, (s_num_obs + k)*i, (s_num_obs + k)*i, (s_num_obs + k)*i);
+                world = new World(i*size_step, (s_num_obs * k), (s_num_obs * k), (s_num_obs * k));
                 engine = new Engine(world);
                 Reactive_agent * r_agent = new Reactive_agent(engine, i*size_step, reactive_file);
                 world->qt_world->view->close();
