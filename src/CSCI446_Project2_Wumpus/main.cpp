@@ -12,11 +12,12 @@ int main(int argc, char *argv[]) {
 
             QApplication app(argc, argv);
     
+            //1477267586
             init_rand();
         
-            int N = 10;
+            int N = 5;
             
-            World * world = new World(N, 2, 2, 2);
+            World * world = new World(N, 1, 1, 1);
             Engine * engine = new Engine(world);
             Logic_agent * player = new Logic_agent(engine, N);
 

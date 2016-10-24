@@ -35,6 +35,7 @@ void Logic_agent::make_move() {
         int direction;
 
         /* Determine next move */
+
         if (clearN and knowledge->world_vec[x][y + 1] == FOG) {
             move_stack.push_back(SOUTH);
             direction = NORTH;
@@ -48,7 +49,8 @@ void Logic_agent::make_move() {
             move_stack.push_back(NORTH);
             direction = SOUTH;
         } else {
-            if (!move_stack.empty()) {
+            cout << move_stack.size() << endl;
+            if (move_stack.size() != 0) {
                 direction = move_stack.back();
                 cout << "popping " << direction << " off the stack" << endl;
                 move_stack.pop_back();
@@ -58,22 +60,21 @@ void Logic_agent::make_move() {
                 cout << "choosing random direction " << direction << endl;
             }
         }
-        
-        if(direction != NORTH and direction != SOUTH and direction != WEST and direction != EAST){
-            cout << "Invalid data on move stack!" << endl;
-            return;
-        }
+
+
 
         int next_tile = engine->move(direction, position);
 
         neighbors = knowledge->find_neighbors(position);
         if ((next_tile & WALL) > 0) {
 
-            move_stack.pop_back();
+            if (move_stack.size() != 0) {
+                move_stack.pop_back();
+            }
+
 
             x = neighbors[direction]->x;
             y = neighbors[direction]->y;
-            cout << x << " " << y << endl;
             kb->clear_heap(x, y);
 
             kb->clear_stack();

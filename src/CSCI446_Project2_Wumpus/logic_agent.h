@@ -36,6 +36,7 @@ public:
     bool clearS;
     bool clearE;
     bool clearW;
+    bool stuck;
     
     vector<int> move_stack;
     

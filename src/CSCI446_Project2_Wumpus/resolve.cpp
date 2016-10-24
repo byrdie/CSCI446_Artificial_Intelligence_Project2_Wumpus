@@ -122,6 +122,7 @@ uint Knowledge::input_resolution_bfs(clause query) {
 
             }
 
+            break;
         }
         rtree[i + 1] = next_row;
     }
