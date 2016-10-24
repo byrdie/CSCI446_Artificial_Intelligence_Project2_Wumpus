@@ -114,7 +114,7 @@ Our task was to create a reasoning agent and reactive agent to navigate a Wumpus
 
 
 \section{Problem Generation}
-\begin{figure}
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{images/ex_ww}
 	\caption{An example of a wumpus world produced by our problem generator. The green haze represents stench and the blue tiles represent breezy squares.}
@@ -207,7 +207,10 @@ Our rules are constructed to simply verify if a square is clear. Since there is 
 \text{Stinky}(s) \lor \neg \text{Wumpus(west($s$))} \\
 \text{Breezy}(s) \lor \text{Clear}(s) \lor \text{Wall}(s) \lor \text{Wumpus}(s)\\
 \end{gather*}
-So to navigate the wumpus world, our agent simply asks a square is clear. Then the resolution algorithm uses the rules above to determine if the square is accessible. Notice that these rules can only determine if a square is clear
+So to navigate the wumpus world, our agent simply asks a square is clear. 
+Then the resolution algorithm uses the rules above to determine if the square is accessible. 
+Notice that these rules can only determine if a square is clear. 
+We found that determining if a square is not clear often led to infinite loops in the resolution algorithm.
 
 \section{Comparing Algorithm Performance}
 	\label{comparisons}
@@ -223,12 +226,33 @@ So to navigate the wumpus world, our agent simply asks a square is clear. Then t
 	  We ran each algorithm on graph sizes \{5, 10, 15,...,25\} with ten runs for each size.
 	  The number of obstacles was roughly computed to have a constant obstacle density.
 	
-	We then used \textit{Mathematica}  to produce a 3D plot to display the data in terms of score vs. size vs. number of obstacles
+	We then used \textit{Mathematica}  to produce a density plots to display the data in terms of score vs. size vs. number of obstacles
 	
 	\subsection{Results}
 		In general, the results presented exactly as hypothesized. The reasoning agent outstripped the reactive agent in terms of score regardless of the size of the world or the number of obstacles in the world. 
-		However, size and the number of obstacles did affect by how much the reasoning agent was better than the reactive agent. 
+		However, size and the number of obstacles did increase the advantage of the reasoning agent over the reactive agent.
 		For very small board sizes with minimal obstacles the two algorithms scored almost evenly, but for large worlds with a  large number of obstacles the reasoning agent far outstrips the reactive agent.
+		
+		\begin{figure}[h!]
+			\centering
+			\begin{subfigure}[b]{0.47\textwidth}
+							\centering
+							\includegraphics[width=\textwidth]{images/density_reason}
+							\caption{Reasoning Agent}
+				\end{subfigure}
+				\begin{subfigure}[b]{0.47\textwidth}
+					\centering
+					\includegraphics[width=\textwidth]{images/density_react}
+					\caption{Reactive Agent}
+				\end{subfigure}
+				\caption{Density plots of number of obstacles vs. board size vs. score. The average score for a given number of density and board size is given by the color. The plots above have been scaled to have the same color table.}
+		\end{figure}
+		
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=0.7\textwidth]{images/2dplot}
+			\caption{Plot of score vs. size. In this plot we averaged all the results for the different amout of obstacles.}
+		\end{figure}
 		
 		One reason the reactive agent was almost as good as the reasoning agent in small worlds is that the search space is so small that the reactive agent can search the whole safe space in nearly the same number of steps as the logical agent.
 	 Since the number of steps to search the space has a large effect on the score, the scores for the small worlds are almost the same. 
