@@ -136,6 +136,80 @@ World::World(int side_length, int n_wumpi, int n_pit, int n_barrier) {
 
 }
 
+void World::reset(int side_length, int n_wumpi, int n_pit, int n_barrier) {
+    N = side_length;
+    num_wumpi = n_wumpi;
+    num_pits = n_pit;
+    num_barriers = n_barrier;
+
+    vector<vector<int> > vec;
+    world_vec = vec;
+    wumpus_list.clear();
+    pit_list.clear();
+    barrier_list.clear();
+    gold_list.clear();
+
+    for (int i = 0; i < N + 2; i++) {
+        vector<int> world_vec_row;
+        for (int j = 0; j < N + 2; j++) {
+            if (i == 0 or i == N + 1 or j == 0 or j == N + 1) {
+                world_vec_row.push_back(WALL);
+                //qt_world->set_tile(i, j, WALL);
+            } else {
+                world_vec_row.push_back(EMPTY);
+                //qt_world->set_tile(i, j, EMPTY);
+            }
+
+        }
+        world_vec.push_back(world_vec_row);
+    }
+
+    //Place all the wumpi
+    for (int i = 0; i < num_wumpi; i++) {
+        Point * next_pt = add_element(WUMPUS);
+        wumpus_list.push_back(next_pt);
+        //qt_world->set_tile(next_pt->x, next_pt->y, WUMPUS);
+    }
+
+    //Place all the pits
+    for (int i = 0; i < num_pits; i++) {
+        Point * next_pt = add_element(PIT);
+        pit_list.push_back(next_pt);
+       // qt_world->set_tile(next_pt->x, next_pt->y, PIT);
+    }
+
+    // Place all the barriers
+    for (int i = 0; i < num_barriers; i++) {
+        Point * next_pt = add_element(WALL);
+        barrier_list.push_back(next_pt);
+       // qt_world->set_tile(next_pt->x, next_pt->y, WALL);
+    }
+
+    // Place the gold
+    Point * next_pt = add_element(GOLD);
+    gold_list.push_back(next_pt);
+   //qt_world->set_tile(next_pt->x, next_pt->y, GOLD);
+
+    //Place the stench
+    for (int i = 0; i < num_wumpi; i++) {
+        vector<Point *> affected_tiles = add_effect(wumpus_list[i], STENCH);
+        for (uint j = 0; j < affected_tiles.size(); j++) {
+            Point * tile = affected_tiles[j];
+          //  qt_world->set_tile(tile->x, tile->y, STENCH);
+        }
+    }
+
+    // Place the breeze
+    for (int i = 0; i < num_pits; i++) {
+        vector<Point *> affected_tiles = add_effect(pit_list[i], BREEZE);
+        for (uint j = 0; j < affected_tiles.size(); j++) {
+            Point * tile = affected_tiles[j];
+           // qt_world->set_tile(tile->x, tile->y, BREEZE);
+        }
+    }
+
+}
+
 bool World::tile_is_empty(Point* p) {
     if (world_vec[p->x][p->y] == EMPTY) {
         return true;
@@ -149,7 +223,7 @@ bool World::tile_is_empty(Point* p) {
 Point * World::add_element(int elem_bits) {
 
     while (true) {
-
+        
         // Find a new random point
         int x = rand() % N + 1;
         int y = rand() % N + 1;

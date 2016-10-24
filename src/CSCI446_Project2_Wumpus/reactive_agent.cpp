@@ -37,7 +37,7 @@ void Reactive_agent::output_stats(uint gold) {
     myfile.open(filename, std::ios::out | std::ios::app);
      
     myfile << N << "," << engine->num_obstacles() << "," << engine->score << "," << gold << endl;
-    
+    cout << N << "," << engine->num_obstacles() << "," << engine->score << "," << gold << endl;
     
     
 }
