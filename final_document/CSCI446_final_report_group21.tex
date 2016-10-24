@@ -167,16 +167,47 @@ As one might expect, this technique is very inefficient, so we turned to an algo
 Linear resolution improves on the exhaustive approach pf \textsc{PL-Resolution} by only attempting to resolve clauses that are either in the knowledge base or an ancestor of the original input query\cite{ai}. 
 By only resolving clauses with the input query, we were able to drastically reduce the search space of the resolution algorithm.
 
-In linear resolution, the search space forms a tree, since each successive resolution step produces an arbitrary number of descendants, where each descendant will be again be resolved with the knowledge base. The performance of our resolution algorithm then directly depends on the strategy for searching this linear resolution tree. The strategy adopted by our implementation is the breadth-first strategy described by Lawrence and Starkey. For this search strategy, the inference engine resolves every clause at each layer, before descending to the next layer. This approach prevents the resolution algorithm from getting stuck in the search tree if it uses unideal rule.
+In linear resolution, the search space forms a tree, since each successive resolution step produces an arbitrary number of descendants, where each descendant will be again be resolved with the knowledge base. 
+The performance of our resolution algorithm then directly depends on the strategy for searching this linear resolution tree. 
+The strategy adopted by our implementation is the breadth-first strategy described by Lawrence and Starkey. 
+For this search strategy, the inference engine resolves every clause at each layer, before descending to the next layer. 
+This approach prevents the resolution algorithm from getting stuck in the search tree if it uses unideal rule.
 
-To further improve the efficiency of the resolution problem, we made sure to only search local rules. In the wumpus world, the knowledge base consists of many facts associated with each location, but our rules only concern neighboring squares. Therefore, we only tried to resolve rules from the squares adjacent to the agent's current square. This prevented the resolution process from having to search the whole board for a single rule.
+To further improve the efficiency of the resolution problem, we made sure to only search local rules. 
+In the wumpus world, the knowledge base consists of many facts associated with each location, but our rules only concern neighboring squares. 
+Therefore, we only tried to resolve rules from the squares adjacent to the agent's current square. 
+This prevented the resolution process from having to search the whole board for a single rule.
 \subsection{Unification}
 
-Our implementation of resolution relies on the concept of unification to check if two clauses can be unified. Our unification algorithm is based off of the function \textsc{Unify} presented in Russell and Norvig Figure 9.1. Since many of our rules contain functions, we improved on Russell and Norvig's implementation using the unification algorithm described by Robinson \cite{robinson}.
+Resolution relies on the concept of unification to check if two clauses can be unified\cite{robinson}. 
+Our unification algorithm is based off of the function \textsc{Unify} presented in Russell and Norvig Figure 9.1. Since many of our rules contain functions, we improved on Russell and Norvig's implementation using the unification algorithm described by \cite{robinson}.
+
+In unifying our rules with the knowledge base an interesting question presented itself: should we evaluate functions? Ultimately we tried it both ways. Evaluating functions led to a more robust resolution/unification algorithm, but was much less efficient than not evaluating functions. This is because evaluating functions leads to information propagation, e.g. resolution propagates across the whole board attempting to unify everything. If we left the functions unevaluated, this helped to restrict the resolution process to local scope, but had the disadvantage of having to have copies of information with different functional forms.
 
 \subsection{Pathfinding}
 
-		
+To navigate the wumpus world, we embraced a simple recursive backtracking algorithm. 
+This algorithm attempts to travel to only clear and unexplored squares. 
+If a clear/unexplored square is unavailable, it backs up until a clear/unexplored square is found. 
+If all accessible squares have been explored, the agent then does a random walk to attempt to find the gold.
+
+It is worth mentioning here that we did not get the chance to implement a shooting routine for our agent. Unfortunately time constraints prevented us from realizing this feature.
+
+\section{Rules}
+
+Our rules are constructed to simply verify if a square is clear. Since there is the possibility of multiple pits and wumpi, there is no way to precisely determine where the obstacles are. Therefore we have to satisfy ourselves with the knowledge where the obstacles are not. The rules we implemented are as follows.
+\begin{gather*}
+\text{Breezy}(s) \lor \neg \text{Pit(north($s$))} \\
+\text{Breezy}(s) \lor \neg \text{Pit(south($s$))} \\
+\text{Breezy}(s) \lor \neg \text{Pit(east($s$))} \\
+\text{Breezy}(s) \lor \neg \text{Pit(west($s$))} \\
+\text{Stinky}(s) \lor \neg \text{Wumpus(north($s$))} \\
+\text{Stinky}(s) \lor \neg \text{Wumpus(south($s$))} \\
+\text{Stinky}(s) \lor \neg \text{Wumpus(east($s$))} \\
+\text{Stinky}(s) \lor \neg \text{Wumpus(west($s$))} \\
+\text{Breezy}(s) \lor \text{Clear}(s) \lor \text{Wall}(s) \lor \text{Wumpus}(s)\\
+\end{gather*}
+So to navigate the wumpus world, our agent simply asks a square is clear. Then the resolution algorithm uses the rules above to determine if the square is accessible. Notice that these rules can only determine if a square is clear
 
 \section{Comparing Algorithm Performance}
 	\label{comparisons}

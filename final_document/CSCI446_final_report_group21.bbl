@@ -1,21 +1,4 @@
-\begin{thebibliography}{1}
-
-\bibitem{ai}
-Stuart Russel and Peter Norvig.
-\newblock {\em Artificial Intelligence: A Modern Approach}.
-\newblock Pearson Education, Upper Saddle River, New Jersey 07458, 3rd edition,
-  2010.
-
-\bibitem{reactive}
-Gerhard Weiss.
-\newblock {\em Multiagent Systems: A Modern Approach to Distributed Artificial
-  Intelligence}.
-\newblock MIT Press, Cambridge, Massachusetts, 1999.
-
-\bibitem[Lawrence and Starkey, 1976]{linear}
-Lawrence, J.~D. and Starkey, J.~D. (1976).
-\newblock Experimental tests of resolution-based theorem-proving strategies.
-\newblock {\em Information Sciences}, 10(2):131 -- 154.
+\begin{thebibliography}{}
 
 \bibitem[Robinson, 1965]{robinson}
 Robinson, J.~A. (1965).
@@ -26,5 +9,11 @@ Robinson, J.~A. (1965).
 Russel, S. and Norvig, P. (2010).
 \newblock {\em Artificial Intelligence: A Modern Approach}.
 \newblock Pearson Education, Upper Saddle River, New Jersey 07458, 3rd edition.
+
+\bibitem[Weiss, 1999]{reactive}
+Weiss, G. (1999).
+\newblock {\em Multiagent Systems: A Modern Approach to Distributed Artificial
+  Intelligence}.
+\newblock MIT Press, Cambridge, Massachusetts.
 
 \end{thebibliography}
