@@ -2,8 +2,8 @@
 \BOOKMARK [1][-]{section.2}{Problem Generation}{}% 2
 \BOOKMARK [1][-]{section.3}{Reactive Agent}{}% 3
 \BOOKMARK [1][-]{section.4}{Reasoning Agent}{}% 4
-\BOOKMARK [2][-]{subsection.4.1}{Unification}{section.4}% 5
-\BOOKMARK [2][-]{subsection.4.2}{Resolution}{section.4}% 6
+\BOOKMARK [2][-]{subsection.4.1}{Resolution}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{Unification}{section.4}% 6
 \BOOKMARK [2][-]{subsection.4.3}{Pathfinding}{section.4}% 7
 \BOOKMARK [1][-]{section.5}{Comparing Algorithm Performance}{}% 8
 \BOOKMARK [2][-]{subsection.5.1}{Experimental Approach}{section.5}% 9

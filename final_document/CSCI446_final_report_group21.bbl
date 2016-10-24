@@ -12,4 +12,19 @@ Gerhard Weiss.
   Intelligence}.
 \newblock MIT Press, Cambridge, Massachusetts, 1999.
 
+\bibitem[Lawrence and Starkey, 1976]{linear}
+Lawrence, J.~D. and Starkey, J.~D. (1976).
+\newblock Experimental tests of resolution-based theorem-proving strategies.
+\newblock {\em Information Sciences}, 10(2):131 -- 154.
+
+\bibitem[Robinson, 1965]{robinson}
+Robinson, J.~A. (1965).
+\newblock A machine-oriented logic based on the resolution principle.
+\newblock {\em J. ACM}, 12(1):23--41.
+
+\bibitem[Russel and Norvig, 2010]{ai}
+Russel, S. and Norvig, P. (2010).
+\newblock {\em Artificial Intelligence: A Modern Approach}.
+\newblock Pearson Education, Upper Saddle River, New Jersey 07458, 3rd edition.
+
 \end{thebibliography}
