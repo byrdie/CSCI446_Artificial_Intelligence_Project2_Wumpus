@@ -19,6 +19,7 @@
 #include "rule_parser.h"
 #include "logic_agent.h"
 #include "tests.h"
+#include "reactive_agent.h"
 
 using namespace std;
 

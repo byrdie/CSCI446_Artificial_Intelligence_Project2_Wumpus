@@ -21,9 +21,12 @@
 
 class World;
 
-#include "qt_world.h"
-#include "typedef.h"
 
+#include "logic_agent.h"
+#include "qt_world.h"
+#include "human_agent.h"
+#include "typedef.h"
+#include "reactive_agent.h"                                                                                                                            
 #define START_X 1
 #define START_Y 1
 
@@ -31,7 +34,7 @@ using namespace std;
 
 
 
-class World {
+class World {                                                  
 public:
     int N;
     int num_wumpi;
@@ -48,6 +51,8 @@ public:
     vector<Point*> gold_list;
     
     World(int side_length, Logic_agent * agent);   // Create a new world covered in fog
+    World(int side_length, Human_agent * agent);   // Create a new world covered in fog
+    World(int side_length, Reactive_agent * agent); 
     World(int side_length, int n_wumpi, int n_pit, int n_barrier); // Create a new master world
     World(char * filename);     // Load a world from a file
     bool tile_is_empty(Point * p);

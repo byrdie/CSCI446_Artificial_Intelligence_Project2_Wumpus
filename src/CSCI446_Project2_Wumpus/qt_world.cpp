@@ -27,7 +27,35 @@ Qt_world::Qt_world(int num_tiles) {
 
 }
 
+Qt_world::Qt_world(int num_tiles, Human_agent * h_agent) {
+    // Initialize variables
+    N = num_tiles;
+    win_sz = 1000;
+    scale = win_sz / (num_tiles + 2);
+
+    // Initialize Qt variables
+    scene = new QGraphicsScene(0, 0, win_sz, win_sz);
+    view = new World_view(scene, h_agent);
+    view->resize(win_sz,win_sz);
+    view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
+    init_map();
+}
+
 Qt_world::Qt_world(int num_tiles, Logic_agent * h_agent) {
+    // Initialize variables
+    N = num_tiles;
+    win_sz = 1000;
+    scale = win_sz / (num_tiles + 2);
+
+    // Initialize Qt variables
+    scene = new QGraphicsScene(0, 0, win_sz, win_sz);
+    view = new World_view(scene, h_agent);
+    view->resize(win_sz,win_sz);
+    view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
+    init_map();
+}
+
+Qt_world::Qt_world(int num_tiles, Reactive_agent * h_agent) {
     // Initialize variables
     N = num_tiles;
     win_sz = 1000;
@@ -138,8 +166,17 @@ World_view::World_view(QGraphicsScene * scene, Logic_agent * h_agent) : QGraphic
     agent = h_agent;
 }
 
+World_view::World_view(QGraphicsScene * scene, Reactive_agent * h_agent) : QGraphicsView(scene) {
+    ragent = h_agent;
+}
+
+World_view::World_view(QGraphicsScene * scene, Human_agent * h_agent) : QGraphicsView(scene) {
+    hagent = h_agent;
+}
+
 World_view::World_view(QGraphicsScene * scene) : QGraphicsView(scene) {
     agent = 0;
+    ragent = 0;
 }
 
 void World_view::keyPressEvent(QKeyEvent * e) {
@@ -162,6 +199,7 @@ void World_view::keyPressEvent(QKeyEvent * e) {
             case Qt::Key_Space:
                 agent->make_move();
             default:
+                
                 std::cout << "invalid input" << std::endl;
         }
     }

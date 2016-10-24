@@ -15,7 +15,7 @@ Engine::Engine(World * this_world) {
 
 int Engine::move(int direction, Point * cur_pos) {
     orient_to_direction(direction, orientation);
-    score++;
+    score--;
     vector<Point *> neighbors = world->find_neighbors(cur_pos);
 
     Point * test_pt = neighbors[direction];
@@ -39,10 +39,10 @@ int Engine:: orient_to_direction(int direction, int orientation){
         score = score;
     }else if(abs(orientation - direction) % 2 == 0){
         orientation = (orientation + 2) % 4;
-        score += 2;
+        score -= 2;
     }else {
         orientation = direction;
-        score++;
+        score--;
     }
 
     
