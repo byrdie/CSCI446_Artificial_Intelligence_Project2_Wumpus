@@ -65,7 +65,7 @@ void run_test() {
             for (int k = 0; k < num_obs; k++) {
 
                 int seed = init_rand();
-                World * world = new World(i*size_step, s_num_obs + k, s_num_obs + k, s_num_obs + k);
+                World * world = new World(i*size_step, (s_num_obs + k)*i, (s_num_obs + k)*i, (s_num_obs + k)*i);
                 Engine * engine = new Engine(world);
                 Logic_agent * l_agent = new Logic_agent(engine, i*size_step, logic_file);
                 world->qt_world->view->close();
@@ -75,7 +75,7 @@ void run_test() {
                 
                 
                 init_rand(seed);
-                world = new World(i*size_step, s_num_obs + k, s_num_obs + k, s_num_obs + k);
+                world = new World(i*size_step, (s_num_obs + k)*i, (s_num_obs + k)*i, (s_num_obs + k)*i);
                 engine = new Engine(world);
                 Reactive_agent * r_agent = new Reactive_agent(engine, i*size_step, reactive_file);
                 world->qt_world->view->close();
