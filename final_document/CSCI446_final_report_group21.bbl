@@ -1,5 +1,10 @@
 \begin{thebibliography}{}
 
+\bibitem[Lawrence and Starkey, 1976]{linear}
+Lawrence, J.~D. and Starkey, J.~D. (1976).
+\newblock Experimental tests of resolution-based theorem-proving strategies.
+\newblock {\em Information Sciences}, 10(2):131 -- 154.
+
 \bibitem[Robinson, 1965]{robinson}
 Robinson, J.~A. (1965).
 \newblock A machine-oriented logic based on the resolution principle.

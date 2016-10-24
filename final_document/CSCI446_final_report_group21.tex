@@ -97,15 +97,15 @@
 
 \begin{abstract}
 	Our project attempts to solve the problem of Logic and the Wumpus World by using two agents of varying sophistication to navigate the environment.
-	 The agents used are a reasoning agent and a reactive agent. The reasoning agent utilized first order logic and resolution to navigate the world while the reactive agent used its current state and its previous states to make decisions. The performance of these two agents were compared to determine which one navigated the Wumpus World in the least amount of steps. It was found that the reasoning agent performed better on Wumpus Worlds of varying size, though this difference became much more apparent on Wumpus Worlds that are larger or have a large number of obstacles.
+	 The agents used are a reasoning agent and a reactive agent. The reasoning agent utilized first-order logic and resolution to navigate the world while the reactive agent uses its current state and its previous states to make decisions. The performances of these two agents were compared to determine which one navigated the Wumpus World in the least amount of steps. It was found that the reasoning agent performed better on Wumpus Worlds of varying size, though this difference became much more apparent on Wumpus Worlds that are larger or have a large number of obstacles.
 \end{abstract}
 \section{Introduction}
-Our task was to create a reasoning agent and reactive agent to navigate a WumpusWorld.
-		\textit{Logic and the Wumpus World} is an artificial intelligence problem first proposed by Michael Genesereth, and described in detail by his student Stuart Russel\cite{ai}.  The problem involves navigating an environment known as the Wumpus World using logic to avoid dangers as the agent attempts to reach a goal.  The environment is a square grid of tiles that can be empty or contain gold for the goal state, a pit that the agent will fall into, or a monster known as a wumpus. 
+Our task was to create a reasoning agent and reactive agent to navigate a Wumpus World.
+		\textit{Logic and the Wumpus World} is an artificial intelligence problem first proposed by Michael Genesereth, and described in detail by his student Stuart Russel \cite{ai}.  The problem involves navigating an environment known as the Wumpus World using logic to avoid dangers as the agent attempts to reach a goal.  The environment is a square grid of tiles that can be empty or contain gold for the goal state, a pit that the agent will fall into, or a monster known as a wumpus. 
 		 As the agent navigates the environment, a score is calculated from the various actions that the agent makes.  
 		 The objective of the game is thus to maximize the score.
 		 
-		 Our reasoning agent uses first order logic and the process of resolution to navigate the Wumpus World and find the gold. Resolution relies on the concept of proof by contradiction to deduce things about the Wumpus World and uses those deductions to make further deductions about the world.
+		 Our reasoning agent uses first-order logic and the process of resolution to navigate the Wumpus World and find the gold. Resolution relies on the concept of proof by contradiction to deduce things about the Wumpus World and uses those deductions to make further deductions about the world.
 		 
 		 Meanwhile, our reactive agent does not use resolution and relies solely on the information supplied at its current tile and the information from tiles it has already visited to make decisions as to how to find the gold. This agent uses a kind of directed random walk to navigate the Wumpus World.
 		 
@@ -114,6 +114,7 @@ Our task was to create a reasoning agent and reactive agent to navigate a Wumpus
 
 
 \section{Problem Generation}
+To create our Wumpus World we used a two dimensional vector of unsigned integers. We assigned certain bits to certain features such as the walls and wumpi. This made it easy to see what each tile contained with a simple bitwise operation. The wumpi and pits were placed randomly and could not be in the start tile or a tile already occupied. Each agent received a blank world that contained only zeros except for the start tile.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{images/ex_ww}
@@ -122,27 +123,27 @@ Our task was to create a reasoning agent and reactive agent to navigate a Wumpus
 \end{figure}
 \section{Reactive Agent}
 The first agent that was implemented was the reactive agent.
- This agent was not attached to the logical reasoning system and made decisions using an \texttt{if/else} tree.
-  This agent was not a purely reactive agent as it saved old states and used that information to improve its functionality\cite{reactive}.
+ This agent is not attached to the logical reasoning system and made decisions using an \texttt{if/else} tree.
+  This agent is not a purely reactive agent as it saves old states and uses that information to improve its functionality\cite{reactive}.
   
 
 The reactive agent had very basic functionality.
- As it searched the space it would mark squares that have been visited as safe.
+ As it searched the space, it would mark squares that have been visited as safe.
   If the agent encountered a breeze or a stench it would move to a randomly chosen safe tile.
-   If the agent was on a tile that was not breezy and not smelly it randomly chose from the set of adjacent tiles that had not been explored yet.
-    If all tiles squares had been explored a tile was chosen at random.
+   If the agent was on a tile that was not breezy and not smelly, it randomly chose from the set of adjacent tiles that had not been explored yet.
+    If all tiles had been explored, a tile was chosen at random.
 
 The reactive agent also had a special mode that was used to take chances if the space was currently searched sufficiently.
  To implement this we added a counter that incremented ever time the agent had to move to a previously explored tile and was set to zero every time the agent encountered an unexplored tile.
-  If the counter reached a certain threshold a chance was taken.
+  If the counter reached a certain threshold, a chance was taken.
 
 \section{Reasoning Agent}
-Our reasoning agent has the ability to navigate through each of the caves while avoiding wumpi, pits and barriers in search of the gold. We did not have time to implement a shooting routine, so wumpi and pits are notionally the same to our program. The reasoning agent is designed to navigate the caves through the use of af first-order logic \textit{inference engine}. This inference engine is an automated theorem prover based on unification and resolution. These algorithms use clauses in conjuctive normal form (CNF) that represent the rules of the wumpus world. The inference engine can use these rules, and the knowledge gained exploring the cave to locate and avoid obstacles.
+Our reasoning agent has the ability to navigate through each of the caves while avoiding wumpi, pits, and barriers in search of the gold. We did not have time to implement a shooting routine, so wumpi and pits are notionally the same to our program. The reasoning agent is designed to navigate the caves through the use of a first-order logic \textit{inference engine}. This inference engine is an automated theorem prover based on unification and resolution. These algorithms use clauses in conjunctive normal form (CNF) that represent the rules of the wumpus world. The inference engine can use these rules and the knowledge gained exploring the cave to locate and avoid obstacles.
 
 \subsection{Resolution}
 The application of resolution to automated theorem proving was introduced by J.A. Robinson in 1965.
 In first-order logic, resolution forms a single inference rule that can be used to construct proofs by refutation \cite{robinson}. 
-Our reasoning agent will use resolution to prove that a square in the wumpus word is safe.
+Our reasoning agent uses resolution to prove that a square in the wumpus word is safe.
 
 Two clauses in CNF may be resolved if they contain complementary literals. In predicate-order logic, two literals are complimentary if one is the negation of the other. 
 In first-order logic, we add the additional distinction that two literals are complimentary if one is the negation of the other following unification (variable substitution)\cite{ai}. 
@@ -163,14 +164,14 @@ The inference engine then negates the query and uses resolution to find either a
 
 Initially, we based our resolution algorithm off of the function \textsc{PL-Resolution} described in Figure 7.5 of Russell and Norvig. 
 This algorithm attempts to find a contradiction or tautology by resolving every resolvable clause with every other resolvable clause. 
-As one might expect, this technique is very inefficient, so we turned to an algorithm known as \textit{linear resolution}. 
+As one might expect, this technique is very inefficient, so we turned to an algorithm known as \textit{linear resolution}\cite{linear}. 
 Linear resolution improves on the exhaustive approach pf \textsc{PL-Resolution} by only attempting to resolve clauses that are either in the knowledge base or an ancestor of the original input query\cite{ai}. 
 By only resolving clauses with the input query, we were able to drastically reduce the search space of the resolution algorithm.
 
-In linear resolution, the search space forms a tree, since each successive resolution step produces an arbitrary number of descendants, where each descendant will be again be resolved with the knowledge base. 
+In linear resolution, the search space forms a tree, since each successive resolution step produces an arbitrary number of descendants, where each descendant will again be resolved with the knowledge base. 
 The performance of our resolution algorithm then directly depends on the strategy for searching this linear resolution tree. 
 The strategy adopted by our implementation is the breadth-first strategy described by Lawrence and Starkey. 
-For this search strategy, the inference engine resolves every clause at each layer, before descending to the next layer. 
+For this search strategy, the inference engine resolves every clause at each layer before descending to the next layer. 
 This approach prevents the resolution algorithm from getting stuck in the search tree if it uses unideal rule.
 
 To further improve the efficiency of the resolution problem, we made sure to only search local rules. 
@@ -180,9 +181,9 @@ This prevented the resolution process from having to search the whole board for 
 \subsection{Unification}
 
 Resolution relies on the concept of unification to check if two clauses can be unified\cite{robinson}. 
-Our unification algorithm is based off of the function \textsc{Unify} presented in Russell and Norvig Figure 9.1. Since many of our rules contain functions, we improved on Russell and Norvig's implementation using the unification algorithm described by \cite{robinson}.
+Our unification algorithm is based off of the function \textsc{Unify}, presented in Russell and Norvig Figure 9.1. Since many of our rules contain functions, we improved on Russell and Norvig's implementation using the unification algorithm described by \cite{robinson}.
 
-In unifying our rules with the knowledge base an interesting question presented itself: should we evaluate functions? Ultimately we tried it both ways. Evaluating functions led to a more robust resolution/unification algorithm, but was much less efficient than not evaluating functions. This is because evaluating functions leads to information propagation, e.g. resolution propagates across the whole board attempting to unify everything. If we left the functions unevaluated, this helped to restrict the resolution process to local scope, but had the disadvantage of having to have copies of information with different functional forms.
+In unifying our rules with the knowledge base an interesting question presented itself: should we evaluate functions? Ultimately, we tried it both ways. Evaluating functions led to a more robust resolution/unification algorithm, but was much less efficient than not evaluating functions. This is because evaluating functions leads to information propagation, e.g. resolution propagates across the whole board attempting to unify everything. If we left the functions unevaluated, this helped to restrict the resolution process to local scope, but had the disadvantage of requiring copies of information with different functional forms.
 
 \subsection{Pathfinding}
 
@@ -191,7 +192,7 @@ This algorithm attempts to travel to only clear and unexplored squares.
 If a clear/unexplored square is unavailable, it backs up until a clear/unexplored square is found. 
 If all accessible squares have been explored, the agent then does a random walk to attempt to find the gold.
 
-It is worth mentioning here that we did not get the chance to implement a shooting routine for our agent. Unfortunately time constraints prevented us from realizing this feature.
+It is worth mentioning here that we did not get the chance to implement a shooting routine for our agent. Unfortunately time constraints prevented us from completing this feature.
 
 \section{Rules}
 
@@ -212,12 +213,13 @@ Then the resolution algorithm uses the rules above to determine if the square is
 Notice that these rules can only determine if a square is clear. 
 We found that determining if a square is not clear often led to infinite loops in the resolution algorithm.
 
+
 \section{Comparing Algorithm Performance}
 	\label{comparisons}
 	
 	\subsection{Experimental Approach}
-	To measure the performance of our agents we made a scoring system that decrements each time a move is made.
-	 A move is defined as rotating left, rotating right, and moving forward.
+	To measure the performance of our agents, we made a scoring system that decrements each time a move is made.
+	 A move is defined as rotating left, rotating right, or moving forward.
 	  The score will start at 1000 and finding the gold will yield an additional 1000 points to be added to the score.
 	
 	Using the performance measurement, we then varied the parameters of the wumpus world such as the size, number of wumpi, number of pits, etc. and plotted the relationships between the size of the world, number of obstacles, and the score.
@@ -265,7 +267,9 @@ We found that determining if a square is not clear often led to infinite loops i
 		     Meanwhile, the reactive agent does not have this ability and cannot mark a tile unless it has visited that tile.
 	
 \section{Summary}
+In this paper, we have explored the implementation and performance of both a reasoning agent and a reactive agent in the Wumpus World. The implementation of a first-order inference system for solving the Wumpus World was discussed and explained. In a similar manner, the decision tree for the reactive agent was explained as well as the general restrictions on such an agent.
 
+We have shown that both approaches are capable of solving the problem and that both solutions are not infallible in that they do no get the gold every time. However, the reasoning agent clearly solved the Wumpus World in less steps than the reactive agent. Furthermore, this advantage grew with an increase in world size and number of obstacles. We feel that our experimentation fulfilled our goals in identifying how well each algorithm solved the Wumpus World and how the agents compared to each other.
 
 
 	
