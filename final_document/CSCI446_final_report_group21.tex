@@ -114,6 +114,7 @@ Our task was to create a reasoning agent and reactive agent to navigate a Wumpus
 
 
 \section{Problem Generation}
+To create our Wumpus World we used a two dimensional vector of unsigned integers. We assigned certain bits to certain features such as the walls and wumpi. This made it easy to see what each tile contained with a simple bitwise operation. The wumpi and pits were placed randomly and could not be in the start tile or a tile already occupied. Each agent received a blank world that contained only zeros except for the start tile.
 \begin{figure}
 	\centering
 	\includegraphics[width=0.5\textwidth]{images/ex_ww}
@@ -241,7 +242,9 @@ So to navigate the wumpus world, our agent simply asks a square is clear. Then t
 		     Meanwhile, the reactive agent does not have this ability and cannot mark a tile unless it has visited that tile.
 	
 \section{Summary}
+In this paper, we have explored the implementation and performance of both a reasoning and a reactive agent in the Wumpus World. The implementation of a first order inference system for solving the Wumpus World was discussed and explained. In the same way the decision tree for the reactive agent was explained as well as the general restrictions on such an agent.
 
+We have shown that both approaches are capable of solving the problem and that both solutions are not infallible in that they do no get the gold every time. However, the reasoning agent clearly solved the Wumpus World in less steps than the reactive agent. Furthermore, this advantage grew with an increase in world size and number of obstacles. We feel that our experimentation fulfilled our goals in identifying how well each algorithm solved the Wumpus World and how the agents compared to each other.
 
 
 	

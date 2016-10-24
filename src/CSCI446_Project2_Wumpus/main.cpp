@@ -15,9 +15,9 @@ int main(int argc, char *argv[]) {
     //1477267586
     init_rand();
     //run_test();
-    int N = 4;
+    int N = 5;
 
-    World * world = new World(N, 1, 1, 1);
+    World * world = new World(N, 1, 1, 0);
     Engine * engine = new Engine(world);
     Logic_agent * player = new Logic_agent(engine, N, "../Results/Logic_results.txt");
 
