@@ -1,3 +1,15 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{ai}
+Stuart Russel and Peter Norvig.
+\newblock {\em Artificial Intelligence: A Modern Approach}.
+\newblock Pearson Education, Upper Saddle River, New Jersey 07458, 3rd edition,
+  2010.
+
+\bibitem{reactive}
+Gerhard Weiss.
+\newblock {\em Multiagent Systems: A Modern Approach to Distributed Artificial
+  Intelligence}.
+\newblock MIT Press, Cambridge, Massachusetts, 1999.
 
 \end{thebibliography}
