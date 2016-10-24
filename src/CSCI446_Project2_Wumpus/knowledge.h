@@ -14,7 +14,7 @@
 #ifndef KNOWLEDGE_H
 #define KNOWLEDGE_H
 
-#define debug_mode false
+#define debug_mode true
 
 #include <iostream>
 #include <vector>

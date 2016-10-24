@@ -14,12 +14,12 @@ int main(int argc, char *argv[]) {
 
     //1477267586
     init_rand();
-    run_test();
-//                int N = 10;
-//                
-//                World * world = new World(N, 3, 3, 3);
-//                Engine * engine = new Engine(world);
-//                Logic_agent * player = new Logic_agent(engine, N, "../Results/Logic_results.txt");
+    //run_test();
+    int N = 4;
+
+    World * world = new World(N, 1, 1, 1);
+    Engine * engine = new Engine(world);
+    Logic_agent * player = new Logic_agent(engine, N, "../Results/Logic_results.txt");
 
 
     //    test_unification();
@@ -65,15 +65,15 @@ void run_test() {
             for (int k = 0; k < num_obs; k++) {
 
                 int seed = init_rand();
-                World * world = new World(i*size_step, (s_num_obs* k), (s_num_obs * k), (s_num_obs * k));
+                World * world = new World(i*size_step, (s_num_obs * k), (s_num_obs * k), (s_num_obs * k));
                 Engine * engine = new Engine(world);
                 Logic_agent * l_agent = new Logic_agent(engine, i*size_step, logic_file);
                 world->qt_world->view->close();
                 delete world;
                 delete engine;
                 delete l_agent;
-                
-                
+
+
                 init_rand(seed);
                 world = new World(i*size_step, (s_num_obs * k), (s_num_obs * k), (s_num_obs * k));
                 engine = new Engine(world);
