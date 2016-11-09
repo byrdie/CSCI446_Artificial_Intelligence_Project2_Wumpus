@@ -1,21 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * @param this_world
  */
 
 
 #include "engine.h"
 #include <cmath>
+
 Engine::Engine(World * this_world) {
     world = this_world;
-    orientation = SOUTH;
+    orientation = NORTH;
     score = 0;
 }
 
 int Engine::move(int direction, Point * cur_pos) {
-    orient_to_direction(direction);
-    score++;
+    orient_to_direction(direction, orientation);
+    score--;
     vector<Point *> neighbors = world->find_neighbors(cur_pos);
 
     Point * test_pt = neighbors[direction];
@@ -32,21 +32,24 @@ int Engine::move(int direction, Point * cur_pos) {
 
 }
 
-void Engine:: orient_to_direction( int direction){
+int Engine:: orient_to_direction(int direction, int orientation){
+    
     //Moves player orientation to direction and increments score correctly
     if(orientation == direction){
         score = score;
     }else if(abs(orientation - direction) % 2 == 0){
         orientation = (orientation + 2) % 4;
-        score += 2;
+        score -= 2;
     }else {
         orientation = direction;
-        score++;
+        score--;
     }
-//    cout << "Score: " << score << endl;
-//    cout << orientation << ", " << direction << endl;
+
+    
+    return orientation;
     
     
-    
-    
+}
+int Engine::num_obstacles(){
+    return world->num_pits;
 }

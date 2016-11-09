@@ -14,6 +14,7 @@
 #ifndef RESOLVE_H
 #define RESOLVE_H
 
+#include <fstream>
 #include <iomanip>
 #include "knowledge.h"
 

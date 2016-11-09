@@ -17,14 +17,16 @@
 #include "world_gen.h"
 #include "qt_world.h"
 #include "rule_parser.h"
-#include "human_agent.h"
+#include "logic_agent.h"
 #include "tests.h"
+#include "reactive_agent.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]);
 void init_rand(unsigned long int seed);
-void init_rand();
+unsigned long int init_rand();
+void run_test();
 
 
 

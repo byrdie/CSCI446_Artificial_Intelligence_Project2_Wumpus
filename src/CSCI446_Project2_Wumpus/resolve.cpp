@@ -2,67 +2,166 @@
 
 #include "resolve.h"
 
-/**
- * Recursive function to execute linear resolution strategy
- * @param kb
- * @param query MUST BE ALREADY NEGATED!
- * @return 0 for false, 1 for true, 2 for not found 
- */
-uint Knowledge::linear_resolution(cnf list_kb, cnf square_kb, clause query, uint indent) {
-    
-    if(indent > 30){
-        cout << "RECURSION LIMIT REACHED!" << endl;
-        return FALSE;
-    }
-
-    /* Check for tautology */
-    cnf query_cnf;
-    query_cnf.push_back(query);
-    if (subset(query_cnf, kb)) {
-        return FALSE;
-    }
-
-    /* Loop through the knowledge base to find a resolution */
-    for (uint i = 0; i < kb.size(); i++) {
-        
-        /* After we use a rule, move to the back of the rule priority */
-        cnf kbc = kb;
-        auto it = kbc.begin() + i;
-        rotate(it, it +1, kbc.end());
-
-        /* Attempt to resolve each clause */
-        cnf resolvents = resolve(kb[i], query);
+uint Knowledge::input_resolution_bfs(clause query) {
 
 
-        cout << setw(indent) << ' ';
-        cout << "Resolve ";
-        print_clause(query);
-        cout << " and ";
-        print_clause(kb[i]);
-        cout << endl;
 
-        
-        /* Loop through the possible resolvents and recursively apply linear resolution to each*/
-        for (uint j = 0; j < resolvents.size(); j++) {
+    cnf kb = kb_time_stack; // Make a copy of the KB
 
-            /* Check for inconsitency conditions */
-            if (resolvents[j].empty()) {
-                return TRUE;
+    /* negate theorem to be proven */
+    query = negate_clause(query)[0];
+
+    /* Define a tree to store the results of the bfs */
+    uint max_depth = 12; // Don't keep trying after this depth
+    vector<vector < clause >> rtree(max_depth);
+
+    /* Define the query to be at the root node */
+    vector<clause> rtree_top;
+    rtree_top.push_back(query);
+    rtree[0] = rtree_top;
+
+    /* Loop through each layer of the resolution tree */
+    for (uint i = 0; i < rtree.size() - 1; i++) {
+
+        /* loop through though each resolvent for each layer */
+        vector<clause> this_row = rtree[i];
+        vector<clause> next_row;
+        for (uint j = 0; j < this_row.size(); j++) {
+
+            /* Select the next rule to be resolved */
+            clause input = this_row[j];
+            //                        clause input = eval_clause(this_row[j]);
+
+
+            /* Attempt to resolve the input with every clause in the KB */
+            for (uint k = 0; k < kb.size(); k++) {
+
+                /* Possibly delete rules as they're used here */
+
+
+                /* Attempt to resolve each clause */
+                cnf resolvents = resolve(kb[k], input);
+
+                /* Loop over the resolvents and check for an inconsistency
+                 * If there is no inconsistency, set the clause variable
+                 * equal to the resolvent and restart the main loop */
+                for (uint l = 0; l < resolvents.size(); l++) {
+
+                    print_resolution(input, kb[k], i);
+
+
+                    /* Check if the rule is a tautology */
+                    cnf query_cnf;
+                    query_cnf.push_back(resolvents[l]);
+                    if (subset(query_cnf, kb)) { // A tautology exists if the rule is already in the KB                   
+                        print_tautology(resolvents[l], i);
+                        return FALSE;
+                    }
+
+                    /* Inconsistency check. If two clauses resolve to an empty
+                     * clause the two clauses are inconsistent */
+                    if (resolvents[l].empty()) {
+                        print_contradiction(input, i);
+                        return TRUE;
+                    }
+
+                    print_result(resolvents[l], i);
+
+
+                    /* If the resolvent is consistent, restart the main loop
+                     * with the query as the resolvent*/
+                    next_row.push_back(resolvents[l]);
+
+                }
+
+
+
             }
 
-            /* Apply linear resolution to the resolvents */
-            uint result = linear_resolution(kbc, resolvents[j], indent + 5);
-
-            /* return if linear_resolution found a result, otherwise continue looping */
-            if (result != NOT_FOUND) {
-                return result;
+            /* Usually not necessary to check more than this */
+            if (j == 1) {
+                break;
             }
 
         }
-
-
+        rtree[i + 1] = next_row;
     }
+
     return NOT_FOUND;
+}
+
+void Knowledge::print_tautology(clause c, uint i) {
+#if debug_mode
+    out << setw(i * 1) << '-';
+    out << "The rule ";
+    print_clause(&out, c);
+    out << " is a tautology.";
+    out << endl;
+
+    latex << "\\texttt{";
+    latex << setw(i * 1) << '-';
+    latex << "The rule ";
+    print_clause(&latex, c);
+    latex << " is a tautology.";
+    latex << "} \\\\";
+    latex << endl;
+#endif
+}
+
+void Knowledge::print_contradiction(clause c, uint i) {
+#if debug_mode
+    
+    out << setw((i + 1) * 5) << '-';
+    out << "The rule ";
+    print_clause(&out, c);
+    out << " is a contradiction.";
+    out << endl;
+
+    latex << "\\texttt{";
+    latex << setw((i + 1) * 5) << '-';
+    latex << "The rule ";
+    print_clause(&latex, c);
+    latex << " is a contradiction.";
+    latex << "} \\\\";
+    latex << endl;
+#endif
+}
+
+void Knowledge::print_resolution(clause c1, clause c2, uint i) {
+#if debug_mode
+    out << setfill('-') << setw((i + 1) * 5);
+    out << "Resolve ";
+    print_clause(&out, c1);
+    out << " and ";
+    print_clause(&out, c2);
+    out << endl;
+
+    latex << setfill('-');
+    latex << "\\texttt{";
+    latex << setw(i * 5) << '-';
+    latex << "Resolve ";
+    print_clause(&latex, c1);
+    latex << " and ";
+    print_clause(&latex, c2);
+    latex << "}\\\\";
+    latex << endl;
+#endif
+}
+
+void Knowledge::print_result(clause c, uint i) {
+#if debug_mode
+    out << setw((i + 1) * 5) << '-';
+    out << "Result ";
+    print_clause(&out, c);
+    out << endl;
+
+    latex << "\\texttt{";
+    latex << setw((i + 1) * 5) << '-';
+    latex << "Result ";
+    print_clause(&latex, c);
+    latex << "}\\\\";
+    latex << endl;
+#endif
 }
 
 /**
@@ -127,7 +226,6 @@ cnf Knowledge::resolve(clause ci, clause cj) {
     }
     return resolvents;
 }
-
 
 bool Knowledge::is_neg(pred p) {
     if ((get<0>(p) & P_NEGATION) > 0) {

@@ -1,12 +1,12 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Problem\040Statement}{}% 2
-\BOOKMARK [1][-]{section.3}{Software\040Design}{}% 3
-\BOOKMARK [2][-]{subsection.3.1}{Wumpus\040World\040Generation}{section.3}% 4
-\BOOKMARK [2][-]{subsection.3.2}{Environment\040Engine}{section.3}% 5
-\BOOKMARK [2][-]{subsection.3.3}{Reasoning\040Agent}{section.3}% 6
-\BOOKMARK [3][-]{subsubsection.3.3.1}{Inference\040Engine}{subsection.3.3}% 7
-\BOOKMARK [3][-]{subsubsection.3.3.2}{Knowledge\040Base}{subsection.3.3}% 8
+\BOOKMARK [1][-]{section.2}{Problem Statement}{}% 2
+\BOOKMARK [1][-]{section.3}{Software Design}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Wumpus World Generation}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Environment Engine}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{Reasoning Agent}{section.3}% 6
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Inference Engine}{subsection.3.3}% 7
+\BOOKMARK [3][-]{subsubsection.3.3.2}{Knowledge Base}{subsection.3.3}% 8
 \BOOKMARK [3][-]{subsubsection.3.3.3}{Pathfinding}{subsection.3.3}% 9
-\BOOKMARK [2][-]{subsection.3.4}{Reactive\040Agent}{section.3}% 10
-\BOOKMARK [2][-]{subsection.3.5}{Human\040Agent}{section.3}% 11
-\BOOKMARK [1][-]{section.4}{Experiment\040Design}{}% 12
+\BOOKMARK [2][-]{subsection.3.4}{Reactive Agent}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.5}{Human Agent}{section.3}% 11
+\BOOKMARK [1][-]{section.4}{Experiment Design}{}% 12
